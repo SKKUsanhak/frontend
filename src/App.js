@@ -27,7 +27,7 @@ function App() {
             setMessage('Failed to upload file.');
             console.error('There was an error uploading the file!', error);
         });
-    };
+    }; 
 
     return (
         <div>
