@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './Upload.css';
 
 export default function Upload() {
     const [file, setFile] = useState(null);
@@ -24,6 +25,7 @@ export default function Upload() {
     };
 
     const handleUpload = () => {
+        setMessage('업로드 중이니 잠시만 기다려 주세요 10~20초 가량 소모됩니다.')
         const formData = new FormData();
         formData.append('file', file);
 
@@ -43,24 +45,32 @@ export default function Upload() {
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <div className="container">
             <h1>Upload File</h1>
             <div 
+                className="drop-area" 
                 onDrop={handleDrop} 
-                onDragOver={handleDragOver} 
-                style={{ width: '500px', height: '300px', border: '2px dashed #cccccc', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', margin: '20px 0' }}
+                onDragOver={handleDragOver}
             >
-                <input type="file" onChange={handleFileChange} style={{ display: 'none' }} id="fileInput" />
-                <label htmlFor="fileInput" style={{ padding: '10px 20px', border: '1px solid #cccccc', borderRadius: '5px', cursor: 'pointer', backgroundColor: '#f0f0f0' }}>
+                <input 
+                    type="file" 
+                    onChange={handleFileChange} 
+                    className="hidden-input" 
+                    id="fileInput" 
+                />
+                <label 
+                    htmlFor="fileInput" 
+                    className="label"
+                >
                     파일 선택
                 </label>
-                <p style={{ marginTop: '10px' }}>{file ? file.name : '여기에 파일을 드롭하세요'}</p>
+                <p className="drop-text">{file ? file.name : '또는 여기에 파일을 드롭하세요'}</p>
             </div>
-            <button onClick={handleUpload}>업로드</button>
-            <p>{message}</p>
+            <button onClick={handleUpload} className="upload-button">업로드</button>
+            <p className="message">{message}</p>
             {jsonResponse && 
-                <div style={{ width: '500px', height: '200px', overflow: 'auto', marginTop: '20px', border: '1px solid #cccccc', padding: '10px', borderRadius: '5px' }}>
-                    <h2>JSON Response:</h2>
+                <div className="json-response">
+                    <h2>JSON 응답:</h2>
                     <pre>{printJsonResponse(jsonResponse)}</pre>
                 </div>
             }

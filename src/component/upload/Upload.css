@@ -1,0 +1,53 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    padding-top: 20px;
+}
+
+.drop-area {
+    width: 500px;
+    height: 300px;
+    border: 2px dashed #cccccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.hidden-input {
+    display: none;
+}
+
+.label {
+    padding: 10px 20px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+}
+
+.drop-text {
+    margin-top: 10px;
+}
+
+.upload-button {
+    margin-bottom: 20px;
+}
+
+.message {
+    margin-bottom: 20px;
+}
+
+.json-response {
+    width: 80%;
+    height: 60%;
+    overflow: auto;
+    margin-top: 20px;
+    border: 1px solid #cccccc;
+    padding: 10px;
+    border-radius: 5px;
+}
