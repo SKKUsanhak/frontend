@@ -1,0 +1,20 @@
+.Rowcontrols,
+.Colcontrols {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 300px; 
+  justify-content: space-between;
+}
+
+.Rowcontrols input,
+.Colcontrols input {
+  flex: 1;
+  margin-right: 10px; 
+}
+
+.Rowcontrols button,
+.Colcontrols button {
+  flex: none;
+  margin-left: 5px;
+}

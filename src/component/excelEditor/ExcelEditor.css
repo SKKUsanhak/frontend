@@ -21,17 +21,14 @@
   
   /* Input 스타일 */
   .input {
-    margin: 5px;
-    padding: 5px;
     border: 1px solid #ccc;
-    border-radius: 5px;
   }
   
   /* Table 스타일 */
   .table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 5px;
+    margin-top: 10px;
   }
   
   /* Th 스타일 */
@@ -45,7 +42,7 @@
   
   /* Td 스타일 */
   .td {
-    padding: 5px;
+    padding: 1px;
     border: 1px solid #ccc;
     text-align: center;
     background-color: white;
@@ -68,4 +65,3 @@
   .cell-input:focus {
     outline: none;
   }
-  
