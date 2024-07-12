@@ -84,13 +84,14 @@ export default function ExcelEditor() {
     const handleColumnRangeChange = (sheetIndex, e) => {
         const { name, value } = e.target;
         const intValue = parseInt(value, 10);
+        const maxColumn = data[currentSheetIndex]?.columns.length - 1 ?? 0;
 
         if (intValue >= 0) { // 값이 0 이상인지 확인
             setColumnRanges(prevRanges => ({
                 ...prevRanges,
                 [sheetIndex]: {
                     ...prevRanges[sheetIndex],
-                    [name]: intValue
+                    [name]: Math.min(intValue, maxColumn)
                 }
             }));
         }
@@ -120,7 +121,7 @@ export default function ExcelEditor() {
                 <input
                     type="number"
                     value={rowIndex}
-                    onChange={(e) => setRowIndex(Number(e.target.value))}
+                    onChange={(e) => setRowIndex(e.target.value === '' ? '' : Math.min(Number(e.target.value), data[currentSheetIndex]?.rows.length ?? 0))}
                     placeholder="행 지정"
                     min="0"
                     max={data[currentSheetIndex]?.rows.length ?? 0}
@@ -135,7 +136,7 @@ export default function ExcelEditor() {
                 <input
                     type="number"
                     value={colIndex}
-                    onChange={(e) => setColIndex(Number(e.target.value))}
+                    onChange={(e) => setColIndex(e.target.value === '' ? '' : Math.min(Number(e.target.value), data[currentSheetIndex]?.columns.length ?? 0))}
                     placeholder="열 지정"
                     min="0"
                     max={data[currentSheetIndex]?.columns.length ?? 0}
