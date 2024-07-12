@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './Upload.css';
 
 export default function Upload() {
     const [file, setFile] = useState(null);
-    const [jsonResponse, setJsonResponse] = useState(null);
     const [message, setMessage] = useState('');
-
-    function printJsonResponse(jsonResponse) {
-        return JSON.stringify(jsonResponse, null, 2);
-    }
+    const navigate = useNavigate();
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
@@ -25,18 +22,19 @@ export default function Upload() {
     };
 
     const handleUpload = () => {
-        setMessage('업로드 중이니 잠시만 기다려 주세요 10~20초 가량 소모됩니다.')
+        setMessage('업로드 중이니 잠시만 기다려 주세요 10~20초 가량 소모됩니다.');
         const formData = new FormData();
         formData.append('file', file);
 
         axios.post('/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
-            }
+            },
+            responseType: 'arraybuffer'
         })
         .then(response => {
             setMessage('파일 업로드에 성공했습니다!');
-            setJsonResponse(response.data);
+            navigate('/excelEditor', { state: { fileData: response.data } });
         })
         .catch(error => {
             setMessage('파일 업로드에 실패했습니다.');
@@ -68,12 +66,6 @@ export default function Upload() {
             </div>
             <button onClick={handleUpload} className="upload-button">업로드</button>
             <p className="message">{message}</p>
-            {jsonResponse && 
-                <div className="json-response">
-                    <h2>JSON 응답:</h2>
-                    <pre>{printJsonResponse(jsonResponse)}</pre>
-                </div>
-            }
         </div>
     );
 }

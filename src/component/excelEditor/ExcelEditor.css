@@ -1,0 +1,71 @@
+/* Container 스타일 */
+.container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Button 스타일 */
+  .button {
+    margin: 3px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Input 스타일 */
+  .input {
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Table 스타일 */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+  }
+  
+  /* Th 스타일 */
+  .th {
+    background-color: #f2f2f2;
+    padding: 5px;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-size: 12px;
+  }
+  
+  /* Td 스타일 */
+  .td {
+    padding: 5px;
+    border: 1px solid #ccc;
+    text-align: center;
+    background-color: white;
+    font-size: 12px;
+  }
+  
+  .td.selected {
+    background-color: yellow;
+  }
+  
+  /* CellInput 스타일 */
+  .cell-input {
+    width: 140px;
+    padding: 2px;
+    border: none;
+    font-size: 12px;
+    text-align: center;
+  }
+  
+  .cell-input:focus {
+    outline: none;
+  }
+  
