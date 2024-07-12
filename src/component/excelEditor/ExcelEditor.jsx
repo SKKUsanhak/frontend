@@ -5,13 +5,15 @@ import './ExcelEditor.css';
 import { useCellSelection } from './SelectCell';
 import { useRowHandler } from './RowHandler';
 import { useColumnHandler } from './ColumnHandler';
+import { UploadHandler } from './UploadHandler';
 
 export default function ExcelEditor() {
-    const location = useLocation();
+    const location = useLocation(); // 파일 로딩을 위한 location
     const [currentSheetIndex, setCurrentSheetIndex] = useState(0); // 현재 시트 인덱스 추가
     const [data, setData] = useState([]); // 테이블 데이터 추가
     const [rowIndex, setRowIndex] = useState(0); // 행 인덱싱 추가
     const [colIndex, setColIndex] = useState(0); // 열 인덱싱 추가
+    const [ColumnRanges, setColumnRanges] = useState({}); // 열 범위 추가
 
     const { // 셀 선택 함수 묶음
         selectedCells,
@@ -21,17 +23,17 @@ export default function ExcelEditor() {
         handleTableMouseDown,
     } = useCellSelection();
 
-    const { 
+    const { // 열 컨트롤 함수들 
         handleAddRow, 
         handleDeleteRow 
     } = useRowHandler(data, setData, currentSheetIndex);
-    
-    const { 
+
+    const { // 행 컨트롤 함수들
         handleAddColumn,
         handleDeleteColumn 
     } = useColumnHandler(data, setData, currentSheetIndex);
 
-    useEffect(() => {
+    useEffect(() => { // 파일 로딩 후 data로 엑셀 파일 매핑 
         if (location.state && location.state.fileData) {
             const workbook = new ExcelJS.Workbook();
             const buffer = location.state.fileData;
@@ -79,7 +81,22 @@ export default function ExcelEditor() {
         setCurrentSheetIndex((prevIndex) => (prevIndex < data.length - 1 ? prevIndex + 1 : 0));
     };
 
-    const handleCellChange = (rowIndex, cellIndex, value) => {
+    const handleColumnRangeChange = (sheetIndex, e) => {
+        const { name, value } = e.target;
+        const intValue = parseInt(value, 10);
+
+        if (intValue >= 0) { // 값이 0 이상인지 확인
+            setColumnRanges(prevRanges => ({
+                ...prevRanges,
+                [sheetIndex]: {
+                    ...prevRanges[sheetIndex],
+                    [name]: intValue
+                }
+            }));
+        }
+    };
+
+    const handleCellChange = (rowIndex, cellIndex, value) => { // 셀 변경 적용
         const newData = [...data];
         newData[currentSheetIndex].rows[rowIndex][cellIndex] = value;
         setData(newData);
@@ -127,6 +144,30 @@ export default function ExcelEditor() {
                 <button onClick={() => handleDeleteColumn(colIndex)}>열 삭제</button>
 
             </div>
+
+            <div className="ColumnRanges">
+                <h3> 현재 시트의 행 범위 지정 </h3>
+                <input
+                    type="number"
+                    name="startColumn"
+                    placeholder="시작 열"
+                    value={ColumnRanges[currentSheetIndex]?.startColumn !== undefined ? ColumnRanges[currentSheetIndex]?.startColumn : ''}
+                    min="0"
+                    max={data[currentSheetIndex]?.columns.length - 1 ?? 0}
+                    onChange={(e) => handleColumnRangeChange(currentSheetIndex, e)}
+                />
+                <input
+                    type="number"
+                    name="endColumn"
+                    placeholder="종료 열"
+                    value={ColumnRanges[currentSheetIndex]?.endColumn !== undefined ? ColumnRanges[currentSheetIndex]?.endColumn : ''}
+                    min="0"
+                    max={data[currentSheetIndex]?.columns.length - 1 ?? 0}
+                    onChange={(e) => handleColumnRangeChange(currentSheetIndex, e)}
+                />
+            </div>
+
+
             {/* 테이블 표기 부분 */ }
             <table className='table' onMouseDown={handleTableMouseDown}>
                 <tbody> {/* 현재 시트에 대해서 데이터 열 순회 */ }
@@ -155,6 +196,14 @@ export default function ExcelEditor() {
                     ))}
                 </tbody>
             </table>
+            <div>
+                <button
+                    className='upload-button'
+                    onClick={() => UploadHandler(data, ColumnRanges)}
+                >
+                DB 업로드
+                </button>
+            </div>
         </div>
     );
 }
