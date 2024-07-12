@@ -1,6 +1,5 @@
 import ExcelJS from 'exceljs';
 import axios from 'axios';
-import buffer from 'react'
 
 export const UploadHandler = async (data, ColumnRanges) => {
 
@@ -16,15 +15,26 @@ export const UploadHandler = async (data, ColumnRanges) => {
             });
         });
     });
-
-    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    const file = new File([blob], 'output.xlsx', { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('ColumnRanges', JSON.stringify(ColumnRanges));
-
     try {
+        // 버퍼 생성
+        const buffer = await workbook.xlsx.writeBuffer();
+        // console.log("Buffer created successfully");
+
+        // Blob 객체로 변환
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        // console.log("Blob created successfully");
+
+        // 파일 다운로드
+        // aveAs(blob, 'output.xlsx');
+        // console.log("File saved locally");
+
+        // FormData 생성
+        const formData = new FormData();
+        const file = new File([blob], 'output.xlsx', { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        formData.append('file', file);
+        formData.append('ColumnRanges', JSON.stringify(ColumnRanges));
+
+        // 파일 업로드
         const response = await axios.post('/final-result', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -34,5 +44,4 @@ export const UploadHandler = async (data, ColumnRanges) => {
     } catch (error) {
         console.error('파일 업로드 실패', error);
     }
-
 }
