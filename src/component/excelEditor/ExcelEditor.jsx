@@ -13,6 +13,7 @@ export default function ExcelEditor() {
     const [data, setData] = useState([]); // 테이블 데이터 추가
     const [rowIndex, setRowIndex] = useState(0); // 행 인덱싱 추가
     const [colIndex, setColIndex] = useState(0); // 열 인덱싱 추가
+    const [tableIndex, setTableIndex] = useState(''); // 테이블 인덱싱 추가
     const [ColumnRanges, setColumnRanges] = useState({}); // 열 범위 추가
 
     const { // 셀 선택 함수 묶음
@@ -73,6 +74,27 @@ export default function ExcelEditor() {
         }
     }, [location.state]);
 
+    const addTable = (index) => { // 테이블 생성
+        const newData = [...data];
+        const newTable = { rows: [['']], columns: [''] }; // 기본적으로 빈 테이블 생성
+        
+        if (index < 0 || index > newData.length) {
+            index = newData.length;
+        }
+
+        newData.splice(index, 0, newTable);
+        setData(newData);
+        setCurrentSheetIndex(index);
+    };
+
+    const deleteTable = (index) => { // 테이블 삭제
+        if (data.length > 0 && index >= 0 && index < data.length) {
+            const newData = data.filter((_, i) => i !== index);
+            setData(newData);
+            setCurrentSheetIndex(newData.length > 0 ? Math.min(index, newData.length - 1) : 0);
+        }
+    };
+
     const handlePrevSheet = () => { // 이전 시트로 이동
         setCurrentSheetIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : data.length - 1));
     };
@@ -81,7 +103,7 @@ export default function ExcelEditor() {
         setCurrentSheetIndex((prevIndex) => (prevIndex < data.length - 1 ? prevIndex + 1 : 0));
     };
 
-    const handleColumnRangeChange = (sheetIndex, e) => {
+    const handleColumnRangeChange = (sheetIndex, e) => { // 행 범위 변경
         const { name, value } = e.target;
         const intValue = parseInt(value, 10);
         const maxColumn = data[currentSheetIndex]?.columns.length - 1 ?? 0;
@@ -116,6 +138,23 @@ export default function ExcelEditor() {
                     다음 테이블 &gt;
                 </button>
             </div>
+
+            <div className="Tablecontrols"> {/* 테이블 추가 및 삭제 버튼 */ }
+                <input
+                    type="number"
+                    value={tableIndex}
+                    onChange={(e) => {
+                        const value = e.target.value === '' ? '' : Math.min(Number(e.target.value) - 1, data.length);
+                        setTableIndex(value === '' ? '' : value + 1);
+                    }}
+                    placeholder="테이블 번호 지정"
+                    min="1"
+                    max={data.length + 1}
+                />
+                <button onClick={() => addTable(tableIndex - 1)}>테이블 추가</button>
+                <button onClick={() => deleteTable(tableIndex - 1)}>테이블 삭제</button>
+            </div>
+
             <div className="Rowcontrols"> {/* 행 추가 및 삭제 버튼 */ }
 
                 <input

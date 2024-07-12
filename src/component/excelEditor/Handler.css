@@ -1,5 +1,6 @@
 .Rowcontrols,
-.Colcontrols {
+.Colcontrols,
+.Tablecontrols {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
@@ -8,13 +9,15 @@
 }
 
 .Rowcontrols input,
-.Colcontrols input {
+.Colcontrols input,
+.Tablecontrols input {
   flex: 1;
   margin-right: 10px; 
 }
 
 .Rowcontrols button,
-.Colcontrols button {
+.Colcontrols button,
+.Tablecontrols button {
   flex: none;
   margin-left: 5px;
 }
