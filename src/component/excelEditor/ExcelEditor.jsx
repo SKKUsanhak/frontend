@@ -246,7 +246,7 @@ export default function ExcelEditor() {
 
                 <div>
                     <button
-                        className='upload-button'
+                        className='db-upload-button'
                         onClick={() => UploadHandler(data, ColumnRanges)}
                     >
                         DB 업로드
