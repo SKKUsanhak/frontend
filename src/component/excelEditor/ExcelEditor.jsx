@@ -6,6 +6,7 @@ import { useCellSelection } from './SelectCell';
 import { useRowHandler } from './RowHandler';
 import { useColumnHandler } from './ColumnHandler';
 import { UploadHandler } from './UploadHandler';
+import { MergeHandler } from './MergeHandler';
 
 export default function ExcelEditor() {
     const location = useLocation(); // 파일 로딩을 위한 location
@@ -204,6 +205,12 @@ export default function ExcelEditor() {
                     min="0"
                     max={data[currentSheetIndex]?.columns.length - 1 ?? 0}
                     onChange={(e) => handleColumnRangeChange(currentSheetIndex, e)}
+                />
+                <MergeHandler
+                    data={data}
+                    setData={setData}
+                    currentSheetIndex={currentSheetIndex}
+                    ColumnRanges={ColumnRanges}
                 />
             </div>
 

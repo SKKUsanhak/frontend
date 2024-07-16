@@ -20,7 +20,7 @@ export const useColumnHandler = (data, setData, currentSheetIndex) => {
 
     const handleDeleteColumn = useCallback((colIndex) => {
         const newData = [...data];
-        if (colIndex >= 0 && colIndex < newData[currentSheetIndex].columns.length) {
+        if (colIndex >= 0 && colIndex <= newData[currentSheetIndex].columns.length) {
             newData[currentSheetIndex].columns.splice(colIndex, 1);
             
             newData[currentSheetIndex].rows = newData[currentSheetIndex].rows.map(row => {

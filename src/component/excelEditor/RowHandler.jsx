@@ -20,7 +20,7 @@ export const useRowHandler = (data, setData, currentSheetIndex) => {
 
     const handleDeleteRow = useCallback((rowIndex) => {
         const newData = [...data];
-        if (rowIndex >= 0 && rowIndex < newData[currentSheetIndex].rows.length) {
+        if (rowIndex >= 0 && rowIndex <= newData[currentSheetIndex].rows.length) {
             newData[currentSheetIndex].rows.splice(rowIndex, 1);
             setData(newData);
         }
