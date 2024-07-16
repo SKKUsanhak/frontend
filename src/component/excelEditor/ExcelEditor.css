@@ -19,21 +19,52 @@
   margin-top: 80px;
   align-items: center;
   padding: 20px;
-  border-radius: 10px;
+}
+
+.controls-section input {
+  border: 1px solid #ccc; /* 연한 회색 테두리 */
+  outline: none; /* 포커스 시 아웃라인 제거 */
+  padding: 8px;
+  border-radius: 5px; /* 둥근 테두리 */
+  width: 100%;
+  box-sizing: border-box; /* 패딩을 포함한 박스 크기 계산 */
+}
+
+/* 컨트롤 섹션 내의 버튼 스타일 */
+.controls-section button {
+  background-color: #4CAF50; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 10px; 
+  font-size: 12px; 
+  cursor: pointer;
+  transition: background-color 0.3s; 
+}
+
+.controls-section button:hover {
+  background-color: #45a049; 
+}
+
+.controls-section button:active {
+  background-color: #3e8e41; 
+}
+
+.controls-section button:focus {
+  outline: none; 
 }
 
 .table-container {
   max-width: 100%;
-  height: 500px;
+  height: 550px;
   overflow: auto; /* 내용이 넘칠 경우 스크롤 생성 */
   border-width: 0;
 }
 
-.table-container input{
+.table-container input {
   border: none;
   outline: none;
 }
-
 
 .table {
   width: 100%;
@@ -43,6 +74,8 @@
 .table th, .table td {
   border: 1px solid #ddd;
   padding: 8px;
+  align-items: center;
+  justify-content: center;
 }
 
 .sheet-navigation {
@@ -55,8 +88,19 @@
 .controls-section .Rowcontrols,
 .controls-section .Colcontrols,
 .controls-section .ColumnRanges,
-.controls-section .db-upload-button {
+.controls-section .upload-button {
   margin-bottom: 20px;
+}
+
+.controls-section .ColumnRanges {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.controls-section .ColumnRanges button {
+  margin: 15px;
+  align-items: center;
 }
 
 .hovered-cell-info {
