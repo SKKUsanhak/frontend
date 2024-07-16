@@ -1,86 +1,59 @@
-/* Container 스타일 */
-.container {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    margin: 0 auto;
-  }
-  
-  /* Button 스타일 */
-  .button {
-    margin: 3px;
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Input 스타일 */
-  .input {
-    border: 1px solid #ccc;
-  }
-  
-  /* Table 스타일 */
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid #ccc;
-    margin-top: 10px;
-    margin: 0 auto;
-  }
-  
-  /* Th 스타일 */
-  .th {
-    background-color: #f2f2f2;
-    padding: 5px;
-    border: 1px solid #ccc;
-    text-align: center;
-    font-size: 12px;
-  }
-  
-  /* Td 스타일 */
-  .td {
-    padding: 1px;
-    border: 1px solid #ccc;
-    text-align: center;
-    background-color: white;
-    font-size: 12px;
-  }
-  
-  .td.selected {
-    background-color: yellow;
-  }
-  
-  /* CellInput 스타일 */
-  .cell-input {
-    width: 140px;
-    padding: 2px;
-    border: none;
-    font-size: 12px;
-    text-align: center;
-  }
-  
-  .cell-input:focus {
-    outline: none;
-  }
-  .excel-editor {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+.excel-editor {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* 왼쪽에 테이블, 오른쪽에 컨트롤 */
+  gap: 20px;
+  padding: 20px;
+}
 
-  .sheet-navigation, .Tablecontrols, .Rowcontrols, .Colcontrols, .ColumnRanges, table, .upload-button {
-    margin: 10px 0;
-    text-align: center;
-  }
+.table-section {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+}
 
-  .input {
-    width: 100px;
-    text-align: center;
-  }
+.controls-section {
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 80px;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.table-container {
+  width: 1000px;
+  max-width: 100%;
+  overflow: auto; /* 내용이 넘칠 경우 스크롤 생성 */
+  border-width: 0;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.sheet-navigation {
+  margin-top: 20px; /* 테이블과의 간격을 위해 여백 추가 */
+  display: flex;
+  justify-content: space-between;
+}
+
+.controls-section .Tablecontrols,
+.controls-section .Rowcontrols,
+.controls-section .Colcontrols,
+.controls-section .ColumnRanges,
+.controls-section .upload-button {
+  margin-bottom: 20px;
+}
+
+.hovered-cell-info {
+  margin-top: 20px;
+  font-weight: bold;
+}
