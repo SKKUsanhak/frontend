@@ -29,7 +29,9 @@
   .table {
     width: 100%;
     border-collapse: collapse;
+    border: 1px solid #ccc;
     margin-top: 10px;
+    margin: 0 auto;
   }
   
   /* Th 스타일 */
@@ -65,4 +67,20 @@
   
   .cell-input:focus {
     outline: none;
+  }
+  .excel-editor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sheet-navigation, .Tablecontrols, .Rowcontrols, .Colcontrols, .ColumnRanges, table, .upload-button {
+    margin: 10px 0;
+    text-align: center;
+  }
+
+  .input {
+    width: 100px;
+    text-align: center;
   }
