@@ -33,14 +33,20 @@
 }
 
 .controls-section {
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
   display: flex;
   flex-direction: column;
   gap: 10px;
   align-items: center;
   padding: 20px;
   font-family: "LineFont";
-  position: sticky;
+  position: fixed;
+  top: 200px;  /* Adjust this as needed depending on your header's height */
+  right: 100px;  /* Aligns the section to the right edge of the viewport */
+  width: 1fr;  /* Specifies the width of the controls section */
+  height: 600px;  /* Fixed height, can adjust if needed */
+  background-color: white;  /* Optional: sets a background color */
+  z-index: 1000;  /* Ensures it stays on top of other content */
 }
 
 .controls-section input {

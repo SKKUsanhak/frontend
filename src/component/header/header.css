@@ -1,40 +1,49 @@
 #header {
-    position: fixed; 
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 10000;
-    background-color: white;
-    box-shadow: 0 4px 6px rgb(250, 250, 250);
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10000;
+  background-color: white;
+  box-shadow: 0 4px 6px rgb(250, 250, 250);
+}
 
 .header__inner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    font-family: "LineFont";
-  }
-  
-  .header__nav {
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    font-family: "LineFont";
-  }
-  
-  .nav__item {
-    list-style: none;
-    float: left;
-    margin: 0 15px; 
-    justify-content: center;
-    align-items: center;
-    font-family: "LineFont";
-  }
-  
-  .nav__item a {
-    color: rgb(3, 3, 3);
-    text-decoration: none;
-    font-family: "LineFont";
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  font-family: "LineFont";
+}
+
+.header__nav {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  font-family: "LineFont";
+}
+
+.nav__item {
+  list-style: none;
+  float: left;
+  margin: 0 15px;
+  justify-content: center;
+  align-items: center;
+  font-family: "LineFont";
+}
+
+.nav__item a {
+  color: rgb(65, 60, 60);
+  text-decoration: none;
+  font-family: "LineFont";
+  transition: color 0.3s ease-in-out;
+  /* Smooth transition for color change */
+}
+
+.nav__item a:hover {
+  /* color: rgb(3, 3, 3); */
+  /* Change color on hover */
+  /* text-decoration: underline; */
+  font-family: "LineFontBold";
+  /* Optional: add underline on hover */
+}
