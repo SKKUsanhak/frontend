@@ -1,22 +1,28 @@
+/* Upload.css */
+
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
+    text-align: center;
+    position: relative;
+    font-family: "LineFontBold";
 }
 
 .drop-area {
-    width: 400px;
-    height: 300px;
     border: 2px dashed #ccc;
+    padding: 20px;
+    margin: 20px;
+    width: 1000px; /* 크기 조정 */
+    height: 600px; /* 크기 조정 */
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    background-color: #f9f9f9;
+    justify-content: center;
+    position: relative;
+    font-family: "LineFontBold";
 }
 
 .hidden-input {
@@ -24,48 +30,60 @@
 }
 
 .label {
-    cursor: pointer;
+    display: inline-block;
     padding: 10px 20px;
-    background-color: #4590df;
+    background-color: #007bff;
     color: white;
     border-radius: 5px;
-    margin-bottom: 10px;
+    cursor: pointer;
+    margin-bottom: 10px; /* 추가: 간격 조정 */
+    font-family: "LineFontBold";
 }
 
 .drop-text {
-    color: #666;
+    margin-top: 10px;
+    text-align: center;
+    font-family: "LineFontBold";
 }
 
 .upload-button {
+    margin-top: 20px;
     padding: 10px 20px;
-    background-color: #71ce74;
+    background-color: #28a745;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-family: "LineFontBold";
+}
+
+.progress-message {
     margin-top: 10px;
+    font-family: "LineFontBold";
 }
 
 .message {
     margin-top: 20px;
-    font-size: 16px;
-    color: #ff0000;
-    text-align: center;
+    color: red;
+    font-family: "LineFontBold";
 }
 
-.progress-bar {
+.loader-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    background-color: #f3f3f3;
-    border-radius: 5px;
-    margin-top: 10px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    backdrop-filter: blur(5px);
+    font-family: "LineFontBold";
 }
 
-.progress-bar-fill {
-    height: 20px;
-    background-color: #71ce74;
-    width: 0%;
-    border-radius: 5px;
-    text-align: center;
-    color: white;
-    transition: width 0.4s ease;
+.hidden {
+    display: none;
 }

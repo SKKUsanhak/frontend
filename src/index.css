@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: "LineFont";
+  font-weight: 50;
+  src: url("./fonts/LINESeedKR-Rg.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "LineFontBold";
+  font-weight: 50;
+  src: url("./fonts/LINESeedKR-Bd.ttf") format("truetype");
+}
