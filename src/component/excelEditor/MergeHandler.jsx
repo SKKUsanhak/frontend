@@ -66,6 +66,6 @@ export const MergeHandler = ({ data, setData, currentSheetIndex, ColumnRanges })
     }, [data, setData, currentSheetIndex, ColumnRanges, handleDeleteRow]);
 
     return (
-        <button onClick={handleMerge}>Merge</button>
+        <button onClick={handleMerge}>열 병합</button>
     );
 };

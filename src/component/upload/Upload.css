@@ -8,7 +8,7 @@
     height: 100vh;
     text-align: center;
     position: relative;
-    font-family: "LineFontBold";
+    font-family: "LineFont";
 }
 
 .drop-area {
@@ -22,7 +22,6 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    font-family: "LineFontBold";
 }
 
 .hidden-input {
@@ -43,7 +42,6 @@
 .drop-text {
     margin-top: 10px;
     text-align: center;
-    font-family: "LineFontBold";
 }
 
 .upload-button {
@@ -59,13 +57,11 @@
 
 .progress-message {
     margin-top: 10px;
-    font-family: "LineFontBold";
 }
 
 .message {
     margin-top: 20px;
     color: red;
-    font-family: "LineFontBold";
 }
 
 .loader-overlay {
@@ -81,7 +77,6 @@
     justify-content: center;
     z-index: 10;
     backdrop-filter: blur(5px);
-    font-family: "LineFontBold";
 }
 
 .hidden {

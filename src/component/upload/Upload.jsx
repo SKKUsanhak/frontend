@@ -8,21 +8,18 @@ export default function Upload() {
     const [file, setFile] = useState(null);
     const [message, setMessage] = useState('');
     const [progress, setProgress] = useState(0);
-    const [progressMessage, setProgressMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
         setProgress(0); // 파일 변경 시 진행률 초기화
-        setProgressMessage('');
     };
 
     const handleDrop = (event) => {
         event.preventDefault();
         setFile(event.dataTransfer.files[0]);
         setProgress(0); // 파일 드롭 시 진행률 초기화
-        setProgressMessage('');
     };
 
     const handleDragOver = (event) => {
@@ -40,7 +37,6 @@ export default function Upload() {
 
         const formData = new FormData();
         formData.append('file', file);
-        setProgressMessage('파일 업로드 성공, Azure 분석 중...');
         setProgress(30);
         axios.post('/upload', formData, {
             headers: {
@@ -49,16 +45,13 @@ export default function Upload() {
             responseType: 'arraybuffer'
         })
         .then(response => {
-            setMessage('파일 분석에 성공했습니다!');
             setProgress(100);
-            setProgressMessage("분석 성공!");
             setTimeout(() => {
                 setLoading(false); // 로딩 상태 비활성화
                 navigate('/excelEditor', { state: { fileData: response.data } });
             }, 500); // 0.5초 뒤에 리다이렉션
         })
         .catch(error => {
-            setMessage('파일 분석에 실패했습니다.');
             setLoading(false); // 로딩 상태 비활성화
         });
 
@@ -66,7 +59,7 @@ export default function Upload() {
 
     return (
         <div className="container">
-            <h1>Upload File</h1>
+            <h1>File Upload</h1>
             <div 
                 className="drop-area" 
                 onDrop={handleDrop} 
@@ -90,7 +83,6 @@ export default function Upload() {
             <div className={`loader-overlay ${loading ? '' : 'hidden'}`}>
                 <FadeLoader />
                 <p className="message">{message}</p>
-                <p className="progress-message">{progressMessage}</p>
                 <p>{progress}%</p>
             </div>
         </div>

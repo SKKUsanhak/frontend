@@ -4,6 +4,8 @@
     left: 0;
     width: 100%;
     z-index: 10000;
+    background-color: white;
+    box-shadow: 0 4px 6px rgb(250, 250, 250);
   }
 
 .header__inner {
