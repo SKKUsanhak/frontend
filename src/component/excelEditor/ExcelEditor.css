@@ -1,6 +1,21 @@
+.excel-editor-container {
+  display: flex;
+  flex-direction: column;
+  font-family: "LineFont";
+  height: 100%;
+}
+
+.editor-header {
+  display: flex;
+  padding: 20px; 
+  margin-left: 20px;
+  font-family: "LineFont";
+}
+
+
 .excel-editor {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(200px, 1fr); /* 왼쪽에 테이블, 오른쪽에 최소 200px 컨트롤 */
+  grid-template-columns: 75% 25%; /* 왼쪽에 테이블, 오른쪽에 컨트롤 */
   gap: 20px;
   padding: 20px;
   font-family: "LineFont";
@@ -9,7 +24,8 @@
 .table-section {
   display: flex;
   flex-direction: column;
-  border-radius: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
   font-family: "LineFont";
 }
 
@@ -18,7 +34,6 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 80px;
   align-items: center;
   padding: 20px;
   font-family: "LineFont";
@@ -40,7 +55,7 @@
   color: white;
   border: none;
   border-radius: 5px;
-  padding: 10px 10px; 
+  padding: 10px 5px; 
   font-size: 12px; 
   cursor: pointer;
   transition: background-color 0.3s; 
@@ -61,10 +76,10 @@
 
 .table-container {
   max-width: 100%;
-  height: 550px;
+  height: 100%;
   overflow: auto; /* 내용이 넘칠 경우 스크롤 생성 */
   border-width: 0;
-  font-family: "LineFontBold";
+  font-family: "LineFont";
 }
 
 .table-container input {
@@ -76,7 +91,6 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-family: "LineFont";
 }
 
 .table th, .table td {
@@ -84,14 +98,38 @@
   padding: 8px;
   align-items: center;
   justify-content: center;
-  font-family: "LineFont";
 }
 
 .sheet-navigation {
-  margin-top: 20px; /* 테이블과의 간격을 위해 여백 추가 */
+  margin-top: 20px;
   display: flex;
   justify-content: space-between;
-  font-family: "LineFont";
+  gap: 5px;
+  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: center; /* 중앙에 정렬 */
+  gap: 10px;
+}
+
+.sheet-navigation button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  box-shadow: none; 
+}
+
+.sheet-navigation button:hover,
+.sheet-navigation button:active,
+.sheet-navigation button:focus {
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.nav-icon {
+  font-size: 1.5rem;
 }
 
 .controls-section .Tablecontrols,

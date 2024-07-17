@@ -1,0 +1,38 @@
+#header {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10000;
+  }
+
+.header__inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    font-family: "LineFont";
+  }
+  
+  .header__nav {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    font-family: "LineFont";
+  }
+  
+  .nav__item {
+    list-style: none;
+    float: left;
+    margin: 0 15px; 
+    justify-content: center;
+    align-items: center;
+    font-family: "LineFont";
+  }
+  
+  .nav__item a {
+    color: rgb(3, 3, 3);
+    text-decoration: none;
+    font-family: "LineFont";
+  }
+  
