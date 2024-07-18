@@ -15,8 +15,8 @@
     border: 2px dashed #ccc;
     padding: 20px;
     margin: 20px;
-    width: 1000px; /* 크기 조정 */
-    height: 600px; /* 크기 조정 */
+    width: 800px; /* 크기 조정 */
+    height: 400px; /* 크기 조정 */
     display: flex;
     flex-direction: column;
     align-items: center;

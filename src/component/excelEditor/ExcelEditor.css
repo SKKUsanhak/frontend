@@ -42,7 +42,7 @@
   font-family: "LineFont";
   position: fixed;
   top: 200px;  /* Adjust this as needed depending on your header's height */
-  right: 100px;  /* Aligns the section to the right edge of the viewport */
+  right: 50px;  /* Aligns the section to the right edge of the viewport */
   width: 1fr;  /* Specifies the width of the controls section */
   height: 600px;  /* Fixed height, can adjust if needed */
   background-color: white;  /* Optional: sets a background color */
@@ -61,7 +61,7 @@
 
 /* 컨트롤 섹션 내의 버튼 스타일 */
 .controls-section button {
-  background-color: #4CAF50; 
+  background-color: #060429; 
   color: white;
   border: none;
   border-radius: 5px;
@@ -73,7 +73,7 @@
 }
 
 .controls-section button:hover {
-  background-color: #45a049; 
+  background-color: #252582; 
 }
 
 .controls-section button:active {

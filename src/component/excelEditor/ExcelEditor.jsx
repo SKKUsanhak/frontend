@@ -7,6 +7,7 @@ import { useRowHandler } from './RowHandler';
 import { useColumnHandler } from './ColumnHandler';
 import { UploadHandler } from './UploadHandler';
 import { MergeHandler } from './MergeHandler';
+import { DownloadHandler } from './DownloadHandler';
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
 
 export default function ExcelEditor() {
@@ -259,9 +260,18 @@ export default function ExcelEditor() {
                     <div>
                         <button
                             className="upload-button"
-                            onClick={() => UploadHandler(data, ColumnRanges)}
+                            onClick={() => UploadHandler(data)}
                         >
                             DB 업로드
+                        </button>
+                    </div>
+
+                    <div>
+                        <button 
+                            className='download-button'
+                            onClick={() => DownloadHandler(data)}
+                        >
+                            엑셀 파일로 다운로드
                         </button>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 import ExcelJS from 'exceljs';
 import axios from 'axios';
 
-export const UploadHandler = async (data, ColumnRanges) => {
+export const UploadHandler = async (data) => {
 
     const workbook = new ExcelJS.Workbook();
 
@@ -32,7 +32,6 @@ export const UploadHandler = async (data, ColumnRanges) => {
         const formData = new FormData();
         const file = new File([blob], 'output.xlsx', { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         formData.append('file', file);
-        formData.append('ColumnRanges', JSON.stringify(ColumnRanges));
 
         // 파일 업로드
         const response = await axios.post('/final-result', formData, {
