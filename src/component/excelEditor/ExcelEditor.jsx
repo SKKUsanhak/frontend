@@ -8,6 +8,7 @@ import { useColumnHandler } from './ColumnHandler';
 import { UploadHandler } from './UploadHandler';
 import { MergeHandler } from './MergeHandler';
 import { DownloadHandler } from './DownloadHandler';
+import EditableFileName from './EditableFileName';
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
 
 export default function ExcelEditor() {
@@ -18,6 +19,7 @@ export default function ExcelEditor() {
     const [colIndex, setColIndex] = useState(0); // 열 인덱싱 추가
     const [tableIndex, setTableIndex] = useState(0); // 테이블 인덱싱 추가
     const [ColumnRanges, setColumnRanges] = useState({}); // 열 범위 추가
+    const [fileName, setFileName] = useState("");
 
     const { // 셀 선택 함수 묶음
         selectedCells,
@@ -41,6 +43,7 @@ export default function ExcelEditor() {
         if (location.state && location.state.fileData) {
             const workbook = new ExcelJS.Workbook();
             const buffer = location.state.fileData;
+            const loadedFileName = location.state.fileName || 'Uploaded File';
 
             workbook.xlsx.load(buffer).then(() => {
                 const sheets = [];
@@ -73,6 +76,7 @@ export default function ExcelEditor() {
                 });
 
                 setData(sheets);
+                setFileName(loadedFileName);
             });
         }
     }, [location.state]);
@@ -128,10 +132,15 @@ export default function ExcelEditor() {
         setData(newData);
     };
 
+    const handleFileNameSave = (newFileName) =>{
+        setFileName(newFileName);
+    }
+
     return (
         <div className="excel-editor-container">
             <div className="editor-header">
-                <h1 className="editor-title">Excel Editor</h1>
+                <h1><EditableFileName initialFileName={fileName} onSave={handleFileNameSave}/></h1>
+                {/* <h1 className="editor-title">Excel Editor</h1> */}
             </div>
             <div className="excel-editor" onMouseUp={handleMouseUp}>
                 <div className="table-section">
@@ -230,7 +239,7 @@ export default function ExcelEditor() {
                     </div>
 
                     <div className="ColumnRanges">
-                        <h3> 현재 시트의 행 범위 지정 </h3>
+                        <h3> 열 데이터 병합 범위 지정 </h3>
                         <input
                             type="number"
                             name="startColumn"
@@ -258,21 +267,9 @@ export default function ExcelEditor() {
                     </div>
 
                     <div>
-                        <button
-                            className="upload-button"
-                            onClick={() => UploadHandler(data)}
-                        >
-                            DB 업로드
-                        </button>
-                    </div>
+                        <button onClick={() => UploadHandler(data, fileName)}> DB 업로드 </button>
 
-                    <div>
-                        <button 
-                            className='download-button'
-                            onClick={() => DownloadHandler(data)}
-                        >
-                            엑셀 파일로 다운로드
-                        </button>
+                        <button onClick={() => DownloadHandler(data)}> 엑셀 파일로 다운로드 </button>
                     </div>
                 </div>
             </div>

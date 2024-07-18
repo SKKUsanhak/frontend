@@ -37,6 +37,7 @@ export default function Upload() {
 
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('filename', file.name); // 파일 이름 추가
         setProgress(30);
         axios.post('/upload', formData, {
             headers: {

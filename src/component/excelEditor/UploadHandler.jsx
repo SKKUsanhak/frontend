@@ -1,8 +1,7 @@
 import ExcelJS from 'exceljs';
 import axios from 'axios';
 
-export const UploadHandler = async (data) => {
-
+export const UploadHandler = async (data, fileName) => {
     const workbook = new ExcelJS.Workbook();
 
     data.forEach((sheetData, sheetIndex) => {
@@ -15,24 +14,21 @@ export const UploadHandler = async (data) => {
             });
         });
     });
+
     try {
         // 버퍼 생성
         const buffer = await workbook.xlsx.writeBuffer();
-        // console.log("Buffer created successfully");
 
         // Blob 객체로 변환
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        // console.log("Blob created successfully");
-
-        // 파일 다운로드
-        // aveAs(blob, 'output.xlsx');
-        // console.log("File saved locally");
 
         // FormData 생성
         const formData = new FormData();
         const file = new File([blob], 'output.xlsx', { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        formData.append('file', file);
-
+        console.log(typeof(fileName));
+        formData.append("file", file);
+        formData.append("fileName", fileName);
+        
         // 파일 업로드
         const response = await axios.post('/final-result', formData, {
             headers: {
@@ -43,4 +39,4 @@ export const UploadHandler = async (data) => {
     } catch (error) {
         console.error('파일 업로드 실패', error);
     }
-}
+};
