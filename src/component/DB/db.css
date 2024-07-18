@@ -1,12 +1,55 @@
- .table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .table th, .table td {
-    border: 1px solid #ddd;
-    padding: 8px;
+.db-container {
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    font-family: "LineFont";
+    height: 100%;
     align-items: center;
-    justify-content: center;
-  }
-  
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 4px 6px rgb(250, 250, 250);
+    z-index: 10000;
+}
+
+.table {
+    max-width: 100%;
+    height: 100%;
+    overflow: auto; /* 내용이 넘칠 경우 스크롤 생성 */
+    border-width: 0;
+    font-family: "LineFont";
+}
+
+.table, .th, .td {
+    border: 1px solid black;
+}
+
+.th, .td {
+    padding: 8px;
+    text-align: left;
+}
+
+.th {
+    background-color: #f2f2f2;
+}
+
+.button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #45a049;
+}
+
+.button:active {
+    background-color: #3e8e41;
+}
+
+.button:focus {
+    outline: none;
+}
