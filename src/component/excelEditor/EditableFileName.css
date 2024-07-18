@@ -13,12 +13,12 @@
     padding: 5px 10px;
     font-size: 1rem;
     cursor: pointer;
-    background-color: #4CAF50;
+    background-color: #060429;
     color: white;
     border: none;
     border-radius: 3px;
 }
 
 .editable-file-name button:hover {
-    background-color: #45a049;
+    background-color: #252582;
 }

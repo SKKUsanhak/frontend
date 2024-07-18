@@ -3,11 +3,11 @@ import { useLocation } from 'react-router-dom';
 import ExcelJS from 'exceljs';
 import './ExcelEditor.css';
 import { useCellSelection } from './SelectCell';
-import { useRowHandler } from './RowHandler';
-import { useColumnHandler } from './ColumnHandler';
-import { UploadHandler } from './UploadHandler';
-import { MergeHandler } from './MergeHandler';
-import { DownloadHandler } from './DownloadHandler';
+import { useRowHandler } from './Handler/RowHandler';
+import { useColumnHandler } from './Handler/ColumnHandler';
+import { UploadHandler } from './Handler/UploadHandler';
+import { MergeHandler } from './Handler/MergeHandler';
+import { DownloadHandler } from './Handler/DownloadHandler';
 import EditableFileName from './EditableFileName';
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
 
@@ -43,7 +43,7 @@ export default function ExcelEditor() {
         if (location.state && location.state.fileData) {
             const workbook = new ExcelJS.Workbook();
             const buffer = location.state.fileData;
-            const loadedFileName = location.state.fileName || 'Uploaded File';
+            const loadedFileName = location.state.fileName;
 
             workbook.xlsx.load(buffer).then(() => {
                 const sheets = [];

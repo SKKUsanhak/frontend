@@ -25,7 +25,7 @@ export const UploadHandler = async (data, fileName) => {
         // FormData 생성
         const formData = new FormData();
         const file = new File([blob], 'output.xlsx', { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        console.log(typeof(fileName));
+        // console.log(typeof(fileName));
         formData.append("file", file);
         formData.append("fileName", fileName);
         

@@ -37,7 +37,6 @@ export default function Upload() {
 
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('filename', file.name); // 파일 이름 추가
         setProgress(30);
         axios.post('/upload', formData, {
             headers: {
@@ -49,7 +48,7 @@ export default function Upload() {
             setProgress(100);
             setTimeout(() => {
                 setLoading(false); // 로딩 상태 비활성화
-                navigate('/excelEditor', { state: { fileData: response.data } });
+                navigate('/excelEditor', { state: { fileData: response.data, fileName: file.name } });
             }, 500); // 0.5초 뒤에 리다이렉션
         })
         .catch(error => {
