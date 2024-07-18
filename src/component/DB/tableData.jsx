@@ -1,10 +1,9 @@
 import React from 'react';
 
-export default function TableData({ tableData }) {
+export default function TableData({ tableData , tableTitle}) {
     if (!tableData || tableData.length === 0) {
         return <p>No table data available.</p>;
     }
-
     // Extract unique column names
     const columns = [...new Set(tableData.map(item => item.columnName))];
     // Extract unique row numbers
@@ -21,7 +20,7 @@ export default function TableData({ tableData }) {
 
     return (
         <div>
-            <h2>테이블 데이터</h2>
+            <h2 className='tableTitle'>{tableTitle}</h2>
             <table>
                 <thead>
                     <tr>

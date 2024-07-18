@@ -11,12 +11,14 @@
     z-index: 10000;
 }
 
+.hidden {
+    display: none;
+}
+
 .table {
-    max-width: 100%;
-    height: 100%;
-    overflow: auto; /* 내용이 넘칠 경우 스크롤 생성 */
-    border-width: 0;
-    font-family: "LineFont";
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
 }
 
 .table, .th, .td {
@@ -52,4 +54,8 @@
 
 .button:focus {
     outline: none;
+}
+
+.tableTitle {
+    margin-top: 100px;
 }
