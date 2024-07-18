@@ -9,7 +9,7 @@ const Header = () => {
                     <ul className="nav__list">
                         <li className="nav__item"><a href="/upload">File Upload</a></li>
                         <li className="nav__item"><a href="/ExcelEditor">Excel Editor</a></li>
-                        <li className="nav__item"><a href="/DB">Show DB</a></li>
+                        <li className="nav__item"><a href="/database">Show DB</a></li>
                     </ul>
                 </nav>
             </div>
