@@ -3,6 +3,7 @@
     // 1. 파일 추가(upload file로 대체) / 삭제 (삭제 시 temp가 아닌 데이터도 함께 삭제되는 문제) 기능
     // 2. 테이블 추가(excelEditor 기능처럼 구현?) / 삭제 (삭제 시 table과 연결된 temp가 아닌 데이터도 함께 삭제됨) 기능
     // 3. 테이블 수정 기능 (excelEditor 기능처럼 구현)
+    // 4. 
     
     // 파일 관리 기능 추가 (Admin, User 기능 나누어 구현)
 
@@ -32,6 +33,10 @@
         const [tableTitle, setTableTitle] = useState('');
 
         useEffect(() => {
+            fetchFiles();
+        }, []);
+
+        const fetchFiles = () => {
             // 서버에 '/show-file' 요청 보내기
             axios.get('/show-file')
                 .then(response => {
@@ -42,7 +47,7 @@
                 .catch(error => {
                     console.error('Error fetching files:', error);
                 });
-        }, []);
+        }
     
         const handleFileSelect = (id) => { // 파일 선택을 관리
             setSelectedFileId(id);
@@ -87,7 +92,25 @@
                     });
             }
         };
-    
+        
+        const handleFileDelete = async (fileId) => {
+            try {
+                const response = await axios.get(`/delete-file`, {
+                    params: { id: fileId },
+                });
+                if (response.status === 200) {
+                    alert("파일 삭제 성공");
+                    fetchFiles();
+                    // 파일이 삭제된 후의 추가 작업이 필요하다면 여기에 작성합니다.
+                } else {
+                    throw new Error('파일 삭제 실패');
+                }
+            } catch (error) {
+                console.error('There was a problem with the axios operation:', error);
+                alert("There was an error deleting the file.");
+            }
+        };
+
         const handleBackToFileList = () => {
             setVisible('fileList');
             setSelectedFileId(null);
@@ -106,7 +129,7 @@
             <div className="db-container">
                 {visible === 'fileList' && (
                     <div>
-                        <FileList files={files} selectedFileId={selectedFileId} onFileSelect={handleFileSelect} />
+                        <FileList files={files} selectedFileId={selectedFileId} onFileSelect={handleFileSelect} onFileDelete={handleFileDelete}/>
                         {selectedFileId && (
                             <div className="file-button-container">
                                 <button onClick={FileSelect}>파일 선택</button>

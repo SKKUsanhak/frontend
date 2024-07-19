@@ -231,3 +231,19 @@
 .highlight-cell {
     background-color: #9090cb; /* 하이라이트 색상을 노란색으로 지정합니다. 필요에 따라 변경할 수 있습니다. */
 }
+
+.table .trash-icon {
+    cursor: pointer;
+    color: black; /* 기본 색상 */
+    transition: color 0.3s;
+    border: none;
+    background-color: white;
+}
+
+.table .trash-icon:hover {
+    color: rgb(215, 60, 18); /* 호버 시 빨간색 */
+}
+
+.table .trash-icon:active {
+    color: red;
+}
