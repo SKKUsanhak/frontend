@@ -174,7 +174,11 @@
 }
 
 .control-section {
-
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    font-family: "LineFont";
+    margin-right: 10px;
 }
 
 .table-back-container button{
