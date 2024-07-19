@@ -19,26 +19,35 @@ export default function TableData({ tableData , tableTitle}) {
     });
 
     return (
-        <div className='table-data-container'>
+        <div>
             <h2 className='tableTitle'>{tableTitle}</h2>
-            <table className='db-table'>
-                <thead>
-                    <tr>
-                        {columns.map((col, index) => (
-                            <th key={index}>{col}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {table.map((row, rowIndex) => (
-                        <tr key={rowIndex}>
-                            {row.map((cell, cellIndex) => (
-                                <td key={cellIndex}>{cell}</td>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <div className='excel-editor'>
+                <div className='table-section'>
+                    <div className='table-data-container'>
+                        <table className='db-table'>
+                            <thead>
+                                <tr>
+                                    {columns.map((col, index) => (
+                                        <th key={index}>{col}</th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {table.map((row, rowIndex) => (
+                                    <tr key={rowIndex}>
+                                        {row.map((cell, cellIndex) => (
+                                            <td key={cellIndex}>{cell}</td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div className='control-section'>
+
+                </div>
+            </div>
         </div>
     );
 }
