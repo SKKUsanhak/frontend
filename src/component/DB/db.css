@@ -215,3 +215,19 @@
     text-align: center;
     font-family: "LineFontBold";
 }
+
+.selected-cell-info {
+    outline: none;
+    /* 포커스 시 아웃라인 제거 */
+    padding: 8px;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    /* 패딩을 포함한 박스 크기 계산 */
+    font-family: "LineFont";
+    text-align: center;
+}
+
+.highlight-cell {
+    background-color: #9090cb; /* 하이라이트 색상을 노란색으로 지정합니다. 필요에 따라 변경할 수 있습니다. */
+}

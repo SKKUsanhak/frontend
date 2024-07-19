@@ -20,6 +20,7 @@
     import FileList from './fileList';
     import TableList from './tableList';
     import TableData from './tableData';
+    import EditabletableTitle from './tableTitleEdit';
     
     export default function DB() {
         const [files, setFiles] = useState([]);
@@ -128,7 +129,8 @@
                 )}
                 {visible === 'tableData' && tableData && (
                     <div>
-                        <TableData tableData={tableData} tableTitle={tableTitle} />
+                        <h1><EditabletableTitle initialTableTitle={tableTitle} onSave={setTableTitle} tableId={selectedTableId}/></h1>
+                        <TableData tableData={tableData} initialTableTitle={tableTitle} />
                         <div className="table-back-container">
                             <button onClick={handleBackToTableList}>뒤로 가기</button>
                         </div>

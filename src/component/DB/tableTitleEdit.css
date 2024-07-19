@@ -1,0 +1,32 @@
+.editable-title-name {
+    margin-top: 100px;
+    font-family: "LineFont";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+}
+
+.editable-title-name input {
+    display: flex;
+    text-align: center;
+    padding: 5px;
+    font-size: 1rem;
+    white-space: nowrap;
+    box-sizing: content-box; /* Ensure the input width includes the padding */
+}
+
+.editable-title-name button {
+    padding: 5px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #060429;
+    color: white;
+    border: none;
+    border-radius: 3px;
+}
+
+.editable-title-name button:hover {
+    background-color: #252582;
+}

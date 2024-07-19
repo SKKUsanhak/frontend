@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-export default function TableData({ tableData , tableTitle}) {
+export default function TableData({ tableData , initialTableTitle}) {
+    const [selectedCell, setSelectedCell] = useState(null);
+
     if (!tableData || tableData.length === 0) {
         return <p>No table data available.</p>;
     }
@@ -18,9 +20,12 @@ export default function TableData({ tableData , tableTitle}) {
         });
     });
 
+    const handleCellClick = (rowIndex, cellIndex, cellData) => {
+        setSelectedCell({ rowIndex, cellIndex, cellData });
+    };
+
     return (
         <div>
-            <h2 className='tableTitle'>{tableTitle}</h2>
             <div className='excel-editor'>
                 <div className='table-section'>
                     <div className='table-data-container'>
@@ -36,7 +41,13 @@ export default function TableData({ tableData , tableTitle}) {
                                 {table.map((row, rowIndex) => (
                                     <tr key={rowIndex}>
                                         {row.map((cell, cellIndex) => (
-                                            <td key={cellIndex}>{cell}</td>
+                                            <td
+                                            key={cellIndex}
+                                            className={selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex ? 'highlight-cell' : ''}
+                                            onClick={() => handleCellClick(rowIndex, cellIndex, cell)}
+                                        >
+                                            {cell}
+                                        </td>
                                         ))}
                                     </tr>
                                 ))}
@@ -45,7 +56,14 @@ export default function TableData({ tableData , tableTitle}) {
                     </div>
                 </div>
                 <div className='control-section'>
-
+                    {selectedCell && (
+                        <div className='selected-cell-info'>
+                            <p>Selected Cell:</p>
+                            <p>Row: {selectedCell.rowIndex + 1}</p>
+                            <p>Column: {columns[selectedCell.cellIndex]}</p>
+                            <p>Data: {selectedCell.cellData}</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
