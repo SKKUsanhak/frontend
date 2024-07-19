@@ -19,7 +19,7 @@ export default function TableData({ tableData , tableTitle}) {
     });
 
     return (
-        <div>
+        <div className='table-data-container'>
             <h2 className='tableTitle'>{tableTitle}</h2>
             <table className='db-table'>
                 <thead>

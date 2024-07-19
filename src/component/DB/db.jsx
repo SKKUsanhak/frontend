@@ -105,7 +105,7 @@
             <div className="db-container">
                 {visible === 'fileList' && (
                     <div>
-                        <FileList className="fileList" files={files} selectedFileId={selectedFileId} onFileSelect={handleFileSelect} />
+                        <FileList files={files} selectedFileId={selectedFileId} onFileSelect={handleFileSelect} />
                         {selectedFileId && (
                             <div className="file-button-container">
                                 <button onClick={FileSelect}>파일 선택</button>
@@ -115,7 +115,7 @@
                 )}
                 {visible === 'tableList' && (
                     <div>
-                        <TableList className="tableList" tableList={tableList} selectedTableId={selectedTableId} onTableSelect={handleTableSelect} />
+                        <TableList tableList={tableList} selectedTableId={selectedTableId} onTableSelect={handleTableSelect} />
                         {selectedTableId && (
                             <div className="table-button-container">
                                 <button onClick={TableSelect}>테이블 선택</button>
@@ -128,7 +128,7 @@
                 )}
                 {visible === 'tableData' && tableData && (
                     <div>
-                        <TableData className="tableData" tableData={tableData} tableTitle={tableTitle} />
+                        <TableData tableData={tableData} tableTitle={tableTitle} />
                         <div className="table-back-container">
                             <button onClick={handleBackToTableList}>뒤로 가기</button>
                         </div>

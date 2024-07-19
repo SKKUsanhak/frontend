@@ -7,7 +7,7 @@ export default function TableList({ tableList, selectedTableId, onTableSelect })
             {tableList.length === 0 ? (
                 <p>No tables available.</p>
             ) : (
-                <table className='table'>
+                <table>
                     <thead>
                         <tr>
                             <th></th>

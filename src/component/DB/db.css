@@ -61,7 +61,6 @@
     font-family: "LineFont";
     height: 100%;
     width: 60%;
-    border: 1px solid #ddd;
     padding: 10px;
     margin-left: auto;
     margin-right: auto;
@@ -69,15 +68,14 @@
     justify-content: center;
 }
 
-.table-list-container .table {
+.table-list-container table {
     width: 100%;
     border-collapse: collapse;
     align-items: center;
     justify-content: center;
-    margin: 0 auto;
 }
 
-.table-list-container .table td {
+.table-list-container th, .table-list-container td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
@@ -136,4 +134,30 @@
     background-color: #6060a6; 
 }
 
+.table-data-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-family: "LineFont";
+    max-width: 80%;
+    height: 100%;
+    overflow: auto; /* 내용이 넘칠 경우 스크롤 생성 */
+    border-width: 0;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    justify-content: center;
+}
 
+.table-data-container .db-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.db-table th, .db-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    align-items: center;
+    justify-content: center;
+}
