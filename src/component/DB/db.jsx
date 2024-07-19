@@ -35,6 +35,7 @@
             axios.get('/show-file')
                 .then(response => {
                     // JSON 형태의 데이터를 받아서 files 상태로 설정
+                    console.log(response.data);
                     setFiles(response.data);
                 })
                 .catch(error => {
@@ -104,32 +105,32 @@
             <div className="db-container">
                 {visible === 'fileList' && (
                     <div>
-                        <FileList files={files} selectedFileId={selectedFileId} onFileSelect={handleFileSelect} />
+                        <FileList className="fileList" files={files} selectedFileId={selectedFileId} onFileSelect={handleFileSelect} />
                         {selectedFileId && (
-                            <div>
-                                <button onClick={FileSelect}>파일 확인</button>
+                            <div className="file-button-container">
+                                <button onClick={FileSelect}>파일 선택</button>
                             </div>
                         )}
                     </div>
                 )}
                 {visible === 'tableList' && (
                     <div>
-                        <TableList tableList={tableList} selectedTableId={selectedTableId} onTableSelect={handleTableSelect} />
+                        <TableList className="tableList" tableList={tableList} selectedTableId={selectedTableId} onTableSelect={handleTableSelect} />
                         {selectedTableId && (
-                            <div>
-                                <button onClick={TableSelect}>테이블 데이터 확인</button>
+                            <div className="table-button-container">
+                                <button onClick={TableSelect}>테이블 선택</button>
                             </div>
                         )}
-                        <div>
-                            <button onClick={handleBackToFileList}>파일 목록으로 돌아가기</button>
+                        <div className="file-back-container">
+                            <button onClick={handleBackToFileList}>뒤로 가기</button>
                         </div>
                     </div>
                 )}
                 {visible === 'tableData' && tableData && (
                     <div>
-                        <TableData tableData={tableData} tableTitle={tableTitle} />
-                        <div>
-                            <button onClick={handleBackToTableList}>테이블 목록으로 돌아가기</button>
+                        <TableData className="tableData" tableData={tableData} tableTitle={tableTitle} />
+                        <div className="table-back-container">
+                            <button onClick={handleBackToTableList}>뒤로 가기</button>
                         </div>
                     </div>
                 )}

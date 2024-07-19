@@ -21,7 +21,7 @@ export default function TableData({ tableData , tableTitle}) {
     return (
         <div>
             <h2 className='tableTitle'>{tableTitle}</h2>
-            <table>
+            <table className='db-table'>
                 <thead>
                     <tr>
                         {columns.map((col, index) => (

@@ -2,12 +2,12 @@ import React from 'react';
 
 export default function TableList({ tableList, selectedTableId, onTableSelect }) {
     return (
-        <div>
+        <div className='table-list-container'>
             <h2>테이블 목록</h2>
             {tableList.length === 0 ? (
                 <p>No tables available.</p>
             ) : (
-                <table>
+                <table className='table'>
                     <thead>
                         <tr>
                             <th></th>

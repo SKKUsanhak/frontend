@@ -1,18 +1,20 @@
 import React from 'react';
+import './db.css';
 
 export default function FileList({ files, selectedFileId, onFileSelect }) {
     return (
-        <div>
+        <div className='file-list-container'>
             <h2>파일 목록</h2>
             {files.length === 0 ? (
                 <p>No files available.</p>
             ) : (
-                <table>
+                <table className='table'>
                     <thead>
                         <tr>
                             <th></th>
-                            <th>ID</th>
+                            <th>File ID</th>
                             <th>File Name</th>
+                            <th>Upload Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -27,6 +29,7 @@ export default function FileList({ files, selectedFileId, onFileSelect }) {
                                 </td>
                                 <td>{file.id}</td>
                                 <td>{file.fileName}</td>
+                                <td>{file.createTime}</td>
                             </tr>
                         ))}
                     </tbody>
