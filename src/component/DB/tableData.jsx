@@ -85,6 +85,66 @@ export default function TableData({ tableData, tableId, fetchData }) {
         }
     };
 
+    // const handleMakeHeader = () => {
+    //     const newColumnName = prompt("새로운 열 이름을 입력하세요:");
+        
+    //     if (!newColumnName) {
+    //         alert("열 이름을 입력하지 않았습니다.");
+    //         return;
+    //     }
+    
+    //     // 새로운 열의 인덱스 계산
+    //     const newColumnIndex = columns.length;
+    
+    //     // 서버에 새로운 열 생성 요청 보내기
+    //     axios.post('/create-new-column', { contents: newColumnName }, {
+    //         params: {
+    //             tableid: tableId,
+    //             colindex: newColumnIndex
+    //         },
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         }
+    //     })
+    //     .then(response => {
+    //         if (response.status === 200) {
+    //             alert('새로운 열이 성공적으로 추가되었습니다.');
+    //             // 여기서부터 cell 추가 반복 시행
+    //             const newCells = rows.map(rowNumber => ({
+    //                 tableId: tableId,
+    //                 row: rowNumber,
+    //                 column: newColumnIndex,
+    //                 contents: ''
+    //             }));
+    
+    //             Promise.all(newCells.map(cell => (
+    //                 axios.post('/create-new-cell', cell, {
+    //                     headers: {
+    //                         'Content-Type': 'application/json'
+    //                     }
+    //                 })
+    //             )))
+    //             .then(() => {
+    //                 console.log('빈 셀 생성 성공.');
+    //                 fetchData();
+    //             })
+    //             .catch(error => {
+    //                 console.log('빈 셀 생성 실패.');
+    //                 console.error('Error:', error);
+    //             });
+    
+    //         } else {
+    //             alert('새로운 열 생성 실패');
+    //         }
+    //     })
+    //     .catch(error => {
+    //         alert('열 생성 중 오류가 발생했습니다.');
+    //         console.error('Error:', error);
+    //     });
+    // };
+    
+    
+
     return (
         <div>
             <div className='excel-editor'>
@@ -137,18 +197,23 @@ export default function TableData({ tableData, tableId, fetchData }) {
                         </div>
                     )}
                     {selectedHeader && (
-                        <div className='selected-header-info'>
-                            <p>현재 선택한 열</p>
-                            <p>행: 1</p>
-                            <p>데이터: {selectedHeader.cellName}</p>
-                            <input 
-                                type="text" 
-                                value={newHeaderContent} 
-                                onChange={handleHeaderContentChange}
-                            />
-                            <button onClick={handleHeaderUpdateClick}>수정</button>
+                        <div>
+                            <div className='selected-header-info'>
+                                <p>현재 선택한 열</p>
+                                <p>행: 1</p>
+                                <p>데이터: {selectedHeader.cellName}</p>
+                                <input
+                                    type="text"
+                                    value={newHeaderContent}
+                                    onChange={handleHeaderContentChange}
+                                />
+                                <button onClick={handleHeaderUpdateClick}>수정</button>
+                            </div>
                         </div>
                     )}
+                    {/* <div>
+                        <button onClick={handleMakeHeader}>열 추가</button>
+                    </div> */}
                 </div>
             </div>
         </div>
