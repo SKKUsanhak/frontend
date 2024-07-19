@@ -228,6 +228,18 @@
     text-align: center;
 }
 
+.selected-header-info {
+    outline: none;
+    /* 포커스 시 아웃라인 제거 */
+    padding: 8px;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    /* 패딩을 포함한 박스 크기 계산 */
+    font-family: "LineFont";
+    text-align: center;
+}
+
 .highlight-cell {
     background-color: #9090cb; /* 하이라이트 색상을 노란색으로 지정합니다. 필요에 따라 변경할 수 있습니다. */
 }
@@ -246,4 +258,26 @@
 
 .table .trash-icon:active {
     color: red;
+}
+
+.control-section button {
+    margin-top: 0; /* 기존 margin-top을 제거 */
+    margin-left: 5px;
+    background-color: #060429;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: "LineFont";
+}
+
+.control-section button:hover {
+    background-color: #252582;
+}
+
+.control-section button:active {
+    background-color: #6060a6; 
 }

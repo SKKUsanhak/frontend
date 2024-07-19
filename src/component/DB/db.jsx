@@ -41,12 +41,39 @@
             axios.get('/show-file')
                 .then(response => {
                     // JSON 형태의 데이터를 받아서 files 상태로 설정
-                    console.log(response.data);
+                    // console.log(response.data);
                     setFiles(response.data);
                 })
                 .catch(error => {
                     console.error('Error fetching files:', error);
                 });
+        }
+
+        const fetchTable = () => {
+            // 서버에 '/show-table' 요청 보내기
+            axios.get('/show-table', { params: { id: selectedFileId } })
+            .then(response => {
+                // JSON 형태의 데이터를 받아서 tableList 상태로 설정
+                setTableList(response.data);
+                setVisible('tableList'); // 테이블 목록을 표시하도록 설정
+            })
+            .catch(error => {
+                console.error('Error fetching table data:', error);
+            });
+        }
+
+        const fetchData = () => {
+            const selectedTable = tableList.find(table => table.id === selectedTableId);
+                setTableTitle(selectedTable ? selectedTable.tableTitle : '');
+                axios.get('/show-temp-data', { params: { tableId: selectedTableId } })
+                    .then(response => {
+                        // JSON 형태의 데이터를 받아서 tableData 상태로 설정
+                        setTableData(response.data);
+                        setVisible('tableData'); // 테이블 데이터를 표시하도록 설정
+                    })
+                    .catch(error => {
+                        console.error('Error fetching table data:', error);
+                    });
         }
     
         const handleFileSelect = (id) => { // 파일 선택을 관리
@@ -62,40 +89,20 @@
     
         const FileSelect = () => { // 파일을 선택하고 파일의 테이블을 call
             if (selectedFileId !== null) {
-                // 서버에 '/show-table' 요청 보내기
-                axios.get('/show-table', { params: { id: selectedFileId } })
-                    .then(response => {
-                        // JSON 형태의 데이터를 받아서 tableList 상태로 설정
-                        setTableList(response.data);
-                        setVisible('tableList'); // 테이블 목록을 표시하도록 설정
-                    })
-                    .catch(error => {
-                        console.error('Error fetching table data:', error);
-                    });
+                fetchTable();
             }
         };
     
         const TableSelect = () => { // 테이블을 선택하고 데이터를 call
             if (selectedTableId !== null) {
                 // 서버에 '/show-temp-data' 요청 보내기
-                const selectedTable = tableList.find(table => table.id === selectedTableId);
-                setTableTitle(selectedTable ? selectedTable.tableTitle : '');
-                console.log(tableTitle);
-                axios.get('/show-temp-data', { params: { tableId: selectedTableId } })
-                    .then(response => {
-                        // JSON 형태의 데이터를 받아서 tableData 상태로 설정
-                        setTableData(response.data);
-                        setVisible('tableData'); // 테이블 데이터를 표시하도록 설정
-                    })
-                    .catch(error => {
-                        console.error('Error fetching table data:', error);
-                    });
+                fetchData();
             }
         };
         
         const handleFileDelete = async (fileId) => {
             try {
-                const response = await axios.get(`/delete-file`, {
+                const response = await axios.delete(`/delete-file`, {
                     params: { id: fileId },
                 });
                 if (response.status === 200) {
@@ -153,7 +160,7 @@
                 {visible === 'tableData' && tableData && (
                     <div>
                         <h1><EditabletableTitle initialTableTitle={tableTitle} onSave={setTableTitle} tableId={selectedTableId}/></h1>
-                        <TableData tableData={tableData} initialTableTitle={tableTitle} />
+                        <TableData tableData={tableData} tableId={selectedTableId} fetchData={fetchData} />
                         <div className="table-back-container">
                             <button onClick={handleBackToTableList}>뒤로 가기</button>
                         </div>
