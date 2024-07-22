@@ -126,12 +126,14 @@
             setTableList(null);
             setSelectedTableId(null);
             setTableData(null);
+            fetchFiles();
         };
     
         const handleBackToTableList = () => {
             setVisible('tableList');
             setSelectedTableId(null);
             setTableData(null);
+            fetchTable();
         };
     
         return (

@@ -38,6 +38,7 @@ export default function TableList({ tableList, selectedTableId, onTableSelect, f
                             <th></th>
                             <th>ID</th>
                             <th>Table Name</th>
+                            <th>완료 여부</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,6 +53,7 @@ export default function TableList({ tableList, selectedTableId, onTableSelect, f
                                 </td>
                                 <td>{table.id}</td>
                                 <td>{table.tableTitle}</td>
+                                <td>{table.finalData ? 'O' : 'X'}</td>
                             </tr>
                         ))}
                     </tbody>

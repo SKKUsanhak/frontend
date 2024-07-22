@@ -215,6 +215,14 @@
     /* Ensures it stays on top of other content */
 }
 
+.control-section .button-group {
+    margin-top: 10px;
+}
+
+.control-section .save-button-group {
+    margin-top: auto; 
+}
+
 .table-back-container button{
     margin-top: 20px;
     margin-bottom: 20px;
@@ -227,7 +235,6 @@
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 10px 5px;
     font-size: 12px;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -296,7 +303,7 @@
 
 .control-section button {
     margin-top: 0; /* 기존 margin-top을 제거 */
-    margin-left: 5px;
+    margin-right: 5px;
     background-color: #060429;
     color: white;
     border: none;
@@ -314,4 +321,50 @@
 
 .control-section button:active {
     background-color: #6060a6; 
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    margin-bottom: 10px; /* 토글 스위치와 저장 버튼 사이의 간격 */
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #6060a6;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
 }

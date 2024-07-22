@@ -6,6 +6,7 @@ export default function TableData({ tableData, tableId, fetchData }) {
     const [rows, setRows] = useState([]);
     const [table, setTable] = useState([]);
     const [editQueue, setEditQueue] = useState([]);
+    const [toggle, setToggle] = useState();
 
     useEffect(() => {
         if (tableData && tableData.length > 0) {
@@ -152,6 +153,11 @@ export default function TableData({ tableData, tableId, fetchData }) {
                 }
             }
             alert('모든 변경 사항이 성공적으로 저장되었습니다.');
+            if(toggle) {
+                axios.get('/save-final-table', {
+                    params: { tableid: tableId }
+                })
+            }
             fetchData();
             setEditQueue([]);
         } catch (error) {
@@ -159,6 +165,10 @@ export default function TableData({ tableData, tableId, fetchData }) {
             console.error('Error:', error);
             setEditQueue([]);
         }
+    };
+
+    const handleToggleChange = () => {
+        setToggle(!toggle);
     };
 
     return (
@@ -217,7 +227,13 @@ export default function TableData({ tableData, tableId, fetchData }) {
                         <button onClick={handleMakeHeader}>열 추가</button>
                         <button onClick={handleDeleteColumn}>열 삭제</button>
                     </div>
-                    <div className='button-group'>
+                    <div className='save-button-group'>
+                        <div>
+                            <label className='toggle-switch'>
+                                <input type='checkbox' checked={toggle} onChange={handleToggleChange} />
+                                <span className='slider'></span>
+                            </label>
+                        </div>
                         <button onClick={handleSaveChanges}>저장</button>
                     </div>
                 </div>
