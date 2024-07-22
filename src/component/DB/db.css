@@ -87,6 +87,7 @@
     width: 100%;
     border-collapse: collapse;
     align-items: center;
+    text-align: center;
     justify-content: center;
 }
 
@@ -94,7 +95,6 @@
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
-    vertical-align: middle;
 }
 
 .table-button-container button{
@@ -429,4 +429,19 @@ input:checked + .slider:before {
 .tooltip-container:hover .tooltip {
     visibility: visible;
     opacity: 1; /* 호버 시 말풍선 표시 */
+}
+
+.edit-table-button,
+.save-table-button {
+    margin-left: 8px;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 1rem; /* 패딩 외에도 font-size를 함께 사용합니다 */
+    align-items: center;
+}
+
+.edit-table-button svg,
+.save-table-button svg {
+    width: 10px; /* 아이콘의 너비를 줄입니다 */
+    height: 10px; /* 아이콘의 높이를 줄입니다 */
 }
