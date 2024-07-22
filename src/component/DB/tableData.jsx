@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { RiQuestionLine } from "react-icons/ri";
 
-export default function TableData({ tableData, tableId, fetchData }) {
+export default function TableData({ fileId, tableData, tableId, fetchData, isFinal }) {
     const [columns, setColumns] = useState([]);
     const [rows, setRows] = useState([]);
     const [table, setTable] = useState([]);
@@ -158,6 +159,9 @@ export default function TableData({ tableData, tableId, fetchData }) {
                     params: { tableid: tableId }
                 })
             }
+            axios.patch('/update-date', null, {
+                params: { fileid: fileId }
+            })
             fetchData();
             setEditQueue([]);
         } catch (error) {
@@ -228,13 +232,19 @@ export default function TableData({ tableData, tableId, fetchData }) {
                         <button onClick={handleDeleteColumn}>열 삭제</button>
                     </div>
                     <div className='save-button-group'>
-                        <div>
-                            <label className='toggle-switch'>
-                                <input type='checkbox' checked={toggle} onChange={handleToggleChange} />
-                                <span className='slider'></span>
-                            </label>
-                        </div>
-                        <button onClick={handleSaveChanges}>저장</button>
+                        {!isFinal && ( // isFinal이 true가 아닌 경우에만 토글 스위치를 표시
+                            <div className="toggle-container">
+                                <label className='toggle-switch'>
+                                    <input type='checkbox' checked={toggle} onChange={handleToggleChange} />
+                                    <span className='slider'></span>
+                                </label>
+                                <div className="tooltip-container">
+                                    <RiQuestionLine className='question' />
+                                    <div className="tooltip">토글 시 최종 데이터로 저장되며, 관리자만 수정 가능해집니다.</div>
+                                </div>
+                            </div>
+                        )}
+                        <button className='save-button' onClick={handleSaveChanges}>저장</button>
                     </div>
                 </div>
             </div>

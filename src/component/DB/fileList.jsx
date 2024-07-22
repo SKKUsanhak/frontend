@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './db.css';
 import { FaTrash } from "react-icons/fa";
 
-export default function FileList({ files, selectedFileId, onFileSelect, onFileDelete}) {
+export default function FileList({ files, selectedFileId, onFileSelect, onFileDelete, onFileNameUpdate }) {
+    const [editingFileId] = useState(null);
+    const [newFileName, setNewFileName] = useState('');
+
+    const formatDate = (dateString) => {
+        const options = { 
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit', 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit',
+            hour12: false // 24시간제로 설정
+        };
+        return new Date(dateString).toLocaleString('ko-KR', options);
+    };
 
     return (
         <div className='file-list-container'>
@@ -14,10 +29,11 @@ export default function FileList({ files, selectedFileId, onFileSelect, onFileDe
                     <thead>
                         <tr>
                             <th></th>
-                            <th>File ID</th>
-                            <th>File Name</th>
-                            <th>Upload Date</th>
-                            <th>Delete File</th>
+                            <th>파일 ID</th>
+                            <th>파일 이름</th>
+                            <th>업로드 날짜</th>
+                            <th>최종 수정일</th>
+                            <th>파일 삭제</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -31,13 +47,25 @@ export default function FileList({ files, selectedFileId, onFileSelect, onFileDe
                                     />
                                 </td>
                                 <td>{file.id}</td>
-                                <td>{file.fileName}</td>
-                                <td>{file.createTime}</td>
                                 <td>
-                                    <button 
-                                        className='trash-icon' 
-                                        onClick={() => onFileDelete(file.id)}
-                                    >
+                                    {editingFileId === file.id ? (
+                                        <>
+                                            <input
+                                                type="text"
+                                                value={newFileName}
+                                                onChange={(e) => setNewFileName(e.target.value)}
+                                            />
+                                        </>
+                                    ) : (
+                                        <>
+                                            {file.fileName}
+                                        </>
+                                    )}
+                                </td>
+                                <td>{formatDate(file.createTime)}</td>
+                                <td>{formatDate(file.updateTime)}</td>
+                                <td>
+                                    <button className='trash-icon' onClick={() => onFileDelete(file.id)}>
                                         <FaTrash />
                                     </button>
                                 </td>

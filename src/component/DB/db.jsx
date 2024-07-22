@@ -164,7 +164,7 @@
                 {visible === 'tableData' && tableData && (
                     <div>
                         <h1><EditabletableTitle initialTableTitle={tableTitle} onSave={setTableTitle} tableId={selectedTableId}/></h1>
-                        <TableData tableData={tableData} tableId={selectedTableId} fetchData={fetchData} />
+                        <TableData fileId={selectedFileId} tableData={tableData} tableId={selectedTableId} fetchData={fetchData} isFinal={tableList.find(table => table.id === selectedTableId).finalData} />
                         <div className="table-back-container">
                             <button onClick={handleBackToTableList}>뒤로 가기</button>
                         </div>
