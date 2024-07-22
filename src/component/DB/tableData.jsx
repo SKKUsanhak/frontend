@@ -77,7 +77,6 @@ export default function TableData({ tableData, tableId, fetchData }) {
     };
 
     const handleDeleteRow = () => {
-        console.log(rows);
         const rowIndex = parseInt(prompt("삭제할 행 번호를 입력하세요:"), 10);
         if (isNaN(rowIndex) || !rows.includes(rowIndex + 2)) {
             alert("유효하지 않은 행 번호입니다.");
@@ -143,7 +142,6 @@ export default function TableData({ tableData, tableId, fetchData }) {
     };
     
     const handleSaveChanges = async () => {
-        console.log(editQueue);
         try {
             for (const request of editQueue) {
                 const response = await axios(request);

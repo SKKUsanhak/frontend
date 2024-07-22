@@ -65,7 +65,7 @@
         const fetchData = () => {
             const selectedTable = tableList.find(table => table.id === selectedTableId);
                 setTableTitle(selectedTable ? selectedTable.tableTitle : '');
-                axios.get('/show-temp-data', { params: { tableId: selectedTableId } })
+                axios.get('/show-data', { params: { tableid: selectedTableId } })
                     .then(response => {
                         // JSON 형태의 데이터를 받아서 tableData 상태로 설정
                         setTableData(response.data);
@@ -94,6 +94,8 @@
         };
     
         const TableSelect = () => { // 테이블을 선택하고 데이터를 call
+            console.log(tableList);
+            console.log(selectedTableId);
             if (selectedTableId !== null) {
                 // 서버에 '/show-temp-data' 요청 보내기
                 fetchData();
@@ -146,7 +148,7 @@
                 )}
                 {visible === 'tableList' && (
                     <div>
-                        <TableList tableList={tableList} selectedTableId={selectedTableId} onTableSelect={handleTableSelect} />
+                        <TableList tableList={tableList} selectedTableId={selectedTableId} onTableSelect={handleTableSelect} fileId={selectedFileId} fetchTables={fetchTable}/>
                         {selectedTableId && (
                             <div className="table-button-container">
                                 <button onClick={TableSelect}>테이블 선택</button>

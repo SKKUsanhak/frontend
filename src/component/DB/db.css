@@ -65,8 +65,22 @@
     padding: 10px;
     margin-left: auto;
     margin-right: auto;
-    align-items: center;
     justify-content: center;
+}
+
+.table-list-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.table-list-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.add-table-button {
+    cursor: pointer;
 }
 
 .table-list-container table {
@@ -168,6 +182,7 @@
 .db-table th, .db-table td {
     border: 1px solid #ddd;
     padding:5px;
+    text-align: center;
     align-items: center;
     justify-content: center;
     white-space: nowrap;
@@ -176,6 +191,7 @@
 
 .db-table input {
     border: none;
+    text-align: center;
 }
 
 .control-section {
