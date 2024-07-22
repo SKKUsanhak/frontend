@@ -171,14 +171,28 @@
     align-items: center;
     justify-content: center;
     white-space: nowrap;
+    height: 20px;
 }
 
 .control-section {
     display: flex;
     flex-direction: column;
-    border: 1px solid #ddd;
+    align-items: center;
+    padding: 20px;
     font-family: "LineFont";
-    margin-right: 10px;
+    position: fixed;
+    /* Adjust this as needed depending on your header's height */
+    right: 70px;
+    /* Aligns the section to the right edge of the viewport */
+    width: 15%;
+    /* Specifies the width of the controls section */
+    height: 600px;
+    /* Fixed height, can adjust if needed */
+    background-color: white;
+    /* Optional: sets a background color */
+    z-index: 1000;
+    border: 1px solid #ddd;
+    /* Ensures it stays on top of other content */
 }
 
 .table-back-container button{

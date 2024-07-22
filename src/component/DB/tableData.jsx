@@ -45,7 +45,7 @@ export default function TableData({ tableData, tableId, fetchData }) {
         setNewHeaderContent(e.target.value);
     };
 
-    const handleUpdateClick = () => {
+    const handleUpdateClick = () => { // 셀 수정 
         if (selectedCell) {
             const { id } = selectedCell;
             axios.patch(`/update-cell?cellid=${id}`, { contents: newContent })
@@ -65,7 +65,7 @@ export default function TableData({ tableData, tableId, fetchData }) {
         }
     };
 
-    const handleHeaderUpdateClick = () => {
+    const handleHeaderUpdateClick = () => { // 열(헤더) 수정 
         if (selectedHeader) {
             const { cellIndex } = selectedHeader;
             axios.patch(`/update-column-name?tableid=${tableId}&columnnumber=${cellIndex}`, { contents: newHeaderContent })
@@ -85,65 +85,68 @@ export default function TableData({ tableData, tableId, fetchData }) {
         }
     };
 
-    // const handleMakeHeader = () => {
-    //     const newColumnName = prompt("새로운 열 이름을 입력하세요:");
+    const handleMakeHeader = () => { // 새로운 열 추가 
+        const newColumnName = prompt("새로운 열 이름을 입력하세요:");
         
-    //     if (!newColumnName) {
-    //         alert("열 이름을 입력하지 않았습니다.");
-    //         return;
-    //     }
+        if (!newColumnName) {
+            alert("열 이름을 입력하지 않았습니다.");
+            return;
+        }
     
-    //     // 새로운 열의 인덱스 계산
-    //     const newColumnIndex = columns.length;
+        // 새로운 열의 인덱스 계산
+        const newColumnIndex = columns.length;
     
-    //     // 서버에 새로운 열 생성 요청 보내기
-    //     axios.post('/create-new-column', { contents: newColumnName }, {
-    //         params: {
-    //             tableid: tableId,
-    //             colindex: newColumnIndex
-    //         },
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         }
-    //     })
-    //     .then(response => {
-    //         if (response.status === 200) {
-    //             alert('새로운 열이 성공적으로 추가되었습니다.');
-    //             // 여기서부터 cell 추가 반복 시행
-    //             const newCells = rows.map(rowNumber => ({
-    //                 tableId: tableId,
-    //                 row: rowNumber,
-    //                 column: newColumnIndex,
-    //                 contents: ''
-    //             }));
+        // 서버에 새로운 열 생성 요청 보내기
+        axios.post('/create-new-column', { contents: newColumnName }, {
+            params: {
+                tableid: tableId,
+                colindex: newColumnIndex
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.status === 200) {
+                alert('새로운 열이 성공적으로 추가되었습니다.');
+                fetchData();
+            } else {
+                alert('새로운 열 생성 실패');
+            }
+        })
+        .catch(error => {
+            alert('열 생성 중 오류가 발생했습니다.');
+            console.error('Error:', error);
+        });
+    };
     
-    //             Promise.all(newCells.map(cell => (
-    //                 axios.post('/create-new-cell', cell, {
-    //                     headers: {
-    //                         'Content-Type': 'application/json'
-    //                     }
-    //                 })
-    //             )))
-    //             .then(() => {
-    //                 console.log('빈 셀 생성 성공.');
-    //                 fetchData();
-    //             })
-    //             .catch(error => {
-    //                 console.log('빈 셀 생성 실패.');
-    //                 console.error('Error:', error);
-    //             });
-    
-    //         } else {
-    //             alert('새로운 열 생성 실패');
-    //         }
-    //     })
-    //     .catch(error => {
-    //         alert('열 생성 중 오류가 발생했습니다.');
-    //         console.error('Error:', error);
-    //     });
-    // };
-    
-    
+    const handleMakeRow = () => { // 새로운 행 추가
+        // 새로운 열의 인덱스 계산
+        const newRowIndex = rows.length+2;
+        console.log(newRowIndex);
+        // 서버에 새로운 열 생성 요청 보내기
+        axios.post('/create-new-row', null, {
+            params: {
+                tableid: tableId,
+                rowindex: newRowIndex
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.status === 200) {
+                console.log('새로운 행이 성공적으로 추가되었습니다.');
+                fetchData();
+            } else {
+                console.log('새로운 열 생성 실패');
+            }
+        })
+        .catch(error => {
+            alert('열 생성 중 오류가 발생했습니다.');
+            console.error('Error:', error);
+        });
+    };
 
     return (
         <div>
@@ -154,18 +157,21 @@ export default function TableData({ tableData, tableId, fetchData }) {
                             <thead>
                                 <tr>
                                     {columns.map((col, index) => (
-                                        <th
-                                            key={index}
-                                            className={selectedHeader && selectedHeader.cellIndex === index ? 'highlight-cell' : ''}
-                                            onClick={() => handleHeaderClick(index, col)}
-                                        >
-                                            {col}
-                                        </th>
+                                        index !== -1 && (
+                                            <th
+                                                key={index}
+                                                className={selectedHeader && selectedHeader.cellIndex === index ? 'highlight-cell' : ''}
+                                                onClick={() => handleHeaderClick(index, col)}
+                                            >
+                                                {col}
+                                            </th>
+                                        )
                                     ))}
                                 </tr>
                             </thead>
                             <tbody>
-                                {table.map((row, rowIndex) => (
+                            {table.map((row, rowIndex) => (
+                                rowIndex !== -1 && (
                                     <tr key={rowIndex}>
                                         {row.map((cell, cellIndex) => (
                                             <td
@@ -177,7 +183,8 @@ export default function TableData({ tableData, tableId, fetchData }) {
                                             </td>
                                         ))}
                                     </tr>
-                                ))}
+                                )
+                            ))}
                             </tbody>
                         </table>
                     </div>
@@ -211,9 +218,10 @@ export default function TableData({ tableData, tableId, fetchData }) {
                             </div>
                         </div>
                     )}
-                    {/* <div>
+                    <div>
                         <button onClick={handleMakeHeader}>열 추가</button>
-                    </div> */}
+                        <button onClick={handleMakeRow}>행 추가</button>
+                    </div>
                 </div>
             </div>
         </div>
