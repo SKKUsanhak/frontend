@@ -76,6 +76,51 @@ export default function TableData({ tableData, tableId, fetchData }) {
         }]);
     };
 
+    const handleDeleteRow = () => {
+        console.log(rows);
+        const rowIndex = parseInt(prompt("삭제할 행 번호를 입력하세요:"), 10);
+        if (isNaN(rowIndex) || !rows.includes(rowIndex + 2)) {
+            alert("유효하지 않은 행 번호입니다.");
+            return;
+        }
+    
+        setEditQueue([...editQueue, {
+            method: 'delete',
+            url: '/delete-row',
+            params: { tableid: tableId, rowindex: rowIndex + 2 },
+            headers: { 'Content-Type': 'application/json' }
+        }]);
+    
+        const newTable = table.filter(row => row[0].rowNumber !== rowIndex + 2).map((row, index) =>
+            row.map(cell => ({ ...cell, rowNumber: index + 2 }))
+        );
+        const newRows = newTable.map(row => row[0].rowNumber);
+    
+        setTable(newTable);
+        setRows(newRows);
+    };
+    
+    const handleDeleteColumn = () => {
+        const columnIndex = parseInt(prompt("삭제할 열 번호를 입력하세요:"), 10);
+        if (isNaN(columnIndex) || columnIndex < 0 || columnIndex >= columns.length) {
+            alert("유효한 열 번호를 입력하세요.");
+            return;
+        }
+
+        setEditQueue([...editQueue, {
+            method: 'delete',
+            url: '/delete-column',
+            params: { tableid: tableId, columnindex: columnIndex },
+            headers: { 'Content-Type': 'application/json' }
+        }]);
+
+        const newTable = table.map(row => row.filter((_, index) => index !== columnIndex));
+        const newColumns = columns.filter((_, index) => index !== columnIndex);
+
+        setTable(newTable);
+        setColumns(newColumns);
+    };
+
     const handleCellChange = (rowIndex, cellIndex, value) => {
         const newTable = [...table];
         newTable[rowIndex][cellIndex].contents = value;
@@ -126,6 +171,13 @@ export default function TableData({ tableData, tableId, fetchData }) {
                         <table className='db-table'>
                             <thead>
                                 <tr>
+                                    <th>#</th>
+                                    {columns.map((col, index) => (
+                                        <th key={index}>{index}</th>
+                                    ))}
+                                </tr>
+                                <tr>
+                                    <th></th>
                                     {columns.map((col, index) => (
                                         <th key={index}>
                                             <input
@@ -141,6 +193,7 @@ export default function TableData({ tableData, tableId, fetchData }) {
                             <tbody>
                                 {table.map((row, rowIndex) => (
                                     <tr key={rowIndex}>
+                                        <td>{rowIndex}</td>
                                         {row.map((cell, cellIndex) => (
                                             <td key={cellIndex}>
                                                 <input
@@ -158,9 +211,15 @@ export default function TableData({ tableData, tableId, fetchData }) {
                     </div>
                 </div>
                 <div className='control-section'>
-                    <div>
-                        <button onClick={handleMakeHeader}>열 추가</button>
+                    <div className='button-group'>
                         <button onClick={handleMakeRow}>행 추가</button>
+                        <button onClick={handleDeleteRow}>행 삭제</button>
+                    </div>
+                    <div className='button-group'>
+                        <button onClick={handleMakeHeader}>열 추가</button>
+                        <button onClick={handleDeleteColumn}>열 삭제</button>
+                    </div>
+                    <div className='button-group'>
                         <button onClick={handleSaveChanges}>저장</button>
                     </div>
                 </div>
