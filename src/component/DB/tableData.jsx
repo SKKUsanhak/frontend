@@ -142,25 +142,25 @@ export default function TableData({ tableData, tableId, fetchData }) {
         }]);
     };
     
-    const handleSaveChanges = () => {
-        const requests = editQueue.map(request => axios(request));
+    const handleSaveChanges = async () => {
         console.log(editQueue);
-        Promise.all(requests)
-            .then(responses => {
-                if (responses.every(response => response.status === 200)) {
-                    alert('모든 변경 사항이 성공적으로 저장되었습니다.');
-                    fetchData();
-                    setEditQueue([]);
-                } else {
+        try {
+            for (const request of editQueue) {
+                const response = await axios(request);
+                if (response.status !== 200) {
                     alert('일부 변경 사항 저장 실패');
                     setEditQueue([]);
+                    return;
                 }
-            })
-            .catch(error => {
-                alert('오류가 발생했습니다.');
-                console.error('Error:', error);
-                setEditQueue([]);
-            });
+            }
+            alert('모든 변경 사항이 성공적으로 저장되었습니다.');
+            fetchData();
+            setEditQueue([]);
+        } catch (error) {
+            alert('오류가 발생했습니다.');
+            console.error('Error:', error);
+            setEditQueue([]);
+        }
     };
 
     return (
