@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { TbTablePlus } from "react-icons/tb";
+import { TbTablePlus, TbArrowBackUp } from "react-icons/tb";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleDown, GoTriangleUp, GoTriangleRight, GoTriangleLeft } from "react-icons/go";
 import axios from 'axios';
 import './tableList.css';
 
-export default function TableList({ tableList, fileId, fetchTables, onTableSelect, fetchData, onTableDelete }) {
+export default function TableList({ tableList, fileId, fetchTables, onTableSelect, fetchData, onTableDelete, BacktoFileList }) {
     const [editingTableId, setEditingTableId] = useState(null);
     const [newTableName, setNewTableName] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
@@ -116,6 +116,7 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
         <div className='table-list-container'>
             <h2 className='table-list-title'>테이블 목록</h2>
             <div className='table-list-header'>
+                <TbArrowBackUp onClick={BacktoFileList} className='back-icon' size={24} />
                 <TbTablePlus onClick={handleAddTable} className='add-table-button' size={24} />
             </div>
             {tableList.length === 0 ? (

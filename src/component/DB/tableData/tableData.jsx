@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { RiQuestionLine } from "react-icons/ri";
 import './tableData.css'
+import { TbArrowBackUp } from "react-icons/tb";
 
-export default function TableData({ fileId, tableData, tableId, fetchData, isFinal }) {
+export default function TableData({ fileId, tableData, tableId, fetchData, isFinal, BacktoTableList }) {
     const [columns, setColumns] = useState([]);
     const [rows, setRows] = useState([]);
     const [table, setTable] = useState([]);
@@ -11,6 +12,7 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
     const [toggle, setToggle] = useState();
     const [selectedCell, setSelectedCell] = useState(null); // 추가된 상태
     const [deleteEnabled, setDeleteEnabled] = useState(false); // 버튼 활성화 상태
+    const containerRef = useRef(null);
 
     useEffect(() => {
         if (tableData && tableData.length > 0) {
@@ -28,6 +30,19 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
             setTable(newTable);
         }
     }, [tableData]);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (containerRef.current && !containerRef.current.contains(event.target)) {
+                setSelectedCell(null);
+                setDeleteEnabled(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [containerRef]);
 
     const handleHeaderContentChange = (index, value) => {
         const newColumns = [...columns];
@@ -156,10 +171,8 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
 
     // 선택된 셀을 처리하는 함수
     const handleCellClick = (rowIndex, cellIndex) => {
-        if (cellIndex !== 0) { // 첫 번째 열은 하이라이트하지 않음
-            setSelectedCell({ rowIndex, cellIndex }); // 선택된 셀 상태 업데이트
-            setDeleteEnabled(true); // 버튼 활성화
-        }
+        setSelectedCell({ rowIndex, cellIndex }); // 선택된 셀 상태 업데이트
+        setDeleteEnabled(true); // 버튼 활성화
     };
 
     const handleSaveChanges = async () => {
@@ -197,8 +210,9 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
     };
 
     return (
-        <div>
+        <div ref={containerRef}>
             <div className='excel-editor'>
+                <TbArrowBackUp onClick={BacktoTableList} className='back-icon' size={24}/>
                 <div className='table-section'>
                     <div className='table-data-container'>
                         <table className='db-table'>
@@ -251,7 +265,6 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                                     </tr>
                                 ))}
                             </tbody>
-
                         </table>
                     </div>
                 </div>

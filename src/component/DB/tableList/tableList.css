@@ -19,12 +19,20 @@
 
 .table-list-header {
     display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    margin-bottom: 5px;
 }
 
-.add-table-button {
+.table-list-header .back-icon {
     cursor: pointer;
+    margin-right: auto; /* Ensure the back icon is aligned to the left */
+}
+
+.table-list-header .add-table-button {
+    cursor: pointer;
+    margin-left: auto; /* Ensure the add button is aligned to the right */
 }
 
 .table-list-container table {

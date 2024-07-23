@@ -298,3 +298,13 @@ input:checked + .slider:before {
 .highlight-cell-background input {
     background-color: white;
 }
+
+.excel-editor .back-icon {
+    position: absolute;
+    margin-top: 50px;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+    font-size: 24px; /* Adjust the size as needed */
+    z-index: 10; /* Ensure it's on top of other elements */
+}
