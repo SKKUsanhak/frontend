@@ -49,9 +49,9 @@
                 });
         }
 
-        const fetchTable = () => {
+        const fetchTable = (id) => {
             // 서버에 '/show-table' 요청 보내기
-            axios.get('/show-table', { params: { id: selectedFileId } })
+            axios.get('/show-table', { params: { id: id } })
             .then(response => {
                 // JSON 형태의 데이터를 받아서 tableList 상태로 설정
                 setTableList(response.data);
@@ -76,22 +76,20 @@
                     });
         }
     
-        const handleFileSelect = (id) => { // 파일 선택을 관리
+        const handleFileSelect = (id) => {
             setSelectedFileId(id);
             setSelectedTableId(null); // 파일을 선택할 때 테이블 선택 초기화
             setTableList(null); // 파일을 선택할 때 테이블 목록 초기화
             setTableData(null); // 파일을 선택할 때 테이블 데이터 초기화
-        };
+        }
     
         const handleTableSelect = (id) => { // 테이블 선택을 관리
             setSelectedTableId(id);
         };
     
-        const FileSelect = () => { // 파일을 선택하고 파일의 테이블을 call
-            if (selectedFileId !== null) {
-                fetchTable();
-            }
-        };
+        // const FileSelect = () => { // 파일을 선택하고 파일의 테이블을 call
+        //     fetchTable();
+        // };
     
         const TableSelect = () => { // 테이블을 선택하고 데이터를 call
             console.log(tableList);
@@ -139,14 +137,12 @@
         return (
             <div className="db-container">
                 {visible === 'fileList' && (
-                    <div>
-                        <FileList files={files} selectedFileId={selectedFileId} onFileSelect={handleFileSelect} onFileDelete={handleFileDelete} fetchFiles={fetchFiles}/>
-                        {selectedFileId && (
-                            <div className="file-button-container">
-                                <button onClick={FileSelect}>파일 선택</button>
-                            </div>
-                        )}
-                    </div>
+                    <FileList 
+                    files={files} 
+                    onFileSelect={handleFileSelect} 
+                    fetchTables={fetchTable} 
+                    onFileDelete={handleFileDelete} 
+                />
                 )}
                 {visible === 'tableList' && (
                     <div>

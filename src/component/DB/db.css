@@ -93,9 +93,9 @@
 
 .table-list-container th, .table-list-container td {
     border: 1px solid #ddd;
-    padding: 5px;
     text-align: center;
     align-items: center;
+    padding: 5px;
 }
 
 .table-button-container button{
@@ -467,3 +467,36 @@ input:checked + .slider:before {
     margin-bottom: 5px;
 }
 
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.pagination-icon {
+    cursor: pointer;
+    font-size: 24px;
+    margin: 0 10px;
+}
+
+.pagination-icon[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.file-name {
+    cursor: pointer;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.file-name:hover {
+    color: blue;
+    text-decoration: underline;
+}
+
+.empty-row td {
+    height: 48px; /* Ensure this matches the height of your filled rows */
+    border: 1px solid #ddd;
+    text-align: center;
+}

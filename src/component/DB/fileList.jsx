@@ -3,12 +3,14 @@ import axios from 'axios';
 import './db.css';
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
-import { GoTriangleDown, GoTriangleUp, GoTriangleRight } from "react-icons/go";
+import { GoTriangleDown, GoTriangleUp, GoTriangleRight, GoTriangleLeft } from "react-icons/go";
 
-export default function FileList({ files, selectedFileId, onFileSelect, onFileDelete, fetchFiles }) {
+export default function FileList({ files, onFileSelect, fetchTables, onFileDelete }) {
     const [editingFileId, setEditingFileId] = useState(null);
     const [newFileName, setNewFileName] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 15;
 
     const formatDate = (dateString) => {
         const options = { 
@@ -39,7 +41,7 @@ export default function FileList({ files, selectedFileId, onFileSelect, onFileDe
             await axios.patch(url, { contents: newFileName });
             alert("파일 이름이 성공적으로 수정되었습니다.");
             setEditingFileId(null);
-            fetchFiles(); // Fetch the updated table list
+            fetchTables(); // Fetch the updated table list
         } catch (error) {
             console.error("파일 이름 수정 중 오류 발생:", error);
             alert("파일 이름 수정 중 오류가 발생했습니다.");
@@ -78,80 +80,115 @@ export default function FileList({ files, selectedFileId, onFileSelect, onFileDe
         return <GoTriangleRight className='sort-icon' />;
     };
 
+    const handleFileNameClick = (id) => {
+        onFileSelect(id);
+        fetchTables(id);
+    };
+
+    const handleNextPage = () => {
+        if (currentPage * itemsPerPage < files.length) {
+            setCurrentPage((prevPage) => prevPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+    };
+
+    const paginatedFiles = sortedFiles().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const totalPages = Math.ceil(files.length / itemsPerPage);
+
     return (
         <div className='file-list-container'>
             <h2>파일 목록</h2>
             {files && files.length === 0 ? (
                 <p>No files available.</p>
             ) : (
-                <table className='table'>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th onClick={() => handleSort('id')}>
-                                <div className="header-cell">
-                                    파일 ID {getSortIcon('id')}
-                                </div>
-                            </th>
-                            <th>파일 이름</th>
-                            <th onClick={() => handleSort('createTime')}>
-                                <div className="header-cell">
-                                    업로드 날짜 {getSortIcon('createTime')}
-                                </div>
-                            </th>
-                            <th onClick={() => handleSort('updateTime')}>
-                                <div className="header-cell">
-                                    최종 수정일 {getSortIcon('updateTime')}
-                                </div>
-                            </th>
-                            <th>파일 삭제</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {sortedFiles().map((file, index) => (
-                            <tr key={index}>
-                                <td>
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedFileId === file.id}
-                                        onChange={() => onFileSelect(file.id)}
-                                    />
-                                </td>
-                                <td>{file.id}</td>
-                                <td>
-                                    {editingFileId === file.id ? (
-                                        <div className="edit-name-container">
-                                            <input
-                                                type="text"
-                                                value={newFileName}
-                                                onChange={(e) => setNewFileName(e.target.value)}
-                                            />
-                                            <IoIosSave
-                                                onClick={() => handleSaveFileName(file)}
-                                                className='save-file-button'
-                                            />
-                                        </div>
-                                    ) : (
-                                        <div className="file-name-container">
-                                            {file.fileName}
-                                            <FaEdit
-                                                onClick={() => handleEditFileName(file)}
-                                                className='edit-file-button'
-                                            />
-                                        </div>
-                                    )}
-                                </td>
-                                <td>{formatDate(file.createTime)}</td>
-                                <td>{formatDate(file.updateTime)}</td>
-                                <td>
-                                    <button className='trash-icon' onClick={() => onFileDelete(file.id)}>
-                                        <FaTrash />
-                                    </button>
-                                </td>
+                <>
+                    <table className='table'>
+                        <thead>
+                            <tr>
+                                <th onClick={() => handleSort('id')}>
+                                    <div className="header-cell">
+                                        File ID {getSortIcon('id')}
+                                    </div>
+                                </th>
+                                <th>파일 이름</th>
+                                <th onClick={() => handleSort('createTime')}>
+                                    <div className="header-cell">
+                                        업로드 날짜 {getSortIcon('createTime')}
+                                    </div>
+                                </th>
+                                <th onClick={() => handleSort('updateTime')}>
+                                    <div className="header-cell">
+                                        최종 수정일 {getSortIcon('updateTime')}
+                                    </div>
+                                </th>
+                                <th>파일 삭제</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {paginatedFiles.map((file, index) => (
+                                <tr key={index}>
+                                    <td>{file.id}</td>
+                                    <td>
+                                        {editingFileId === file.id ? (
+                                            <div className="edit-name-wrapper">
+                                                <div className="edit-name-container">
+                                                    <input
+                                                        type="text"
+                                                        value={newFileName}
+                                                        onChange={(e) => setNewFileName(e.target.value)}
+                                                    />
+                                                </div>
+                                                <div className="save-icon-container">
+                                                    <IoIosSave
+                                                        onClick={() => handleSaveFileName(file)}
+                                                        className='save-file-button'
+                                                    />
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div
+                                                className="file-name-container"
+                                                onClick={() => handleFileNameClick(file.id)}
+                                            >
+                                                <span className="file-name">
+                                                    {file.fileName}
+                                                </span>
+                                                <FaEdit
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleEditFileName(file);
+                                                    }}
+                                                    className='edit-file-button'
+                                                />
+                                            </div>
+                                        )}
+                                    </td>
+                                    <td>{formatDate(file.createTime)}</td>
+                                    <td>{formatDate(file.updateTime)}</td>
+                                    <td>
+                                        <button className='trash-icon' onClick={() => onFileDelete(file.id)}>
+                                            <FaTrash />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                            {paginatedFiles.length < itemsPerPage &&
+                                [...Array(itemsPerPage - paginatedFiles.length)].map((_, index) => (
+                                    <tr key={`empty-${index}`}>
+                                        <td colSpan="5">&nbsp;</td>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </table>
+                    <div className="pagination">
+                        <GoTriangleLeft onClick={handlePreviousPage} disabled={currentPage === 1} className='pagination-icon' />
+                        <span>{currentPage}</span>
+                        <GoTriangleRight onClick={handleNextPage} disabled={currentPage === totalPages} className='pagination-icon' />
+                    </div>
+                </>
             )}
         </div>
     );
