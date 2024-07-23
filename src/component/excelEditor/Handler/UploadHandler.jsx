@@ -35,8 +35,8 @@ export const UploadHandler = async (data, fileName) => {
                 'Content-Type': 'multipart/form-data'
             }
         });
-        console.log('파일 업로드 성공', response.data);
+        alert('DB 업로드 성공', response.data);
     } catch (error) {
-        console.error('파일 업로드 실패', error);
+        alert('DB 업로드 실패', error);
     }
 };

@@ -155,9 +155,11 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
             }
             alert('모든 변경 사항이 성공적으로 저장되었습니다.');
             if(toggle) {
-                axios.get('/save-final-table', {
-                    params: { tableid: tableId }
+                axios.post('/save-final-table', null, {
+                    params: { tableid: tableId } ,
+                    headers: { 'Content-Type': 'application/json' }
                 })
+                alert('최종 데이터로 전환되었습니다.')
             }
             axios.patch('/update-date', null, {
                 params: { fileid: fileId }

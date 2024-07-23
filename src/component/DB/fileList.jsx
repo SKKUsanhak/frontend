@@ -19,6 +19,12 @@ export default function FileList({ files, selectedFileId, onFileSelect, onFileDe
         return new Date(dateString).toLocaleString('ko-KR', options);
     };
 
+    const handleDelete = (fileId) => {
+        if (window.confirm('정말 파일을 삭제하시겠습니까?')) {
+            onFileDelete(fileId);
+        }
+    };
+
     return (
         <div className='file-list-container'>
             <h2>파일 목록</h2>
@@ -65,7 +71,7 @@ export default function FileList({ files, selectedFileId, onFileSelect, onFileDe
                                 <td>{formatDate(file.createTime)}</td>
                                 <td>{formatDate(file.updateTime)}</td>
                                 <td>
-                                    <button className='trash-icon' onClick={() => onFileDelete(file.id)}>
+                                    <button className='trash-icon' onClick={() => handleDelete(file.id)}>
                                         <FaTrash />
                                     </button>
                                 </td>

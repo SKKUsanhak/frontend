@@ -10,26 +10,32 @@
 
 .header__inner {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 10px;
   font-family: "LineFont";
 }
 
 .header__nav {
-  justify-content: center;
   display: flex;
+  justify-content: center;
   align-items: center;
+  flex-grow: 1;
   font-family: "LineFont";
 }
 
-.nav__item {
-  list-style: none;
-  float: left;
-  margin: 0 15px;
+.nav__list {
+  display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "LineFont";
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  flex-grow: 1;
+}
+
+.nav__item {
+  margin: 0 15px;
 }
 
 .nav__item a {
@@ -37,13 +43,14 @@
   text-decoration: none;
   font-family: "LineFont";
   transition: color 0.3s ease-in-out;
-  /* Smooth transition for color change */
 }
 
 .nav__item a:hover {
-  /* color: rgb(3, 3, 3); */
-  /* Change color on hover */
-  /* text-decoration: underline; */
   font-family: "LineFontBold";
-  /* Optional: add underline on hover */
+}
+
+.login-icon {
+  font-size: 24px;
+  cursor: pointer;
+  color: #343a40;
 }
