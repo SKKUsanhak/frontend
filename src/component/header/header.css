@@ -10,10 +10,11 @@
 
 .header__inner {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* 중앙 정렬 */
   align-items: center;
   padding: 10px;
   font-family: "LineFont";
+  position: relative; /* login-icon-container 위치 조정을 위해 추가 */
 }
 
 .header__nav {
@@ -31,7 +32,6 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  flex-grow: 1;
 }
 
 .nav__item {
@@ -47,6 +47,11 @@
 
 .nav__item a:hover {
   font-family: "LineFontBold";
+}
+
+.login-icon-container {
+  position: absolute; /* 중앙 정렬을 위해 absolute 위치 사용 */
+  right: 10px; /* 오른쪽으로 아이콘 위치 조정 */
 }
 
 .login-icon {

@@ -140,7 +140,7 @@
             <div className="db-container">
                 {visible === 'fileList' && (
                     <div>
-                        <FileList files={files} selectedFileId={selectedFileId} onFileSelect={handleFileSelect} onFileDelete={handleFileDelete}/>
+                        <FileList files={files} selectedFileId={selectedFileId} onFileSelect={handleFileSelect} onFileDelete={handleFileDelete} fetchFiles={fetchFiles}/>
                         {selectedFileId && (
                             <div className="file-button-container">
                                 <button onClick={FileSelect}>파일 선택</button>

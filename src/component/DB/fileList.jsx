@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './db.css';
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaEdit } from "react-icons/fa";
+import { IoIosSave } from "react-icons/io";
 
-export default function FileList({ files, selectedFileId, onFileSelect, onFileDelete, onFileNameUpdate }) {
-    const [editingFileId] = useState(null);
+export default function FileList({ files, selectedFileId, onFileSelect, onFileDelete, fetchFiles }) {
+    const [editingFileId, setEditingFileId] = useState(null);
     const [newFileName, setNewFileName] = useState('');
 
     const formatDate = (dateString) => {
@@ -19,9 +21,26 @@ export default function FileList({ files, selectedFileId, onFileSelect, onFileDe
         return new Date(dateString).toLocaleString('ko-KR', options);
     };
 
-    const handleDelete = (fileId) => {
-        if (window.confirm('정말 파일을 삭제하시겠습니까?')) {
-            onFileDelete(fileId);
+    const handleEditFileName = (file) => {
+        setEditingFileId(file.id);
+        setNewFileName(file.fileName);
+    };
+
+    const handleSaveFileName = async (file) => {
+        if (!newFileName) {
+            alert("파일 이름을 입력하지 않았습니다.");
+            return;
+        }
+
+        try {
+            const url = `/update-file-name?fileid=${file.id}`;
+            await axios.patch(url, { contents: newFileName });
+            alert("파일 이름이 성공적으로 수정되었습니다.");
+            setEditingFileId(null);
+            fetchFiles(); // Fetch the updated table list
+        } catch (error) {
+            console.error("파일 이름 수정 중 오류 발생:", error);
+            alert("파일 이름 수정 중 오류가 발생했습니다.");
         }
     };
 
@@ -55,23 +74,31 @@ export default function FileList({ files, selectedFileId, onFileSelect, onFileDe
                                 <td>{file.id}</td>
                                 <td>
                                     {editingFileId === file.id ? (
-                                        <>
+                                        <div className="edit-name-container">
                                             <input
                                                 type="text"
                                                 value={newFileName}
                                                 onChange={(e) => setNewFileName(e.target.value)}
                                             />
-                                        </>
+                                            <IoIosSave
+                                                onClick={() => handleSaveFileName(file)}
+                                                className='save-file-button'
+                                            />
+                                        </div>
                                     ) : (
-                                        <>
+                                        <div className="file-name-container">
                                             {file.fileName}
-                                        </>
+                                            <FaEdit
+                                                onClick={() => handleEditFileName(file)}
+                                                className='edit-file-button'
+                                            />
+                                        </div>
                                     )}
                                 </td>
                                 <td>{formatDate(file.createTime)}</td>
                                 <td>{formatDate(file.updateTime)}</td>
                                 <td>
-                                    <button className='trash-icon' onClick={() => handleDelete(file.id)}>
+                                    <button className='trash-icon' onClick={() => onFileDelete(file.id)}>
                                         <FaTrash />
                                     </button>
                                 </td>

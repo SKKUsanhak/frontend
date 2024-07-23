@@ -442,10 +442,14 @@ input:checked + .slider:before {
 .table-name-container input, 
 .edit-name-container input {
     margin-right: 5px;
+    font-family: "LineFont";
 }
 
 .edit-table-button, 
-.save-table-button {
+.save-table-button,
+.edit-file-button,
+.save-file-button {
     cursor: pointer;
     margin-left: 5px;
 }
+
