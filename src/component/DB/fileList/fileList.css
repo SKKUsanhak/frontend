@@ -55,7 +55,7 @@
 .sort-icon {
     cursor: pointer;
     margin-left: 5px;
-    font-size: 25px;
+    font-size: 15px;
     margin-bottom: 5px;
 }
 
@@ -107,4 +107,9 @@
 
 .trash-icon:active {
     color: red;
+}
+
+.empty-cell {
+    border: none; /* 테두리를 제거하여 빈칸으로 보이게 함 */
+    background: none; /* 배경 제거 */
 }

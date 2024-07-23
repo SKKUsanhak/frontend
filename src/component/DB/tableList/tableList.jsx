@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { TbTablePlus, TbArrowBackUp } from "react-icons/tb";
-import { FaTrash, FaEdit } from "react-icons/fa";
+import { FaTrash, FaEdit, FaSort } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
-import { GoTriangleDown, GoTriangleUp, GoTriangleRight, GoTriangleLeft } from "react-icons/go";
+import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
 import axios from 'axios';
 import './tableList.css';
 
@@ -11,7 +11,7 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
     const [newTableName, setNewTableName] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 15;
+    const itemsPerPage = 15; // 페이지 당 항목 수
 
     const handleAddTable = async () => {
         const newTableName = prompt("새로운 테이블 이름을 입력하세요:");
@@ -84,14 +84,7 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
     };
 
     const getSortIcon = (key) => {
-        if (sortConfig.key === key) {
-            if (sortConfig.direction === 'ascending') {
-                return <GoTriangleDown className='sort-icon' />;
-            } else if (sortConfig.direction === 'descending') {
-                return <GoTriangleUp className='sort-icon' />;
-            }
-        }
-        return <GoTriangleRight className='sort-icon' />;
+        return <FaSort className='sort-icon' />;
     };
 
     const handleNextPage = () => {
@@ -132,8 +125,16 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                                     </div>
                                 </th>
                                 <th>Table Name</th>
-                                <th>완료 여부</th>
-                                <th>테이블 삭제</th>
+                                <th onClick={() => handleSort('createTime')}>
+                                    <div className="header-cell">
+                                        완료 여부 {getSortIcon('createTime')}
+                                    </div>
+                                </th>
+                                <th onClick={() => handleSort('updateTime')}>
+                                    <div className="header-cell">
+                                        테이블 삭제 {getSortIcon('updateTime')}
+                                    </div>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -180,12 +181,6 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                                     </td>
                                 </tr>
                             ))}
-                            {paginatedTables.length < itemsPerPage &&
-                                [...Array(itemsPerPage - paginatedTables.length)].map((_, index) => (
-                                    <tr key={`empty-${index}`}>
-                                        <td colSpan="4">&nbsp;</td>
-                                    </tr>
-                                ))}
                         </tbody>
                     </table>
                     <div className="pagination">
