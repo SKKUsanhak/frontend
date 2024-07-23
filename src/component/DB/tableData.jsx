@@ -231,7 +231,7 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                                                 key={cellIndex}
                                                 className={
                                                     selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex
-                                                        ? 'highlight-cell highlight-cell-border'
+                                                        ? 'highlight-cell highlight-cell-border highlight-cell-background'
                                                         : selectedCell && (selectedCell.rowIndex === rowIndex || selectedCell.cellIndex === cellIndex)
                                                             ? 'highlight-cell'
                                                             : '' /* 선택된 셀 테두리 강조 및 하이라이트 */

@@ -539,3 +539,11 @@ input:checked + .slider:before {
 .highlight-cell-border {
     border: 2px solid blue !important; /* Adjust the color and width as needed */
 }
+
+.highlight-cell-background {
+    background-color: white !important; /* Ensure the background color is white */
+}
+
+.highlight-cell-background input {
+    background-color: white;
+}
