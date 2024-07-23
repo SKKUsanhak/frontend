@@ -510,3 +510,32 @@ input:checked + .slider:before {
     color: blue;
     text-decoration: underline;
 }
+
+.highlight-cell {
+    background-color: #d4f2fb;; /* 하이라이트 셀의 배경색을 흰색으로 설정 */
+}
+
+.highlight-cell input {
+    background-color: #d4f2fb; /* 하이라이트 셀 내의 input 창의 배경색을 하늘색으로 설정 */
+    border: none;
+}
+
+.highlight-row {
+    background-color: #d4f2fb; /* 연한 하늘색 */
+}
+
+.highlight-input, .highlight-input:focus {
+    outline: none; /* input 창이 포커스될 때 outline 제거 */
+    border:none;
+}
+
+.button-group button:disabled, 
+.save-button-group button:disabled {
+    background-color: #ccc; /* 비활성화된 버튼의 배경색을 회색으로 설정 */
+    cursor: not-allowed; /* 커서를 금지 모양으로 변경 */
+    color: #666; /* 비활성화된 버튼의 텍스트 색상도 변경 */
+}
+
+.highlight-cell-border {
+    border: 2px solid blue !important; /* Adjust the color and width as needed */
+}

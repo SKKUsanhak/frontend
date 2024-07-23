@@ -8,6 +8,8 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
     const [table, setTable] = useState([]);
     const [editQueue, setEditQueue] = useState([]);
     const [toggle, setToggle] = useState();
+    const [selectedCell, setSelectedCell] = useState(null); // 추가된 상태
+    const [deleteEnabled, setDeleteEnabled] = useState(false); // 버튼 활성화 상태
 
     useEffect(() => {
         if (tableData && tableData.length > 0) {
@@ -79,8 +81,10 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
     };
 
     const handleDeleteRow = () => {
-        const rowIndex = parseInt(prompt("삭제할 행 번호를 입력하세요:"), 10);
-        if (isNaN(rowIndex) || !rows.includes(rowIndex + 2)) {
+        if (!selectedCell) return; // 선택된 셀이 없으면 리턴
+
+        const rowIndex = selectedCell.rowIndex + 2; // 선택된 셀의 행 번호
+        if (isNaN(rowIndex) || !rows.includes(rowIndex)) {
             alert("유효하지 않은 행 번호입니다.");
             return;
         }
@@ -88,21 +92,25 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
         setEditQueue([...editQueue, {
             method: 'delete',
             url: '/delete-row',
-            params: { tableid: tableId, rowindex: rowIndex + 2 },
+            params: { tableid: tableId, rowindex: rowIndex },
             headers: { 'Content-Type': 'application/json' }
         }]);
     
-        const newTable = table.filter(row => row[0].rowNumber !== rowIndex + 2).map((row, index) =>
+        const newTable = table.filter(row => row[0].rowNumber !== rowIndex).map((row, index) =>
             row.map(cell => ({ ...cell, rowNumber: index + 2 }))
         );
         const newRows = newTable.map(row => row[0].rowNumber);
     
         setTable(newTable);
         setRows(newRows);
+        setSelectedCell(null); // 선택된 셀 초기화
+        setDeleteEnabled(false); // 버튼 비활성화
     };
     
     const handleDeleteColumn = () => {
-        const columnIndex = parseInt(prompt("삭제할 열 번호를 입력하세요:"), 10);
+        if (!selectedCell) return; // 선택된 셀이 없으면 리턴
+
+        const columnIndex = selectedCell.cellIndex;
         if (isNaN(columnIndex) || columnIndex < 0 || columnIndex >= columns.length) {
             alert("유효한 열 번호를 입력하세요.");
             return;
@@ -120,6 +128,8 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
 
         setTable(newTable);
         setColumns(newColumns);
+        setSelectedCell(null); // 선택된 셀 초기화
+        setDeleteEnabled(false); // 버튼 비활성화
     };
 
     const handleCellChange = (rowIndex, cellIndex, value) => {
@@ -142,7 +152,15 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
             headers: { 'Content-Type': 'application/json' }
         }]);
     };
-    
+
+    // 선택된 셀을 처리하는 함수
+    const handleCellClick = (rowIndex, cellIndex) => {
+        if (cellIndex !== 0) { // 첫 번째 열은 하이라이트하지 않음
+            setSelectedCell({ rowIndex, cellIndex }); // 선택된 셀 상태 업데이트
+            setDeleteEnabled(true); // 버튼 활성화
+        }
+    };
+
     const handleSaveChanges = async () => {
         try {
             for (const request of editQueue) {
@@ -207,31 +225,43 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                             <tbody>
                                 {table.map((row, rowIndex) => (
                                     <tr key={rowIndex}>
-                                        <td>{rowIndex}</td>
+                                        <td className={selectedCell && selectedCell.rowIndex === rowIndex ? 'highlight-cell' : ''}>{rowIndex}</td> {/* 선택된 행의 첫 번째 열 강조 */}
                                         {row.map((cell, cellIndex) => (
-                                            <td key={cellIndex}>
+                                            <td
+                                                key={cellIndex}
+                                                className={
+                                                    selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex
+                                                        ? 'highlight-cell highlight-cell-border'
+                                                        : selectedCell && (selectedCell.rowIndex === rowIndex || selectedCell.cellIndex === cellIndex)
+                                                            ? 'highlight-cell'
+                                                            : '' /* 선택된 셀 테두리 강조 및 하이라이트 */
+                                                }
+                                                onClick={() => handleCellClick(rowIndex, cellIndex)} // 셀 클릭 시 선택된 셀 업데이트
+                                            >
                                                 <input
                                                     type="text"
                                                     value={cell.contents}
                                                     onChange={(e) => handleCellChange(rowIndex, cellIndex, e.target.value)}
                                                     onBlur={(e) => handleCellBlur(rowIndex, cellIndex, e.target.value)}
+                                                    className={selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex ? 'highlight-input' : ''} /* 선택된 셀의 input 강조 */
                                                 />
                                             </td>
                                         ))}
                                     </tr>
                                 ))}
                             </tbody>
+
                         </table>
                     </div>
                 </div>
                 <div className='control-section'>
                     <div className='button-group'>
                         <button onClick={handleMakeRow}>행 추가</button>
-                        <button onClick={handleDeleteRow}>행 삭제</button>
+                        <button onClick={handleDeleteRow} disabled={!deleteEnabled}>행 삭제</button> {/* 선택된 셀이 없으면 버튼 비활성화 */}
                     </div>
                     <div className='button-group'>
                         <button onClick={handleMakeHeader}>열 추가</button>
-                        <button onClick={handleDeleteColumn}>열 삭제</button>
+                        <button onClick={handleDeleteColumn} disabled={!deleteEnabled}>열 삭제</button> {/* 선택된 셀이 없으면 버튼 비활성화 */}
                     </div>
                     <div className='save-button-group'>
                         {!isFinal && ( // isFinal이 true가 아닌 경우에만 토글 스위치를 표시
