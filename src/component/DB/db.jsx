@@ -18,10 +18,9 @@
     import React, { useEffect, useState } from 'react';
     import axios from 'axios';
     import './db.css'; // CSS 파일 임포트
-    import FileList from './fileList';
-    import TableList from './tableList';
-    import TableData from './tableData';
-    import EditabletableTitle from './tableTitleEdit';
+    import FileList from './fileList/fileList.jsx';
+    import TableList from './tableList/tableList.jsx';
+    import TableData from './tableData/tableData.jsx';
     
     export default function DB() {
         const [files, setFiles] = useState([]);
@@ -158,7 +157,7 @@
                 )}
                 {visible === 'tableList' && (
                     <div>
-                        <TableList tableList={tableList} fileId={selectedFileId} fetchTables={fetchTable} selectedTableId={selectedTableId}
+                        <TableList tableList={tableList} fileId={selectedFileId} fetchTables={fetchTable}
                         onTableSelect={handleTableSelect} fetchData={fetchData} onTableDelete={handleTableDelete}/>
                         <div className="file-back-container">
                             <button onClick={handleBackToFileList}>뒤로 가기</button>
@@ -167,7 +166,7 @@
                 )}
                 {visible === 'tableData' && tableData && (
                     <div>
-                        <h1><EditabletableTitle initialTableTitle={tableTitle} onSave={setTableTitle} tableId={selectedTableId}/></h1>
+                        <h1 className='title-name'>{tableTitle}</h1>
                         <TableData fileId={selectedFileId} tableData={tableData} tableId={selectedTableId} fetchData={fetchData} isFinal={tableList.find(table => table.id === selectedTableId).finalData} />
                         <div className="table-back-container">
                             <button onClick={handleBackToTableList}>뒤로 가기</button>

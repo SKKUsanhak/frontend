@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { RiQuestionLine } from "react-icons/ri";
+import './tableData.css'
 
 export default function TableData({ fileId, tableData, tableId, fetchData, isFinal }) {
     const [columns, setColumns] = useState([]);
@@ -225,7 +226,7 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                             <tbody>
                                 {table.map((row, rowIndex) => (
                                     <tr key={rowIndex}>
-                                        <td className={selectedCell && selectedCell.rowIndex === rowIndex ? 'highlight-cell' : ''}>{rowIndex}</td> {/* 선택된 행의 첫 번째 열 강조 */}
+                                        <td>{rowIndex}</td>
                                         {row.map((cell, cellIndex) => (
                                             <td
                                                 key={cellIndex}

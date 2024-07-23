@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './db.css';
+import './fileList.css';
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleDown, GoTriangleUp, GoTriangleRight, GoTriangleLeft } from "react-icons/go";

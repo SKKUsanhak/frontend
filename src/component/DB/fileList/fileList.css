@@ -1,0 +1,110 @@
+.file-list-container {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    font-family: "LineFont";
+    height: 100%;
+    width: 60%;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-list-container .table {
+    width: 100%;
+    border-collapse: collapse;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.file-list-container .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.edit-name-container,
+.file-name-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-name-container input {
+    margin-right: 5px;
+    font-family: "LineFont";
+}
+
+.edit-file-button,
+.save-file-button {
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.header-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sort-icon {
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 25px;
+    margin-bottom: 5px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.pagination-icon {
+    cursor: pointer;
+    font-size: 24px;
+    margin: 0 10px;
+}
+
+.pagination-icon[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.file-name {
+    cursor: pointer;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.file-name:hover {
+    color: blue;
+    text-decoration: underline;
+}
+
+.empty-row td {
+    height: 48px; /* Ensure this matches the height of your filled rows */
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.trash-icon {
+    cursor: pointer;
+    color: black; /* 기본 색상 */
+    transition: color 0.3s;
+    border: none;
+    background-color: white;
+}
+
+.trash-icon:hover {
+    color: rgb(215, 60, 18); /* 호버 시 빨간색 */
+}
+
+.trash-icon:active {
+    color: red;
+}

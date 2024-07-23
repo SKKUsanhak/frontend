@@ -1,0 +1,109 @@
+.table-list-container {
+    border: 1px solid #ddd;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    font-family: "LineFont";
+    height: 100%;
+    width: 60%;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+}
+
+.table-list-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.table-list-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.add-table-button {
+    cursor: pointer;
+}
+
+.table-list-container table {
+    width: 100%;
+    border-collapse: collapse;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.table-list-container th, .table-list-container td {
+    border: 1px solid #ddd;
+    text-align: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.table-name-container, 
+.edit-name-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.table-name-container input, 
+.edit-name-container input {
+    margin-right: 5px;
+    font-family: "LineFont";
+}
+
+.edit-table-button, 
+.save-table-button {
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.header-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sort-icon {
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 25px;
+    margin-bottom: 5px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.pagination-icon {
+    cursor: pointer;
+    font-size: 24px;
+    margin: 0 10px;
+}
+
+.pagination-icon[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.empty-row td {
+    height: 48px; /* Ensure this matches the height of your filled rows */
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.table-name {
+    cursor: pointer;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.table-name:hover {
+    color: blue;
+    text-decoration: underline;
+}

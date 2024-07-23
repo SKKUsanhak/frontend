@@ -4,9 +4,9 @@ import { FaTrash, FaEdit } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleDown, GoTriangleUp, GoTriangleRight, GoTriangleLeft } from "react-icons/go";
 import axios from 'axios';
-import './db.css';
+import './tableList.css';
 
-export default function TableList({ tableList, fileId, fetchTables, onTableSelect, fetchData, onTableDelete, selectedTableId }) {
+export default function TableList({ tableList, fileId, fetchTables, onTableSelect, fetchData, onTableDelete }) {
     const [editingTableId, setEditingTableId] = useState(null);
     const [newTableName, setNewTableName] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
