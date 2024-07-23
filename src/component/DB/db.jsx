@@ -49,7 +49,7 @@
                 });
         }
 
-        const fetchTable = (id) => {
+        const fetchTable = async (id) => {
             // 서버에 '/show-table' 요청 보내기
             axios.get('/show-table', { params: { id: id } })
             .then(response => {
@@ -62,28 +62,28 @@
             });
         }
 
-        const fetchData = (id) => {
-            const selectedTable = tableList.find(table => table.id === selectedTableId);
-                setTableTitle(selectedTable ? selectedTable.tableTitle : '');
-                axios.get('/show-data', { params: { tableid: id } })
-                    .then(response => {
-                        // JSON 형태의 데이터를 받아서 tableData 상태로 설정
-                        setTableData(response.data);
-                        setVisible('tableData'); // 테이블 데이터를 표시하도록 설정
-                    })
-                    .catch(error => {
-                        console.error('Error fetching table data:', error);
-                    });
+        const fetchData = async (id) => {
+            const selectedTable = tableList.find(table => table.id === id);
+            setTableTitle(selectedTable ? selectedTable.tableTitle : '');
+            axios.get('/show-data', { params: { tableid: id } })
+                .then(response => {
+                    // JSON 형태의 데이터를 받아서 tableData 상태로 설정
+                    setTableData(response.data);
+                    setVisible('tableData'); // 테이블 데이터를 표시하도록 설정
+                })
+                .catch(error => {
+                    console.error('Error fetching table data:', error);
+                });
         }
     
-        const handleFileSelect = (id) => {
+        const handleFileSelect = async (id) => {
             setSelectedFileId(id);
             setSelectedTableId(null); // 파일을 선택할 때 테이블 선택 초기화
             setTableList(null); // 파일을 선택할 때 테이블 목록 초기화
             setTableData(null); // 파일을 선택할 때 테이블 데이터 초기화
         }
     
-        const handleTableSelect = (id) => {
+        const handleTableSelect = async (id) => {
             setSelectedTableId(id);
             setTableData(null);
         }
@@ -143,7 +143,7 @@
             setVisible('tableList');
             setSelectedTableId(null);
             setTableData(null);
-            fetchTable();
+            fetchTable(selectedFileId);
         };
     
         return (
@@ -158,7 +158,7 @@
                 )}
                 {visible === 'tableList' && (
                     <div>
-                        <TableList tableList={tableList} fileId={selectedFileId} fetchTables={fetchTable} 
+                        <TableList tableList={tableList} fileId={selectedFileId} fetchTables={fetchTable} selectedTableId={selectedTableId}
                         onTableSelect={handleTableSelect} fetchData={fetchData} onTableDelete={handleTableDelete}/>
                         <div className="file-back-container">
                             <button onClick={handleBackToFileList}>뒤로 가기</button>

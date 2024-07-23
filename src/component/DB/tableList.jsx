@@ -6,7 +6,7 @@ import { GoTriangleDown, GoTriangleUp, GoTriangleRight, GoTriangleLeft } from "r
 import axios from 'axios';
 import './db.css';
 
-export default function TableList({ tableList, fileId, fetchTables, onTableSelect, fetchData, onTableDelete }) {
+export default function TableList({ tableList, fileId, fetchTables, onTableSelect, fetchData, onTableDelete, selectedTableId }) {
     const [editingTableId, setEditingTableId] = useState(null);
     const [newTableName, setNewTableName] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
@@ -104,7 +104,7 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
 
-    const handleTableNameClick = (id) => {
+    const handleTableNameClick = async (id) => {
         onTableSelect(id);
         fetchData(id);
     };
