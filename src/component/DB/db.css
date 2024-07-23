@@ -433,7 +433,8 @@ input:checked + .slider:before {
 }
 
 .table-name-container, 
-.edit-name-container {
+.edit-name-container,
+.file-name-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -451,5 +452,18 @@ input:checked + .slider:before {
 .save-file-button {
     cursor: pointer;
     margin-left: 5px;
+}
+
+.header-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sort-icon {
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 25px;
+    margin-bottom: 5px;
 }
 
