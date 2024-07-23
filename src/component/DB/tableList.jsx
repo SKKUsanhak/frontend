@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { TbTablePlus } from "react-icons/tb";
-import { FaEdit } from "react-icons/fa";
+import { FaTrash, FaEdit } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleDown, GoTriangleUp, GoTriangleRight, GoTriangleLeft } from "react-icons/go";
 import axios from 'axios';
 import './db.css';
 
-export default function TableList({ tableList, fileId, fetchTables, onTableSelect, fetchData }) {
+export default function TableList({ tableList, fileId, fetchTables, onTableSelect, fetchData, onTableDelete }) {
     const [editingTableId, setEditingTableId] = useState(null);
     const [newTableName, setNewTableName] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
@@ -132,6 +132,7 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                                 </th>
                                 <th>Table Name</th>
                                 <th>완료 여부</th>
+                                <th>테이블 삭제</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -171,12 +172,17 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                                         )}
                                     </td>
                                     <td>{table.finalData ? 'O' : 'X'}</td>
+                                    <td>
+                                        <button className='trash-icon' onClick={() => onTableDelete(table.id)}>
+                                            <FaTrash />
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
                             {paginatedTables.length < itemsPerPage &&
                                 [...Array(itemsPerPage - paginatedTables.length)].map((_, index) => (
                                     <tr key={`empty-${index}`}>
-                                        <td colSpan="3">&nbsp;</td>
+                                        <td colSpan="4">&nbsp;</td>
                                     </tr>
                                 ))}
                         </tbody>

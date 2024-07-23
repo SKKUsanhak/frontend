@@ -89,6 +89,9 @@
         }
 
         const handleFileDelete = async (fileId) => {
+            const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
+            if (!confirmDelete) return;
+        
             try {
                 const response = await axios.delete(`/delete-file`, {
                     params: { id: fileId },
@@ -103,6 +106,27 @@
             } catch (error) {
                 console.error('There was a problem with the axios operation:', error);
                 alert("There was an error deleting the file.");
+            }
+        };
+        
+        const handleTableDelete = async (tableId) => {
+            const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
+            if (!confirmDelete) return;
+        
+            try {
+                const response = await axios.delete(`/delete-table`, {
+                    params: { tableid: tableId },
+                });
+                if (response.status === 200) {
+                    alert("테이블 삭제 성공");
+                    fetchTable(selectedFileId);
+                    // 테이블이 삭제된 후의 추가 작업이 필요하다면 여기에 작성합니다.
+                } else {
+                    throw new Error('테이블 삭제 실패');
+                }
+            } catch (error) {
+                console.error('There was a problem with the axios operation:', error);
+                alert("There was an error deleting the table.");
             }
         };
 
@@ -134,7 +158,8 @@
                 )}
                 {visible === 'tableList' && (
                     <div>
-                        <TableList tableList={tableList} fileId={selectedFileId} fetchTables={fetchTable} onTableSelect={handleTableSelect} fetchData={fetchData}/>
+                        <TableList tableList={tableList} fileId={selectedFileId} fetchTables={fetchTable} 
+                        onTableSelect={handleTableSelect} fetchData={fetchData} onTableDelete={handleTableDelete}/>
                         <div className="file-back-container">
                             <button onClick={handleBackToFileList}>뒤로 가기</button>
                         </div>
