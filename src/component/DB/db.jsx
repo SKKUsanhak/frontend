@@ -62,10 +62,10 @@
             });
         }
 
-        const fetchData = () => {
+        const fetchData = (id) => {
             const selectedTable = tableList.find(table => table.id === selectedTableId);
                 setTableTitle(selectedTable ? selectedTable.tableTitle : '');
-                axios.get('/show-data', { params: { tableid: selectedTableId } })
+                axios.get('/show-data', { params: { tableid: id } })
                     .then(response => {
                         // JSON 형태의 데이터를 받아서 tableData 상태로 설정
                         setTableData(response.data);
@@ -83,23 +83,11 @@
             setTableData(null); // 파일을 선택할 때 테이블 데이터 초기화
         }
     
-        const handleTableSelect = (id) => { // 테이블 선택을 관리
+        const handleTableSelect = (id) => {
             setSelectedTableId(id);
-        };
-    
-        // const FileSelect = () => { // 파일을 선택하고 파일의 테이블을 call
-        //     fetchTable();
-        // };
-    
-        const TableSelect = () => { // 테이블을 선택하고 데이터를 call
-            console.log(tableList);
-            console.log(selectedTableId);
-            if (selectedTableId !== null) {
-                // 서버에 '/show-temp-data' 요청 보내기
-                fetchData();
-            }
-        };
-        
+            setTableData(null);
+        }
+
         const handleFileDelete = async (fileId) => {
             try {
                 const response = await axios.delete(`/delete-file`, {
@@ -146,12 +134,7 @@
                 )}
                 {visible === 'tableList' && (
                     <div>
-                        <TableList tableList={tableList} selectedTableId={selectedTableId} onTableSelect={handleTableSelect} fileId={selectedFileId} fetchTables={fetchTable}/>
-                        {selectedTableId && (
-                            <div className="table-button-container">
-                                <button onClick={TableSelect}>테이블 선택</button>
-                            </div>
-                        )}
+                        <TableList tableList={tableList} fileId={selectedFileId} fetchTables={fetchTable} onTableSelect={handleTableSelect} fetchData={fetchData}/>
                         <div className="file-back-container">
                             <button onClick={handleBackToFileList}>뒤로 가기</button>
                         </div>
