@@ -21,3 +21,7 @@
   flex: none;
   margin-left: 5px;
 }
+
+.merge-button {
+  width: 100%;
+}

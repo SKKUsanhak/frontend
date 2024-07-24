@@ -1,8 +1,7 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useRowHandler } from './RowHandler';
 
 export const MergeHandler = ({ data, setData, currentSheetIndex, RowRanges, setRowRanges }) => {
-
     const { handleDeleteRow } = useRowHandler(data, setData, currentSheetIndex);
 
     const handleMerge = useCallback(() => {
@@ -66,6 +65,6 @@ export const MergeHandler = ({ data, setData, currentSheetIndex, RowRanges, setR
     }, [data, setData, currentSheetIndex, RowRanges, handleDeleteRow, setRowRanges]);
 
     return (
-        <button onClick={handleMerge}>열 병합</button>
+        <button className='merge-button' onClick={handleMerge}>열 병합</button>
     );
 };

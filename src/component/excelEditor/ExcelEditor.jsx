@@ -326,10 +326,9 @@ export default function ExcelEditor() {
                             setRowRanges={setRowRanges}
                         />
                     </div>
-
                     <div>
-                        <button onClick={() => UploadHandler(data, fileName)}> DB 업로드 </button>
-                        <button onClick={() => DownloadHandler(data)}> 엑셀 파일로 다운로드 </button>
+                        <button className='upload-button' onClick={() => UploadHandler(data, fileName)}> DB 업로드 </button>
+                        <button className='download-button' onClick={() => DownloadHandler(data)}> 엑셀 파일로 다운로드 </button>
                     </div>
                 </div>
             </div>
