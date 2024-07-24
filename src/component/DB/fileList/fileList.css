@@ -44,6 +44,13 @@
 .save-file-button {
     cursor: pointer;
     margin-left: 5px;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.edit-file-button:hover,
+.save-file-button:hover {
+    color: gray;
 }
 
 .header-cell {
@@ -55,7 +62,8 @@
 .sort-icon {
     cursor: pointer;
     margin-left: 5px;
-    font-size: 15px;
+    width: 12px;
+    height: 12px;
     margin-bottom: 5px;
 }
 
@@ -94,6 +102,7 @@
 }
 
 .trash-icon {
+    font-size: 16px;
     cursor: pointer;
     color: black; /* 기본 색상 */
     transition: color 0.3s;

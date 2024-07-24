@@ -69,10 +69,6 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
         return sorted;
     };
 
-    const getSortIcon = (key) => {
-        return <FaSort className='sort-icon' />;
-    };
-
     const handleFileNameClick = (id) => {
         onFileSelect(id);
         fetchTables(id);
@@ -103,21 +99,24 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
                             <tr>
                                 <th onClick={() => handleSort('id')}>
                                     <div className="header-cell">
-                                        File ID {getSortIcon('id')}
+                                        File ID 
+                                        <FaSort className='sort-icon' />
                                     </div>
                                 </th>
                                 <th>파일 이름</th>
                                 <th onClick={() => handleSort('createTime')}>
                                     <div className="header-cell">
-                                        업로드 날짜 {getSortIcon('createTime')}
+                                        업로드 날짜
+                                        <FaSort className='sort-icon' />
                                     </div>
                                 </th>
                                 <th onClick={() => handleSort('updateTime')}>
                                     <div className="header-cell">
-                                        최종 수정일 {getSortIcon('updateTime')}
+                                        최종 수정일
+                                        <FaSort className='sort-icon' />
                                     </div>
                                 </th>
-                                <th>파일 삭제</th>
+                                <th>삭제/수정</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -134,12 +133,6 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
                                                         onChange={(e) => setNewFileName(e.target.value)}
                                                     />
                                                 </div>
-                                                <div className="save-icon-container">
-                                                    <IoIosSave
-                                                        onClick={() => handleSaveFileName(file)}
-                                                        className='save-file-button'
-                                                    />
-                                                </div>
                                             </div>
                                         ) : (
                                             <div
@@ -149,13 +142,6 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
                                                 <span className="file-name">
                                                     {file.fileName}
                                                 </span>
-                                                <FaEdit
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleEditFileName(file);
-                                                    }}
-                                                    className='edit-file-button'
-                                                />
                                             </div>
                                         )}
                                     </td>
@@ -165,6 +151,20 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
                                         <button className='trash-icon' onClick={() => onFileDelete(file.id)}>
                                             <FaTrash />
                                         </button>
+                                        {editingFileId === file.id ? (
+                                            <IoIosSave
+                                                onClick={() => handleSaveFileName(file)}
+                                                className='save-file-button'
+                                            />
+                                        ) : (
+                                            <FaEdit
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleEditFileName(file);
+                                                }}
+                                                className='edit-file-button'
+                                            />
+                                        )}
                                     </td>
                                 </tr>
                             ))}

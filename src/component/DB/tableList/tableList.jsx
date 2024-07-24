@@ -83,10 +83,6 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
         return sorted;
     };
 
-    const getSortIcon = (key) => {
-        return <FaSort className='sort-icon' />;
-    };
-
     const handleNextPage = () => {
         if (currentPage * itemsPerPage < tableList.length) {
             setCurrentPage((prevPage) => prevPage + 1);
@@ -121,7 +117,8 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                             <tr>
                                 <th onClick={() => handleSort('id')}>
                                     <div className="header-cell">
-                                        ID {getSortIcon('id')}
+                                        ID 
+                                        <FaSort className='sort-icon' />
                                     </div>
                                 </th>
                                 <th>Table Name</th>
@@ -132,7 +129,7 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                                 </th>
                                 <th>
                                     <div className="header-cell">
-                                        테이블 삭제
+                                        삭제/수정
                                     </div>
                                 </th>
                             </tr>
@@ -149,10 +146,6 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                                                     value={newTableName}
                                                     onChange={(e) => setNewTableName(e.target.value)}
                                                 />
-                                                <IoIosSave
-                                                    onClick={() => handleSaveTableName(table)}
-                                                    className='save-table-button'
-                                                />
                                             </div>
                                         ) : (
                                             <div
@@ -163,13 +156,6 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                                                 <span className="table-name">
                                                     {table.tableTitle}
                                                 </span>
-                                                <FaEdit
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleEditTableName(table);
-                                                    }}
-                                                    className='edit-table-button'
-                                                />
                                             </div>
                                         )}
                                     </td>
@@ -178,6 +164,20 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                                         <button className='trash-icon' onClick={() => onTableDelete(table.id)}>
                                             <FaTrash />
                                         </button>
+                                        {editingTableId === table.id ? (
+                                            <IoIosSave
+                                                onClick={() => handleSaveTableName(table)}
+                                                className='save-table-button'
+                                            />
+                                        ) : (
+                                            <FaEdit
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleEditTableName(table);
+                                                }}
+                                                className='edit-table-button'
+                                            />
+                                        )}
                                     </td>
                                 </tr>
                             ))}

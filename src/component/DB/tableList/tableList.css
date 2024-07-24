@@ -69,6 +69,11 @@
     margin-left: 5px;
 }
 
+.edit-table-button:hover, 
+.save-table-button:hover {
+    color: gray;
+}
+
 .header-cell {
     display: flex;
     align-items: center;
