@@ -201,8 +201,8 @@ export default function ExcelEditor() {
                             type="number"
                             value={tableIndex}
                             onChange={(e) => {
-                                const value = e.target.value === '' ? '' : Math.min(Number(e.target.value) - 1, data.length);
-                                setTableIndex(value === '' ? '' : value + 1);
+                                const value = e.target.value === '' ? '' : Math.min(Math.max(Number(e.target.value), 1), data.length); // 사용자 입력값을 현재 테이블 범위 내로 제한
+                                setTableIndex(value === '' ? '' : value);
                             }}
                             placeholder="테이블 번호 지정"
                             min="1"

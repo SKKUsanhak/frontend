@@ -19,6 +19,7 @@
     overflow: auto; /* 내용이 넘칠 경우 스크롤 생성 */
     border-width: 0;
     font-family: "LineFont";
+    position: relative; /* 새로운 속성 추가 */
 }
 
 .table-data-container .db-table {
@@ -28,12 +29,23 @@
 
 .db-table th, .db-table td {
     border: 1px solid #ddd;
-    padding:5px;
+    padding: 5px;
     text-align: center;
     align-items: center;
     justify-content: center;
     white-space: nowrap;
     height: 20px;
+}
+
+.db-table td:first-child {
+    position: sticky;
+    left: 0;
+    background-color: #afafe5; /* 필요 시 배경색을 조정 */
+    z-index: 1; /* 새로운 속성 추가 */
+}
+
+.db-table th:first-child {
+    z-index: 3; /* 헤더 셀의 z-index를 높게 설정하여 내용 셀보다 위에 위치하도록 함 */
 }
 
 .db-table input {
