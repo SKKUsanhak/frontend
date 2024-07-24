@@ -224,7 +224,7 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                                     ))}
                                 </tr>
                                 <tr>
-                                    <th></th>
+                                    <th> </th>
                                     {columns.map((col, index) => (
                                         <th key={index}>
                                             <input
