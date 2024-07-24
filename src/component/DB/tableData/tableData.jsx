@@ -217,7 +217,7 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                     <div className='table-data-container'>
                         <table className='db-table'>
                             <thead>
-                                <tr>
+                                <tr className='first-column'>
                                     <th>#</th>
                                     {columns.map((col, index) => (
                                         <th key={index}>{index}</th>

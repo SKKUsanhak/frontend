@@ -4,6 +4,7 @@
     gap: 20px;
     padding: 20px;
     font-family: "LineFont";
+    overflow: hidden; /* 웹페이지 전체에 스크롤이 생기지 않도록 설정 */
 }
 
 .table-section {
@@ -11,6 +12,8 @@
     flex-direction: column;
     border: 1px solid #ddd;
     font-family: "LineFont";
+    overflow: auto; /* table-section에 스크롤 적용 */
+    height: 620px; /* 높이를 화면 높이에 맞추고 padding을 뺀 값 */
 }
 
 .table-data-container {
@@ -36,29 +39,24 @@
 }
 
 .db-table th {
+    border: 1.5px solid #f3f3f3;
     position: sticky;
-    top: 0;
-    z-index: 1; /* 새로운 속성 추가 */
+    top: -1px;
+    padding: 3px;
     white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
     resize: horizontal;
-}
-
-.db-table td:first-child {
-    position: sticky;
-    left: -1px;
-    padding: 10px;
-    background-color: #e1e1e6; /* 필요 시 배경색을 조정 */
-    z-index: 2; /* 새로운 속성 추가 */
-}
-
-.db-table th:first-child {
-    top: 0;
-    padding: 10px;
-    border-collapse: collapse;
-    background-clip: border-box;
-    position: sticky;
-    background-color: #e1e1e6; /* 필요 시 배경색을 조정 */
+    background-color: rgb(205, 205, 205); /* 필요 시 배경색을 조정 */
     z-index: 4; /* 헤더 셀의 z-index를 높게 설정하여 내용 셀보다 위에 위치하도록 함 */
+}
+
+.db-table td {
+    padding: 10px;
+}
+
+.first-column th {
+    background-color: white;
+    border: 1px solid #ddd;
+    z-index: 1;
 }
 
 .db-table input {
@@ -67,6 +65,10 @@
     font-family: "LineFont";
     text-overflow: ellipsis; /* Display ellipsis for overflow text in input fields */
     white-space: nowrap; /* Prevent line breaks in input fields */
+}
+
+.db-table th input {
+    background-color: rgb(205, 205, 205);
 }
 
 .control-section {
@@ -154,10 +156,6 @@
     /* 패딩을 포함한 박스 크기 계산 */
     font-family: "LineFont";
     text-align: center;
-}
-
-.highlight-cell {
-    background-color: #9090cb; /* 하이라이트 색상을 노란색으로 지정합니다. 필요에 따라 변경할 수 있습니다. */
 }
 
 .control-section button {
@@ -291,16 +289,16 @@ input:checked + .slider:before {
 }
 
 .highlight-cell {
-    background-color: #f0f2fa; /* 하이라이트 셀의 배경색을 흰색으로 설정 */
+    background-color: #f3f3f3; /* 하이라이트 셀의 배경색을 흰색으로 설정 */
 }
 
 .highlight-cell input {
-    background-color: #f0f2fa; /* 하이라이트 셀 내의 input 창의 배경색을 하늘색으로 설정 */
+    background-color: #f3f3f3; /* 하이라이트 셀 내의 input 창의 배경색을 하늘색으로 설정 */
     border: none;
 }
 
 .highlight-row {
-    background-color: #d4f2fb; /* 연한 하늘색 */
+    background-color: #f3f3f3; /* 연한 하늘색 */
 }
 
 .highlight-input, .highlight-input:focus {
@@ -316,7 +314,7 @@ input:checked + .slider:before {
 }
 
 .highlight-cell-border {
-    border: 2px solid #6060a6 !important; /* Adjust the color and width as needed */
+    border: 2px solid #646464 !important; /* Adjust the color and width as needed */
 }
 
 .highlight-cell-background {
