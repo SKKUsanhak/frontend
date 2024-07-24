@@ -270,12 +270,12 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                 </div>
                 <div className='control-section'>
                     <div className='button-group'>
-                        <button onClick={handleMakeRow}>행 추가</button>
-                        <button onClick={handleDeleteRow} disabled={!deleteEnabled}>행 삭제</button> {/* 선택된 셀이 없으면 버튼 비활성화 */}
+                        <button className="add-button" onClick={handleMakeRow}>행 추가</button>
+                        <button className="delete-button" onClick={handleDeleteRow} disabled={!deleteEnabled}>행 삭제</button> {/* 선택된 셀이 없으면 버튼 비활성화 */}
                     </div>
                     <div className='button-group'>
-                        <button onClick={handleMakeHeader}>열 추가</button>
-                        <button onClick={handleDeleteColumn} disabled={!deleteEnabled}>열 삭제</button> {/* 선택된 셀이 없으면 버튼 비활성화 */}
+                        <button className="add-button" onClick={handleMakeHeader}>열 추가</button>
+                        <button className="delete-button" onClick={handleDeleteColumn} disabled={!deleteEnabled}>열 삭제</button> {/* 선택된 셀이 없으면 버튼 비활성화 */}
                     </div>
                     <div className='save-button-group'>
                         {!isFinal && ( // isFinal이 true가 아닌 경우에만 토글 스위치를 표시
