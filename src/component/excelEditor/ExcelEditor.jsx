@@ -15,8 +15,8 @@ export default function ExcelEditor() {
     const location = useLocation(); // 파일 로딩을 위한 location
     const [currentSheetIndex, setCurrentSheetIndex] = useState(0); // 현재 시트 인덱스 추가
     const [data, setData] = useState([]); // 테이블 데이터 추가
-    const [rowIndex, setRowIndex] = useState(0); // 행 인덱싱 추가
-    const [colIndex, setColIndex] = useState(0); // 열 인덱싱 추가
+    const [rowIndex, setRowIndex] = useState(''); // 행 인덱싱 추가
+    const [colIndex, setColIndex] = useState(''); // 열 인덱싱 추가
     const [tableIndex, setTableIndex] = useState(0); // 테이블 인덱싱 추가
     const [RowRanges, setRowRanges] = useState({}); // 행 범위 추가
     const [fileName, setFileName] = useState("");
@@ -86,6 +86,8 @@ export default function ExcelEditor() {
             const container = document.querySelector('.table-container');
             if (container && !container.contains(event.target)) {
                 setSelectedCell(null); // table-container 바깥쪽을 클릭하면 셀 선택 취소
+                setRowIndex(''); // 선택 취소 시 행 인덱스 초기화
+                setColIndex(''); // 선택 취소 시 열 인덱스 초기화
             }
         };
 
@@ -165,6 +167,8 @@ export default function ExcelEditor() {
     // 선택된 셀을 처리하는 함수
     const handleCellClick = (rowIndex, cellIndex) => {
         setSelectedCell({ rowIndex, cellIndex }); // 선택된 셀 상태 업데이트
+        setRowIndex(rowIndex); // 선택된 셀의 행 인덱스 설정
+        setColIndex(cellIndex); // 선택된 셀의 열 인덱스 설정
     };
 
     const isRowInRange = (rowIndex) => {
@@ -180,6 +184,18 @@ export default function ExcelEditor() {
     const isLastRowInRange = (rowIndex) => {
         const range = RowRanges[currentSheetIndex];
         return range && rowIndex === (range.endRow || 0);
+    };
+
+    const confirmAndDeleteRow = (rowIndex) => {
+        if (window.confirm(`정말로 ${rowIndex} 행을 삭제하시겠습니까?`)) {
+            handleDeleteRow(rowIndex);
+        }
+    };
+
+    const confirmAndDeleteColumn = (colIndex) => {
+        if (window.confirm(`정말로 ${colIndex} 열을 삭제하시겠습니까?`)) {
+            handleDeleteColumn(colIndex);
+        }
     };
 
     return (
@@ -282,7 +298,7 @@ export default function ExcelEditor() {
                             max={data[currentSheetIndex]?.rows.length ?? 0}
                         />
                         <button onClick={() => handleAddRow(rowIndex)}>행 추가</button>
-                        <button onClick={() => handleDeleteRow(rowIndex)}>행 삭제</button>
+                        <button onClick={() => confirmAndDeleteRow(rowIndex)}>행 삭제</button>
                     </div>
 
                     <div className="Colcontrols">
@@ -295,7 +311,7 @@ export default function ExcelEditor() {
                             max={data[currentSheetIndex]?.columns.length ?? 0}
                         />
                         <button onClick={() => handleAddColumn(colIndex)}>열 추가</button>
-                        <button onClick={() => handleDeleteColumn(colIndex)}>열 삭제</button>
+                        <button onClick={() => confirmAndDeleteColumn(colIndex)}>열 삭제</button>
                     </div>
 
                     <div className="ColumnRanges">
