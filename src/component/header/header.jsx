@@ -1,8 +1,15 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import './header.css';
 import { BiLogIn } from "react-icons/bi";
 
 const Header = () => {
+    const navigate = useNavigate();
+
+    const redirectToLogin = () => {
+        navigate('/login');
+    };
+
     return (
         <header id="header" role="banner">
             <div className="header__inner">
@@ -13,7 +20,7 @@ const Header = () => {
                     </ul>
                 </nav>
                 <div className="login-icon-container">
-                    <BiLogIn className="login-icon" />
+                    <BiLogIn onClick={redirectToLogin} className="login-icon" />
                 </div>
             </div>
         </header>
