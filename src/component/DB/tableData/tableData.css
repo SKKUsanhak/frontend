@@ -183,6 +183,14 @@
     font-family: "LineFont";
 }
 
+.save-button:hover {
+    background-color: #252582;
+}
+
+.save-button:active {
+    background-color: #6060a6;
+}
+
 .toggle-switch {
     position: relative;
     display: inline-block;

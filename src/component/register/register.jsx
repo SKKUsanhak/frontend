@@ -67,7 +67,7 @@ function RegisterPage() {
                     />
                 </div>
                 {error && <p className="error">{error}</p>}
-                <button type="submit">Register</button>
+                <button type="submit">회원가입</button>
             </form>
         </div>
     );

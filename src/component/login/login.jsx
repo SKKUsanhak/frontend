@@ -50,8 +50,8 @@ function LoginPage() {
                 </div>
                 {error && <p className="error">{error}</p>}
                 <div className='login-button'>
-                    <button type="submit">Login</button>
-                    <button type="button" onClick={redirectRegister}>Register</button>
+                    <button type="submit">로그인</button>
+                    <button type="button" onClick={redirectRegister}>회원가입</button>
                 </div>
             </form>
         </div>

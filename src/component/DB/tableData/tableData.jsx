@@ -104,25 +104,28 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
             alert("유효하지 않은 행 번호입니다.");
             return;
         }
-    
+
+        const confirmDelete = window.confirm(`정말로 ${rowIndex-2} 행을 삭제하시겠습니까?`);
+        if (!confirmDelete) return;
+
         setEditQueue([...editQueue, {
             method: 'delete',
             url: '/delete-row',
             params: { tableid: tableId, rowindex: rowIndex },
             headers: { 'Content-Type': 'application/json' }
         }]);
-    
+
         const newTable = table.filter(row => row[0].rowNumber !== rowIndex).map((row, index) =>
             row.map(cell => ({ ...cell, rowNumber: index + 2 }))
         );
         const newRows = newTable.map(row => row[0].rowNumber);
-    
+
         setTable(newTable);
         setRows(newRows);
         setSelectedCell(null); // 선택된 셀 초기화
         setDeleteEnabled(false); // 버튼 비활성화
     };
-    
+
     const handleDeleteColumn = () => {
         if (!selectedCell) return; // 선택된 셀이 없으면 리턴
 
@@ -131,6 +134,9 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
             alert("유효한 열 번호를 입력하세요.");
             return;
         }
+
+        const confirmDelete = window.confirm(`정말로 ${columns[columnIndex]} 열을 삭제하시겠습니까?`);
+        if (!confirmDelete) return;
 
         setEditQueue([...editQueue, {
             method: 'delete',
