@@ -28,11 +28,21 @@
 .table-list-header .back-icon {
     cursor: pointer;
     margin-right: auto; /* Ensure the back icon is aligned to the left */
+    transition: color 0.3s;
+}
+
+.back-icon:hover {
+    color:cornflowerblue;
 }
 
 .table-list-header .add-table-button {
     cursor: pointer;
     margin-left: auto; /* Ensure the add button is aligned to the right */
+    transition: color 0.3s;
+}
+
+.add-table-button:hover{
+    color:cornflowerblue;
 }
 
 .table-list-container table {
@@ -65,13 +75,19 @@
 
 .edit-table-button, 
 .save-table-button {
+    transition: color 0.3s;
     cursor: pointer;
     margin-left: 5px;
 }
 
 .edit-table-button:hover, 
 .save-table-button:hover {
-    color: gray;
+    color: cornflowerblue;
+}
+
+.edit-table-button:active, 
+.save-table-button:active {
+    color: blue;
 }
 
 .header-cell {

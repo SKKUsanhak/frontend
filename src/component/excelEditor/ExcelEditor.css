@@ -96,6 +96,7 @@
   border: none;
   outline: none;
   font-family: "LineFont";
+  text-overflow: ellipsis;
 }
 
 .table {
@@ -195,7 +196,18 @@
   border:none;
 }
 
-.highlight-row-column input {
-  background-color: #f0f2fa;
-  border: none;
+.highlight-row-range th {
+  border-left: 2px dashed cornflowerblue;
+}
+
+.highlight-row-range td:last-child {
+  border-right: 2px dashed cornflowerblue;
+}
+
+.highlight-row-range-start {
+  border-top: 2px dashed cornflowerblue;
+}
+
+.highlight-row-range-end {
+  border-bottom: 2px dashed cornflowerblue;
 }

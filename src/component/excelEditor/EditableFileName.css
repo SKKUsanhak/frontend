@@ -2,15 +2,25 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    font-family: "LineFont";
+}
+
+.editable-file-name span {
+    padding: 10px;
 }
 
 .editable-file-name input {
-    padding: 5px;
-    font-size: 1rem;
+    padding: 10px;
+    font-size: 24px;
+    font-family: "LineFont";
+    text-align: center;
+    justify-content: center;
+    border: 1px solid #060429;
 }
 
 .editable-file-name button {
-    padding: 5px 10px;
+    margin-left: 20px;
+    padding: 10px 10px;
     font-size: 1rem;
     cursor: pointer;
     background-color: #060429;

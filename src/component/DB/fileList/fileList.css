@@ -50,7 +50,12 @@
 
 .edit-file-button:hover,
 .save-file-button:hover {
-    color: gray;
+    color: cornflowerblue;
+}
+
+.edit-file-button:active,
+.save-file-button:active {
+    color: blue;
 }
 
 .header-cell {

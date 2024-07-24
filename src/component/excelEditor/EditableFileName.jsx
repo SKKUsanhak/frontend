@@ -34,7 +34,7 @@ const EditableFileName = ({ initialFileName, onSave }) => {
                 <span>{fileName}</span> // 파일 이름 표시
             )}
             <button onClick={isEditing ? handleSaveClick : handleEditClick}>
-                {isEditing ? 'Save' : 'Edit'} 
+                {isEditing ? '저장' : '수정'} 
             </button>
         </div>
     );
