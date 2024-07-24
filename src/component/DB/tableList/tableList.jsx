@@ -125,14 +125,14 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                                     </div>
                                 </th>
                                 <th>Table Name</th>
-                                <th onClick={() => handleSort('createTime')}>
+                                <th>
                                     <div className="header-cell">
-                                        완료 여부 {getSortIcon('createTime')}
+                                        완료 여부
                                     </div>
                                 </th>
-                                <th onClick={() => handleSort('updateTime')}>
+                                <th>
                                     <div className="header-cell">
-                                        테이블 삭제 {getSortIcon('updateTime')}
+                                        테이블 삭제
                                     </div>
                                 </th>
                             </tr>
