@@ -175,6 +175,10 @@
   background-color: #f0f2fa; /* 선택된 셀에 해당하는 행과 열의 셀들 배경색 설정 */
 }
 
+.highlight-row-column input {
+  background-color: #f0f2fa;
+}
+
 .highlight-cell input {
   background-color: #f0f2fa;
   border: none;
