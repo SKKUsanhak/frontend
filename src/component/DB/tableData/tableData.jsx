@@ -196,7 +196,7 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
             axios.patch('/update-date', null, {
                 params: { fileid: fileId }
             })
-            fetchData();
+            fetchData(tableId);
             setEditQueue([]);
         } catch (error) {
             alert('오류가 발생했습니다.');

@@ -28,13 +28,22 @@
 }
 
 .db-table th, .db-table td {
+    position: relative;
     border: 1px solid #ddd;
     padding: 5px;
     text-align: center;
     align-items: center;
     justify-content: center;
-    white-space: nowrap;
-    height: 20px;
+    white-space: nowrap; /* Prevent line breaks */
+    text-overflow: ellipsis; /* Display ellipsis for overflow text */
+}
+
+.db-table th {
+    position: sticky;
+    top: 0;
+    z-index: 2; /* 새로운 속성 추가 */
+    white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
+    resize: horizontal;
 }
 
 .db-table td:first-child {
@@ -51,6 +60,9 @@
 .db-table input {
     border: none;
     text-align: center;
+    font-family: "LineFont";
+    text-overflow: ellipsis; /* Display ellipsis for overflow text in input fields */
+    white-space: nowrap; /* Prevent line breaks in input fields */
 }
 
 .control-section {
@@ -82,7 +94,7 @@
     margin-top: auto; 
 }
 
-.table-back-container button{
+.table-back-container button {
     margin-top: 20px;
     margin-bottom: 20px;
     display: flex;
@@ -100,11 +112,11 @@
     font-family: "LineFont";
 }
 
-.table-back-container button:hover{
+.table-back-container button:hover {
     background-color: #252582; 
 }
 
-.table-back-container button:active{
+.table-back-container button:active {
     background-color: #6060a6; 
 }
 

@@ -20,9 +20,9 @@ export default function ExcelEditor() {
     const [tableIndex, setTableIndex] = useState(0); // 테이블 인덱싱 추가
     const [ColumnRanges, setColumnRanges] = useState({}); // 열 범위 추가
     const [fileName, setFileName] = useState("");
+    const [selectedCell, setSelectedCell] = useState(null); // 선택된 셀 상태 추가
 
     const { // 셀 선택 함수 묶음
-        selectedCells,
         handleMouseDown,
         handleMouseOver,
         handleMouseUp,
@@ -81,6 +81,20 @@ export default function ExcelEditor() {
         }
     }, [location.state]);
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            const container = document.querySelector('.table-container');
+            if (container && !container.contains(event.target)) {
+                setSelectedCell(null); // table-container 바깥쪽을 클릭하면 셀 선택 취소
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     const addTable = (index) => { // 테이블 생성
         const newData = [...data];
         const newTable = { rows: [['']], columns: [''] }; // 기본적으로 빈 테이블 생성
@@ -136,6 +150,11 @@ export default function ExcelEditor() {
         setFileName(newFileName);
     }
 
+    // 선택된 셀을 처리하는 함수
+    const handleCellClick = (rowIndex, cellIndex) => {
+        setSelectedCell({ rowIndex, cellIndex }); // 선택된 셀 상태 업데이트
+    };
+
     return (
         <div className="excel-editor-container">
             <div className="editor-header">
@@ -161,12 +180,21 @@ export default function ExcelEditor() {
                                         <tr key={rowIndex}>
                                             <th>{rowIndex}</th>
                                             {row.map((cell, cellIndex) => (
-                                                <td className="td"
-                                                    key={cellIndex}
-                                                    onMouseDown={(e) => handleMouseDown(e, rowIndex, cellIndex)}
-                                                    onMouseOver={(e) => handleMouseOver(e, rowIndex, cellIndex)}
-                                                    style={{ backgroundColor: selectedCells.has(`${rowIndex}-${cellIndex}`) ? 'lightblue' : 'transparent' }}
-                                                >
+                                                <td className={
+                                                    selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex
+                                                    ? 'highlight-cell highlight-cell-border highlight-cell-background'
+                                                    : selectedCell && (selectedCell.rowIndex === rowIndex || selectedCell.cellIndex === cellIndex)
+                                                        ? 'highlight-row-column'
+                                                        : '' /* 선택된 셀 테두리 강조 및 하이라이트 */
+                                                }
+                                                key={cellIndex}
+                                                onMouseDown={(e) => {
+                                                    handleMouseDown(e, rowIndex, cellIndex);
+                                                    handleCellClick(rowIndex, cellIndex); // 셀 클릭 시 선택된 셀 업데이트
+                                                }}
+                                                onMouseOver={(e) => handleMouseOver(e, rowIndex, cellIndex)}
+                                               
+                                            >
                                                     <input
                                                         className="input"
                                                         type="text"

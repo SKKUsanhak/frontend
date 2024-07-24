@@ -165,3 +165,37 @@
   margin-top: 20px;
   font-weight: bold;
 }
+
+.highlight-cell {
+  background-color: #f0f2fa; 
+}
+
+.highlight-row-column {
+  background-color: #f0f2fa; /* 선택된 셀에 해당하는 행과 열의 셀들 배경색 설정 */
+}
+
+.highlight-cell input {
+  background-color: #f0f2fa;
+  border: none;
+}
+.highlight-cell-border {
+  border: 2px solid #6060a6 !important; /* Adjust the color and width as needed */
+}
+
+.highlight-cell-background {
+  background-color: white !important; /* Ensure the background color is white */
+}
+
+.highlight-row {
+  background-color: #d4f2fb;
+}
+
+.highlight-input, .highlight-input:focus {
+  outline: none; 
+  border:none;
+}
+
+.highlight-row-column input {
+  background-color: #f0f2fa;
+  border: none;
+}
