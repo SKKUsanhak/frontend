@@ -131,6 +131,7 @@
 .back-container, .add-container {
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .back-container span, .add-container span {

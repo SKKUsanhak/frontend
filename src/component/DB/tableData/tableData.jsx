@@ -217,8 +217,8 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
 
     return (
         <div className='excel-editor-container'>
-            <div className='back-button-container'>
-                <TbArrowBackUp onClick={BacktoTableList} className='back-icon' size={24} />
+            <div className='back-button-container' onClick={BacktoTableList}>
+                <TbArrowBackUp className='back-icon' size={24} />
                 <span>테이블 목록으로 돌아가기</span>
             </div>
             <div ref={containerRef}>

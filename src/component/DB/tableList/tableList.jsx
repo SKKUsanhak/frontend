@@ -130,8 +130,8 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
             <div className="table-list-container" ref={tableListContainerRef}>
                 <h2 className='table-list-title'>테이블 목록</h2>
                 <div className='table-list-header'>
-                    <div className='back-container'>
-                        <TbArrowBackUp className='back-icon' onClick={BacktoFileList} size={24} />
+                    <div className='back-container' onClick={BacktoFileList}>
+                        <TbArrowBackUp className='back-icon' size={24} />
                         <span>파일 목록으로 돌아가기</span>
                     </div>
                     <div className='search-container'>
@@ -146,9 +146,9 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                         />
                         <FaSearch className='search-icon' />
                     </div>
-                    <div className='add-container'>
+                    <div className='add-container' onClick={handleAddTable}>
                         <span>테이블 추가</span>
-                        <TbTablePlus className='add-table-icon' onClick={handleAddTable} size={24} />
+                        <TbTablePlus className='add-table-icon' size={24} />
                     </div>
                 </div>
                 <div className='table-list-content'>
