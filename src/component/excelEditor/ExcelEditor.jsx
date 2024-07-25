@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ExcelJS from 'exceljs';
 import './ExcelEditor.css';
-import { useCellSelection } from './SelectCell';
 import { useRowHandler } from './Handler/RowHandler';
 import { useColumnHandler } from './Handler/ColumnHandler';
 import { UploadHandler } from './Handler/UploadHandler';
@@ -21,13 +20,6 @@ export default function ExcelEditor() {
     const [RowRanges, setRowRanges] = useState({}); // 행 범위 추가
     const [fileName, setFileName] = useState("");
     const [selectedCell, setSelectedCell] = useState(null); // 선택된 셀 상태 추가
-
-    const { // 셀 선택 함수 묶음
-        handleMouseDown,
-        handleMouseOver,
-        handleMouseUp,
-        handleTableMouseDown,
-    } = useCellSelection();
 
     const { // 열 컨트롤 함수들 
         handleAddRow,
@@ -83,7 +75,7 @@ export default function ExcelEditor() {
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            const container = document.querySelector('.table-container');
+            const container = document.querySelector('.excel-editor');
             if (container && !container.contains(event.target)) {
                 setSelectedCell(null); // table-container 바깥쪽을 클릭하면 셀 선택 취소
                 setRowIndex(''); // 선택 취소 시 행 인덱스 초기화
@@ -203,10 +195,10 @@ export default function ExcelEditor() {
             <div className="editor-header">
                 <h1><EditableFileName initialFileName={fileName} onSave={handleFileNameSave}/></h1>
             </div>
-            <div className="excel-editor" onMouseUp={handleMouseUp}>
+            <div className="excel-editor">
                 <div className="table-section">
                     <div className="table-container">
-                        <table className="table" onMouseDown={handleTableMouseDown}>
+                        <table className="table">
                             <thead>
                                 <tr>
                                     <th></th>
@@ -239,11 +231,7 @@ export default function ExcelEditor() {
                                                             : '' /* 선택된 셀 테두리 강조 및 하이라이트 */
                                                     }
                                                     key={cellIndex}
-                                                    onMouseDown={(e) => {
-                                                        handleMouseDown(e, rowIndex, cellIndex);
-                                                        handleCellClick(rowIndex, cellIndex); // 셀 클릭 시 선택된 셀 업데이트
-                                                    }}
-                                                    onMouseOver={(e) => handleMouseOver(e, rowIndex, cellIndex)}
+                                                    onClick={() => handleCellClick(rowIndex, cellIndex)} // 셀 클릭 시 선택된 셀 업데이트
                                                 >
                                                     <input
                                                         className="input"
