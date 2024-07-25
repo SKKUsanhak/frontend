@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TbTablePlus, TbArrowBackUp } from "react-icons/tb";
-import { FaTrash, FaEdit, FaSort } from "react-icons/fa";
+import { FaTrash, FaEdit, FaSort, FaSearch } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
 import axios from 'axios';
@@ -11,6 +11,7 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
     const [newTableName, setNewTableName] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState('');
     const itemsPerPage = 15; // 페이지 당 항목 수
 
     const handleAddTable = async () => {
@@ -83,8 +84,13 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
         return sorted;
     };
 
+    const filteredTables = () => {
+        if (!searchQuery) return sortedTables();
+        return sortedTables().filter(table => table.tableTitle.toLowerCase().includes(searchQuery.toLowerCase()));
+    };
+
     const handleNextPage = () => {
-        if (currentPage * itemsPerPage < tableList.length) {
+        if (currentPage * itemsPerPage < filteredTables().length) {
             setCurrentPage((prevPage) => prevPage + 1);
         }
     };
@@ -98,15 +104,33 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
         fetchData(id);
     };
 
-    const paginatedTables = sortedTables().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-    const totalPages = Math.ceil(tableList.length / itemsPerPage);
+    const paginatedTables = filteredTables().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const totalPages = Math.ceil(filteredTables().length / itemsPerPage);
 
     return (
         <div className='table-list-container'>
             <h2 className='table-list-title'>테이블 목록</h2>
             <div className='table-list-header'>
-                <TbArrowBackUp onClick={BacktoFileList} className='back-icon' size={24} />
-                <TbTablePlus onClick={handleAddTable} className='add-table-button' size={24} />
+                <div className='back-container'>
+                    <TbArrowBackUp onClick={BacktoFileList} className='back-icon' size={24} />
+                    <span>파일 목록으로 돌아가기</span>
+                </div>
+                <div className='search-container'>
+                    <input
+                        type='text'
+                        placeholder='테이블 이름으로 검색...'
+                        value={searchQuery}
+                        onChange={(e) => {
+                            setSearchQuery(e.target.value);
+                            setCurrentPage(1); // 검색할 때 첫 페이지로 이동
+                        }}
+                    />
+                    <FaSearch className='search-icon' />
+                </div>
+                <div className='add-container'>
+                    <span>테이블 추가</span>
+                    <TbTablePlus onClick={handleAddTable} className='add-table-button' size={24} />
+                </div>
             </div>
             {tableList.length === 0 ? (
                 <p>No tables available.</p>

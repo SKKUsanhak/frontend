@@ -127,3 +127,22 @@
     border: none; /* 테두리를 제거하여 빈칸으로 보이게 함 */
     background: none; /* 배경 제거 */
 }
+
+.search-container {
+    font-family: "LineFont";
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.search-container .search-icon {
+    margin-left: 10px;
+}
+
+.search-container input {
+    flex: 1;
+    padding: 5px 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

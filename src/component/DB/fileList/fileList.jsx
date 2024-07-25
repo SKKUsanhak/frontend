@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './fileList.css';
-import { FaTrash, FaEdit, FaSort } from "react-icons/fa";
+import { FaTrash, FaEdit, FaSort, FaSearch } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
 
@@ -10,6 +10,7 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
     const [newFileName, setNewFileName] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState('');
     const itemsPerPage = 15; // 페이지 당 항목 수
 
     const formatDate = (dateString) => {
@@ -69,13 +70,18 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
         return sorted;
     };
 
+    const filteredFiles = () => {
+        if (!searchQuery) return sortedFiles();
+        return sortedFiles().filter(file => file.fileName.toLowerCase().includes(searchQuery.toLowerCase()));
+    };
+
     const handleFileNameClick = (id) => {
         onFileSelect(id);
         fetchTables(id);
     };
 
     const handleNextPage = () => {
-        if (currentPage * itemsPerPage < files.length) {
+        if (currentPage * itemsPerPage < filteredFiles().length) {
             setCurrentPage((prevPage) => prevPage + 1);
         }
     };
@@ -84,12 +90,24 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
 
-    const paginatedFiles = sortedFiles().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-    const totalPages = Math.ceil(files.length / itemsPerPage);
+    const paginatedFiles = filteredFiles().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const totalPages = Math.ceil(filteredFiles().length / itemsPerPage);
 
     return (
         <div className='file-list-container'>
             <h2>파일 목록</h2>
+            <div className="search-container">
+                <input
+                    type="text"
+                    placeholder="파일 이름으로 검색..."
+                    value={searchQuery}
+                    onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                        setCurrentPage(1); // 검색할 때 첫 페이지로 이동
+                    }}
+                />
+                <FaSearch className="search-icon" />
+            </div>
             {files && files.length === 0 ? (
                 <p>No files available.</p>
             ) : (

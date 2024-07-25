@@ -21,13 +21,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 10px;
-    margin-bottom: 5px;
 }
 
 .table-list-header .back-icon {
+    margin-right: 5px;
     cursor: pointer;
-    margin-right: auto; /* Ensure the back icon is aligned to the left */
     transition: color 0.3s;
 }
 
@@ -37,7 +35,7 @@
 
 .table-list-header .add-table-button {
     cursor: pointer;
-    margin-left: auto; /* Ensure the add button is aligned to the right */
+    margin-right: 5px;
     transition: color 0.3s;
 }
 
@@ -135,4 +133,32 @@
 .table-name:hover {
     color: blue;
     text-decoration: underline;
+}
+
+.search-container {
+    margin-top: 10px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+.search-container .search-icon {
+    margin-right: 10px;
+}
+
+.search-container input {
+    font-family: "LineFont";
+    font-size: 16px;
+    border: 1px solid #ccc;
+}
+
+.back-container, .add-container {
+    display: flex;
+}
+
+.back-container span, .add-container span{
+    margin-top: 3px;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
 }
