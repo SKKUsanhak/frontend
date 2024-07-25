@@ -3,29 +3,80 @@
     display: flex;
     flex-direction: column;
     font-family: "LineFont";
-    height: 100%;
-    width: 60%;
-    border: 1px solid #ddd;
+    width: 60%; /* 중앙에 오게 너비를 조절 */
     padding: 10px;
     margin-left: auto;
     margin-right: auto;
     align-items: center;
-    justify-content: center;
+    position: relative;
+    transition: width 0.5s ease, transform 0.5s ease; /* 너비와 위치 변화 애니메이션 */
+}
+
+.file-details {
+    position: fixed;
+    top: 0;
+    right: -100%; /* 초기 위치를 화면 밖으로 설정 */
+    height: 100%;
+    width: 20%; /* 필요에 따라 너비 조절 */
+    background-color: white;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+    z-index: 1000; /* 다른 요소들 위에 표시되도록 설정 */
+    font-family: "LineFont";
+    transition: right 0.5s ease; /* 위치 변화 애니메이션 */
+}
+
+.file-details.visible {
+    right: 0; /* visible 클래스가 추가되면 화면 안으로 이동 */
+}
+
+.detail-container {
+    text-align: center;
+    align-items: center;
+    margin-top: 100px;
+}
+
+.file-list-container.expanded {
+    width: 40%; /* file-details와 함께 보여질 때 너비 조절 */
+    transform: translateX(-20%); /* 왼쪽으로 이동 */
+}
+
+.file-list-content {
+    display: flex;
+    width: 100%;
+}
+
+.file-list {
+    width: 100%;
+}
+
+.file-details.visible {
+    display: block;
 }
 
 .table {
     width: 100%;
     border-collapse: collapse;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
 }
 
 .table td {
+    cursor: pointer;
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
     vertical-align: middle;
+}
+
+.table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table .selected td {
+    background-color: rgb(228, 228, 228);
 }
 
 .edit-name-container,
@@ -45,7 +96,8 @@
     cursor: pointer;
     margin-left: 5px;
     font-size: 18px;
-    transition: color 0.3s;
+    transition: color 0.5s;
+    padding: 10px;
 }
 
 .edit-file-button:hover,
@@ -56,6 +108,29 @@
 .edit-file-button:active,
 .save-file-button:active {
     color: blue;
+}
+
+.table-view-button {
+    background-color: #1c0e61;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.5s ease;
+    margin-top: 10px;
+    font-family: "LineFont";
+}
+
+.table-view-button:hover {
+    background-color: #2e22d1;
+}
+
+.table-view-button:disabled {
+    background-color: white;
+    cursor: auto;
+    transform: none;
 }
 
 .pagination {
@@ -78,29 +153,32 @@
 
 .file-name {
     cursor: pointer;
-    transition: color 0.3s ease, text-decoration 0.3s ease;
-}
-
-.file-name:hover {
-    color: blue;
-    text-decoration: underline;
+    transition: color 0.5s ease, text-decoration 0.5s ease;
 }
 
 .trash-icon {
     font-size: 16px;
     cursor: pointer;
-    color: black; /* 기본 색상 */
-    transition: color 0.3s;
+    color: black;
+    transition: color 0.5s;
     border: none;
     background-color: white;
+    padding: 10px;
 }
 
 .trash-icon:hover {
-    color: rgb(215, 60, 18); /* 호버 시 빨간색 */
+    color: rgb(215, 60, 18);
 }
 
 .trash-icon:active {
     color: red;
+}
+
+.file-action-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
 }
 
 .search-container {
@@ -120,4 +198,8 @@
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+.delete-file-container {
+    margin-top: auto;
 }
