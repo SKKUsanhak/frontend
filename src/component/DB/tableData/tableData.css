@@ -85,32 +85,6 @@
     margin-top: auto; 
 }
 
-.table-back-container button {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-    align-items: center;
-    justify-content: center;
-    background-color: #060429;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-family: "LineFont";
-}
-
-.table-back-container button:hover {
-    background-color: #252582; 
-}
-
-.table-back-container button:active {
-    background-color: #6060a6; 
-}
-
 .tableTitle {
     margin-top: 100px;
     margin-left: auto;
@@ -290,6 +264,10 @@ input:checked + .slider:before {
     background-color: white;
 }
 
+.excel-editor-container {
+    margin-top: 10px;
+}
+
 .excel-editor-container .back-icon {
     cursor: pointer;
     font-size: 24px; /* Adjust the size as needed */
@@ -317,6 +295,7 @@ input:checked + .slider:before {
 }
 
 .back-button-container {
+    margin-top: auto;
     margin-left: 20px;
     display: flex;
 }

@@ -26,15 +26,13 @@
 }
 
 .title-name {
-    margin-top: 100px;
+    margin-top: 80px;
     font-family: "LineFont";
     font-size: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    gap: 10px;
     white-space: nowrap;
     box-sizing: content-box; /* Ensure the input width includes the padding */
-    padding: 5px;
 }

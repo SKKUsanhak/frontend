@@ -137,7 +137,7 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
                 <div className="file-list-content">
                     <div className="file-list">
                         {files && files.length === 0 ? (
-                            <p>No files available.</p>
+                            <p>현재 DB에 파일이 없습니다.</p>
                         ) : (
                             <table className="table">
                                 <thead>
@@ -167,16 +167,31 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
                         </div>
                     </div>
                 </div>
-                <button className="table-view-button" onClick={handleViewTablesClick} disabled={!selectedFile}>테이블 목록 보기</button>
             </div>
             <div className={`file-details ${selectedFile ? 'visible' : ''}`} ref={fileDetailsRef}>
                 {selectedFile && (
-                    <div className='detail-container'>
+                    <div className='file-detail-container'>
                         <h3>파일 상세 정보</h3>
-                        <p><strong>파일 ID:</strong> {selectedFile.id}</p>
-                        <p><strong>파일 이름:</strong> {selectedFile.fileName}</p>
-                        <p><strong>업로드 날짜:</strong> {formatDate(selectedFile.createTime)}</p>
-                        <p><strong>최종 수정일:</strong> {formatDate(selectedFile.updateTime)}</p>
+                        <table className="detail-table">
+                            <tbody>
+                                <tr>
+                                    <td><strong>파일 ID</strong></td>
+                                    <td>{selectedFile.id}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>파일 이름</strong></td>
+                                    <td>{selectedFile.fileName}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>업로드 날짜</strong></td>
+                                    <td>{formatDate(selectedFile.createTime)}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>최종 수정일</strong></td>
+                                    <td>{formatDate(selectedFile.updateTime)}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <div className="file-action-buttons">
                             <div className="edit-name-wrapper">
                                 <div className="edit-name-container">
@@ -210,6 +225,7 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
                                     <FaTrash />
                                 </button>
                             </div>
+                            <button className="table-view-button" onClick={handleViewTablesClick} disabled={!selectedFile}>테이블 목록 보기</button>
                         </div>
                     </div>
                 )}

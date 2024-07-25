@@ -31,9 +31,12 @@
     right: 0; /* visible 클래스가 추가되면 화면 안으로 이동 */
 }
 
-.detail-container {
+.file-detail-container {
     text-align: center;
     align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     margin-top: 100px;
 }
 
@@ -49,10 +52,6 @@
 
 .file-list {
     width: 100%;
-}
-
-.file-details.visible {
-    display: block;
 }
 
 .table {
@@ -77,6 +76,17 @@
 
 .table .selected td {
     background-color: rgb(228, 228, 228);
+}
+
+.detail-table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.detail-table td {
+    padding: 5px;
+    border: 1px solid #ddd;
 }
 
 .edit-name-container,
@@ -111,7 +121,7 @@
 }
 
 .table-view-button {
-    background-color: #1c0e61;
+    background-color: #060429;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -124,7 +134,11 @@
 }
 
 .table-view-button:hover {
-    background-color: #2e22d1;
+    background-color: #252582;
+}
+
+.table-view-button:active {
+    background-color: #6060a6;
 }
 
 .table-view-button:disabled {
@@ -202,4 +216,8 @@
 
 .delete-file-container {
     margin-top: auto;
+}
+
+.file-list p {
+    text-align: center;
 }

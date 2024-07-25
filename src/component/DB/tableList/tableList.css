@@ -1,88 +1,82 @@
 .table-list-container {
-    border: 1px solid #ddd;
     margin-top: 100px;
     display: flex;
     flex-direction: column;
     font-family: "LineFont";
-    height: 100%;
-    width: 60%;
+    width: 60%; /* 중앙에 오게 너비를 조절 */
     padding: 10px;
     margin-left: auto;
     margin-right: auto;
-    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: width 0.5s ease, transform 0.5s ease; /* 너비와 위치 변화 애니메이션 */
 }
 
-.table-list-title {
+.table-details {
+    position: fixed;
+    top: 0;
+    right: -100%; /* 초기 위치를 화면 밖으로 설정 */
+    height: 100%;
+    width: 20%; /* 필요에 따라 너비 조절 */
+    background-color: white;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+    z-index: 1000; /* 다른 요소들 위에 표시되도록 설정 */
+    font-family: "LineFont";
+    transition: right 0.5s ease; /* 위치 변화 애니메이션 */
+}
+
+.table-details.visible {
+    right: 0; /* visible 클래스가 추가되면 화면 안으로 이동 */
+}
+
+.table-detail-container {
     text-align: center;
-    margin-bottom: 20px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.table-list-container.expanded {
+    width: 40%; /* table-details와 함께 보여질 때 너비 조절 */
+    transform: translateX(-20%); /* 왼쪽으로 이동 */
+}
+
+.table-list-content {
+    display: flex;
+    width: 100%;
+}
+
+.table-list {
+    width: 100%;
 }
 
 .table-list-header {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    justify-content: space-between; /* back-container와 add-container를 양 끝으로 배치 */
+    width: 100%; /* 한 줄에 위치하도록 너비를 100%로 설정 */
 }
 
-.table-list-header .back-icon {
-    margin-right: 5px;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.back-icon:hover {
-    color: cornflowerblue;
-}
-
-.table-list-header .add-table-button {
-    cursor: pointer;
-    margin-right: 5px;
-    transition: color 0.3s;
-}
-
-.add-table-button:hover {
-    color: cornflowerblue;
-}
-
-.table-list-container table {
+.table {
     width: 100%;
     border-collapse: collapse;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
 }
 
-.table-list-container th, .table-list-container td {
+.table th, .table td {
     border: 1px solid #ddd;
     text-align: center;
-    align-items: center;
-    padding: 5px;
+    padding: 8px;
 }
 
-.table-name-container, 
-.edit-name-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.table .selected td {
+    background-color: rgb(228, 228, 228);
 }
 
-.edit-table-button, 
-.save-table-button {
-    transition: color 0.3s;
-    cursor: pointer;
-    margin-left: 5px;
-}
-
-.edit-table-button:hover, 
-.save-table-button:hover {
-    color: cornflowerblue;
-}
-
-.edit-table-button:active, 
-.save-table-button:active {
-    color: blue;
-}
-
-.header-cell {
+.edit-name-container,
+.table-name-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -117,29 +111,127 @@
 }
 
 .search-container {
-    margin-top: 10px;
-    text-align: center;
     display: flex;
     align-items: center;
 }
 
 .search-container .search-icon {
-    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .search-container input {
-    font-family: "LineFont";
+    flex: 1;
+    padding: 5px;
     font-size: 16px;
     border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: "LineFont";
 }
 
 .back-container, .add-container {
     display: flex;
+    align-items: center;
 }
 
 .back-container span, .add-container span {
-    margin-top: 3px;
+    margin-left: 5px;
     margin-right: 5px;
+}
+
+.detail-table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.detail-table td {
+    padding: 5px;
+    border: 1px solid #ddd;
+}
+
+.table-action-buttons {
     display: flex;
+    flex-direction: column;
     align-items: center;
+    margin-top: 10px;
+}
+
+.edit-table-button,
+.save-table-button {
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 18px;
+    transition: color 0.3s;
+    padding: 10px;
+}
+
+.edit-table-button:hover,
+.save-table-button:hover {
+    color: cornflowerblue;
+}
+
+.edit-table-button:active,
+.save-table-button:active {
+    color: blue;
+}
+
+.trash-icon {
+    font-size: 16px;
+    cursor: pointer;
+    color: black;
+    transition: color 0.3s;
+    border: none;
+    background-color: white;
+    padding: 10px;
+}
+
+.trash-icon:hover {
+    color: rgb(215, 60, 18);
+}
+
+.trash-icon:active {
+    color: red;
+}
+
+.table-view-button {
+    background-color: #1c0e61;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 20px;
+}
+
+.table-view-button:hover {
+    background-color: #2e22d1;
+    transform: scale(1.05);
+}
+
+.table-view-button:disabled {
+    background-color: white;
+    cursor: auto;
+    transform: none;
+}
+
+.back-icon, .add-table-icon {
+    transition: color 0.3s;
+}
+
+.back-icon:hover {
+    color: cornflowerblue;
+}
+
+.back-icon:active {
+    color: blue;
+}
+
+.add-table-icon:hover {
+    color: cornflowerblue;
+}
+
+.add-table-icon:active {
+    color: blue;
 }

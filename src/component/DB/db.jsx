@@ -148,7 +148,7 @@ export default function DB() {
                 <div>
                     <h1 className='title-name'>{tableTitle}</h1>
                     <TableData fileId={selectedFileId} tableData={tableData} tableId={selectedTableId} BacktoTableList={handleBackToTableList}
-                    fetchData={fetchData} isFinal={tableList.find(table => table.id === selectedTableId).finalData} />
+                    fetchData={fetchData} isFinal={tableList.find(table => table.id === selectedTableId)?.finalData} />
                 </div>
             )}
         </div>
