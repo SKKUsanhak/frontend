@@ -290,15 +290,12 @@ input:checked + .slider:before {
     background-color: white;
 }
 
-.excel-editor .back-icon {
-    position: absolute;
-    margin-top: 170px;
-    top: 10px;
-    left: 30px;
+.excel-editor-container .back-icon {
     cursor: pointer;
     font-size: 24px; /* Adjust the size as needed */
     z-index: 10; /* Ensure it's on top of other elements */
     transition: color 0.3s;
+    font-family: "LineFont";
 }
 
 .add-button {
@@ -317,4 +314,17 @@ input:checked + .slider:before {
 
 .delete-button:hover {
     background-color: #f08461;
+}
+
+.back-button-container {
+    margin-left: 20px;
+    display: flex;
+}
+
+.back-button-container span {
+    margin-left: 5px;
+    margin-top: 3px;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
 }

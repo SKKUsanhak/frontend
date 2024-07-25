@@ -216,87 +216,92 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
     };
 
     return (
-        <div ref={containerRef}>
-            <div className='excel-editor'>
-                <TbArrowBackUp onClick={BacktoTableList} className='back-icon' size={24}/>
-                <div className='table-section'>
-                    <div className='table-data-container'>
-                        <table className='db-table'>
-                            <thead>
-                                <tr className='first-column'>
-                                    <th>#</th>
-                                    {columns.map((col, index) => (
-                                        <th key={index}>{index}</th>
-                                    ))}
-                                </tr>
-                                <tr>
-                                    <th> </th>
-                                    {columns.map((col, index) => (
-                                        <th key={index}>
-                                            <input
-                                                type="text"
-                                                value={col}
-                                                onChange={(e) => handleHeaderContentChange(index, e.target.value)}
-                                                onBlur={(e) => handleHeaderContentBlur(index, e.target.value)}
-                                            />
-                                        </th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {table.map((row, rowIndex) => (
-                                    <tr key={rowIndex}>
-                                        <td>{rowIndex}</td>
-                                        {row.map((cell, cellIndex) => (
-                                            <td
-                                                key={cellIndex}
-                                                className={
-                                                    selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex
-                                                        ? 'highlight-cell highlight-cell-border highlight-cell-background'
-                                                        : selectedCell && (selectedCell.rowIndex === rowIndex || selectedCell.cellIndex === cellIndex)
-                                                            ? 'highlight-cell'
-                                                            : '' /* 선택된 셀 테두리 강조 및 하이라이트 */
-                                                }
-                                                onClick={() => handleCellClick(rowIndex, cellIndex)} // 셀 클릭 시 선택된 셀 업데이트
-                                            >
-                                                <input
-                                                    type="text"
-                                                    value={cell.contents}
-                                                    onChange={(e) => handleCellChange(rowIndex, cellIndex, e.target.value)}
-                                                    onBlur={(e) => handleCellBlur(rowIndex, cellIndex, e.target.value)}
-                                                    className={selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex ? 'highlight-input' : ''} /* 선택된 셀의 input 강조 */
-                                                />
-                                            </td>
+        <div className='excel-editor-container'>
+            <div className='back-button-container'>
+                <TbArrowBackUp onClick={BacktoTableList} className='back-icon' size={24} />
+                <span>테이블 목록으로 돌아가기</span>
+            </div>
+            <div ref={containerRef}>
+                <div className='excel-editor'>
+                    <div className='table-section'>
+                        <div className='table-data-container'>
+                            <table className='db-table'>
+                                <thead>
+                                    <tr className='first-column'>
+                                        <th>#</th>
+                                        {columns.map((col, index) => (
+                                            <th key={index}>{index}</th>
                                         ))}
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                    <tr>
+                                        <th> </th>
+                                        {columns.map((col, index) => (
+                                            <th key={index}>
+                                                <input
+                                                    type="text"
+                                                    value={col}
+                                                    onChange={(e) => handleHeaderContentChange(index, e.target.value)}
+                                                    onBlur={(e) => handleHeaderContentBlur(index, e.target.value)}
+                                                />
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {table.map((row, rowIndex) => (
+                                        <tr key={rowIndex}>
+                                            <td>{rowIndex}</td>
+                                            {row.map((cell, cellIndex) => (
+                                                <td
+                                                    key={cellIndex}
+                                                    className={
+                                                        selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex
+                                                            ? 'highlight-cell highlight-cell-border highlight-cell-background'
+                                                            : selectedCell && (selectedCell.rowIndex === rowIndex || selectedCell.cellIndex === cellIndex)
+                                                                ? 'highlight-cell'
+                                                                : '' /* 선택된 셀 테두리 강조 및 하이라이트 */
+                                                    }
+                                                    onClick={() => handleCellClick(rowIndex, cellIndex)} // 셀 클릭 시 선택된 셀 업데이트
+                                                >
+                                                    <input
+                                                        type="text"
+                                                        value={cell.contents}
+                                                        onChange={(e) => handleCellChange(rowIndex, cellIndex, e.target.value)}
+                                                        onBlur={(e) => handleCellBlur(rowIndex, cellIndex, e.target.value)}
+                                                        className={selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex ? 'highlight-input' : ''} /* 선택된 셀의 input 강조 */
+                                                    />
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-                <div className='control-section'>
-                    <div className='button-group'>
-                        <button className="add-button" onClick={handleMakeRow}>행 추가</button>
-                        <button className="delete-button" onClick={handleDeleteRow} disabled={!deleteEnabled}>행 삭제</button> {/* 선택된 셀이 없으면 버튼 비활성화 */}
-                    </div>
-                    <div className='button-group'>
-                        <button className="add-button" onClick={handleMakeHeader}>열 추가</button>
-                        <button className="delete-button" onClick={handleDeleteColumn} disabled={!deleteEnabled}>열 삭제</button> {/* 선택된 셀이 없으면 버튼 비활성화 */}
-                    </div>
-                    <div className='save-button-group'>
-                        {!isFinal && ( // isFinal이 true가 아닌 경우에만 토글 스위치를 표시
-                            <div className="toggle-container">
-                                <label className='toggle-switch'>
-                                    <input type='checkbox' checked={toggle} onChange={handleToggleChange} />
-                                    <span className='slider'></span>
-                                </label>
-                                <div className="tooltip-container">
-                                    <RiQuestionLine className='question' />
-                                    <div className="tooltip">토글 시 최종 데이터로 저장되며, 관리자만 수정 가능해집니다.</div>
+                    <div className='control-section'>
+                        <div className='button-group'>
+                            <button className="add-button" onClick={handleMakeRow}>행 추가</button>
+                            <button className="delete-button" onClick={handleDeleteRow} disabled={!deleteEnabled}>행 삭제</button> {/* 선택된 셀이 없으면 버튼 비활성화 */}
+                        </div>
+                        <div className='button-group'>
+                            <button className="add-button" onClick={handleMakeHeader}>열 추가</button>
+                            <button className="delete-button" onClick={handleDeleteColumn} disabled={!deleteEnabled}>열 삭제</button> {/* 선택된 셀이 없으면 버튼 비활성화 */}
+                        </div>
+                        <div className='save-button-group'>
+                            {!isFinal && ( // isFinal이 true가 아닌 경우에만 토글 스위치를 표시
+                                <div className="toggle-container">
+                                    <label className='toggle-switch'>
+                                        <input type='checkbox' checked={toggle} onChange={handleToggleChange} />
+                                        <span className='slider'></span>
+                                    </label>
+                                    <div className="tooltip-container">
+                                        <RiQuestionLine className='question' />
+                                        <div className="tooltip">토글 시 최종 데이터로 저장되며, 관리자만 수정 가능해집니다.</div>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                        <button className='save-button' onClick={handleSaveChanges}>저장</button>
+                            )}
+                            <button className='save-button' onClick={handleSaveChanges}>저장</button>
+                        </div>
                     </div>
                 </div>
             </div>
