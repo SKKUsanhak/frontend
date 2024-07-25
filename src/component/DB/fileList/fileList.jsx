@@ -56,6 +56,8 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
         event.preventDefault();
         event.stopPropagation();
         setSelectedFile(file);
+        console.log(selectedFile.id);
+        onFileSelect(selectedFile);
     };
 
     useEffect(() => {

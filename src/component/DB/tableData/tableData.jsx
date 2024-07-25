@@ -200,7 +200,8 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                 alert('최종 데이터로 전환되었습니다.')
             }
             axios.patch('/update-date', null, {
-                params: { fileid: fileId }
+                params: { fileid: fileId },
+                headers: { 'Content-Type': 'application/json' }
             })
             fetchData(tableId);
             setEditQueue([]);

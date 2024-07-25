@@ -84,6 +84,7 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
 
     const handleTableNameClick = (table) => {
         setSelectedTable(table);
+        onTableSelect(editingTableId);
     };
 
     useEffect(() => {
