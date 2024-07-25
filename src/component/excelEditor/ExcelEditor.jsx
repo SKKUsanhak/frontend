@@ -190,9 +190,21 @@ export default function ExcelEditor() {
         }
     };
 
+    const confirmAndDeleteTable = (tableIndex) => {
+        if (window.confirm(`정말로 ${tableIndex} 번째 테이블을 삭제하시겠습니까?`)){
+            deleteTable(tableIndex-1);
+        }
+    }
+
     return (
         <div className="excel-editor-container">
             <div className="editor-header">
+                <div className='function-explain'>
+                    (0, 0) 셀은 업로드 시 테이블의 제목으로 지정됩니다. <br />
+                    1번째 행은 업로드 시 테이블의 열로 지정됩니다. <br />
+                    열 데이터가 여러 행에 걸쳐 있을 경우, 병합 기능을 이용하여 한 행으로 만들어 주세요. <br />
+                    셀을 클릭 시 해당 셀의 행, 열 정보가 추가/삭제 기능에 자동으로 저장됩니다. <br />
+                </div>
                 <h1><EditableFileName initialFileName={fileName} onSave={handleFileNameSave}/></h1>
             </div>
             <div className="excel-editor">
@@ -273,7 +285,7 @@ export default function ExcelEditor() {
                             max={data.length + 1}
                         />
                         <button onClick={() => addTable(tableIndex - 1)}>테이블 추가</button>
-                        <button onClick={() => deleteTable(tableIndex - 1)}>테이블 삭제</button>
+                        <button onClick={() => confirmAndDeleteTable(tableIndex)}>테이블 삭제</button>
                     </div>
 
                     <div className="Rowcontrols">

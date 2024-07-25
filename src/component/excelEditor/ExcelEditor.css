@@ -8,13 +8,19 @@
 
 .editor-header {
   display: flex;
-  padding: 20px; 
-  margin-left: 20px;
-  font-family: "LineFontBold";
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  font-family: "LineFontBold";
+  padding: 20px;
+  margin-left: 20px;
+  position: relative;
 }
 
+.editor-header h1 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
 .excel-editor {
   display: grid;
@@ -225,4 +231,13 @@
 
 .download-button {
   width: 100%;
+}
+
+.function-explain {
+  font-size: 16px;
+  font-family: "LineFont";
+  flex: 1; /* 제목과 나란히 배치되도록 */
+  text-align: left;
+  margin-right: 20px; /* 제목과의 간격 조정 */
+  line-height: 1.6;
 }
