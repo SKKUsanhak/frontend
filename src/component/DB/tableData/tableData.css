@@ -24,7 +24,7 @@
     position: relative; /* 새로운 속성 추가 */
 }
 
-.table-data-container .db-table {
+.db-table {
     width: 100%;
     border-collapse: collapse;
 }
@@ -36,6 +36,7 @@
     justify-content: center;
     white-space: nowrap; /* Prevent line breaks */
     text-overflow: ellipsis; /* Display ellipsis for overflow text */
+    padding: 10px;
 }
 
 .db-table th {
@@ -47,16 +48,6 @@
     resize: horizontal;
     background-color: rgb(205, 205, 205); /* 필요 시 배경색을 조정 */
     z-index: 4; /* 헤더 셀의 z-index를 높게 설정하여 내용 셀보다 위에 위치하도록 함 */
-}
-
-.db-table td {
-    padding: 10px;
-}
-
-.first-column th {
-    background-color: white;
-    border: 1px solid #ddd;
-    z-index: 1;
 }
 
 .db-table input {
@@ -78,21 +69,15 @@
     padding: 20px;
     font-family: "LineFont";
     position: fixed;
-    /* Adjust this as needed depending on your header's height */
     right: 70px;
-    /* Aligns the section to the right edge of the viewport */
     width: 15%;
-    /* Specifies the width of the controls section */
     height: 600px;
-    /* Fixed height, can adjust if needed */
     background-color: white;
-    /* Optional: sets a background color */
     z-index: 1000;
     border: 1px solid #ddd;
-    /* Ensures it stays on top of other content */
 }
 
-.control-section .button-group {
+.button-group, .save-button-group {
     margin-top: 10px;
 }
 
@@ -159,8 +144,6 @@
 }
 
 .control-section button {
-    margin-top: 0; /* 기존 margin-top을 제거 */
-    margin-right: 5px;
     border: none;
     border-radius: 5px;
     padding: 10px 10px;
@@ -170,17 +153,9 @@
     font-family: "LineFont";
 }
 
-.control-section .save-button {
-    margin-top: 0; /* 기존 margin-top을 제거 */
+.save-button {
     background-color: #060429;
     color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 10px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-family: "LineFont";
 }
 
 .save-button:hover {
@@ -251,7 +226,7 @@ input:checked + .slider:before {
 }
 
 .question:hover {
-    color:#6060a6
+    color: #6060a6;
 }
 
 .tooltip-container {
@@ -268,15 +243,11 @@ input:checked + .slider:before {
     border-radius: 6px;
     padding: 5px 0;
     font-size: 13px;
-
-    /* 말풍선 위치 */
     position: absolute;
     z-index: 1;
     bottom: 125%; /* 아이콘 위에 말풍선 위치 */
     left: 50%;
     margin-left: -60px; /* 말풍선을 가운데로 맞추기 위해 조정 */
-
-    /* 말풍선 화살표 */
     opacity: 0; /* 초기 상태에서는 숨김 */
     transition: opacity 0.3s;
 }
@@ -295,13 +266,9 @@ input:checked + .slider:before {
     border: none;
 }
 
-.highlight-row {
-    background-color: #f3f3f3; /* 연한 하늘색 */
-}
-
 .highlight-input, .highlight-input:focus {
     outline: none; /* input 창이 포커스될 때 outline 제거 */
-    border:none;
+    border: none;
 }
 
 .button-group button:disabled, 
@@ -339,7 +306,15 @@ input:checked + .slider:before {
     color: white;
 }
 
+.add-button:hover {
+    background-color: #252582;
+}
+
 .delete-button {
     background-color: #d35e2c;
     color: white;
+}
+
+.delete-button:hover {
+    background-color: #f08461;
 }

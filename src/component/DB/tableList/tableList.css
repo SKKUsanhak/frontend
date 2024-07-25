@@ -30,7 +30,7 @@
 }
 
 .back-icon:hover {
-    color:cornflowerblue;
+    color: cornflowerblue;
 }
 
 .table-list-header .add-table-button {
@@ -39,8 +39,8 @@
     transition: color 0.3s;
 }
 
-.add-table-button:hover{
-    color:cornflowerblue;
+.add-table-button:hover {
+    color: cornflowerblue;
 }
 
 .table-list-container table {
@@ -63,12 +63,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.table-name-container input, 
-.edit-name-container input {
-    margin-right: 5px;
-    font-family: "LineFont";
 }
 
 .edit-table-button, 
@@ -119,12 +113,6 @@
     opacity: 0.5;
 }
 
-.empty-row td {
-    height: 48px; /* Ensure this matches the height of your filled rows */
-    border: 1px solid #ddd;
-    text-align: center;
-}
-
 .table-name {
     cursor: pointer;
     transition: color 0.3s ease, text-decoration 0.3s ease;
@@ -156,7 +144,7 @@
     display: flex;
 }
 
-.back-container span, .add-container span{
+.back-container span, .add-container span {
     margin-top: 3px;
     margin-right: 5px;
     display: flex;
