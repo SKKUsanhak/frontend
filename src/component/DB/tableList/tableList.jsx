@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TbTablePlus, TbArrowBackUp } from "react-icons/tb";
-import { FaTrash, FaEdit, FaSort, FaSearch } from "react-icons/fa";
+import { FaTrash, FaEdit, FaSearch } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
 import axios from 'axios';
@@ -9,7 +9,6 @@ import './tableList.css';
 export default function TableList({ tableList, fileId, fetchTables, onTableSelect, fetchData, onTableDelete, BacktoFileList }) {
     const [editingTableId, setEditingTableId] = useState(null);
     const [newTableName, setNewTableName] = useState('');
-    const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
     const itemsPerPage = 15; // 페이지 당 항목 수
@@ -63,30 +62,9 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
         }
     };
 
-    const handleSort = (key) => {
-        let direction = 'ascending';
-        if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-            direction = 'descending';
-        } else if (sortConfig.key === key && sortConfig.direction === 'descending') {
-            key = 'id';
-            direction = 'ascending';
-        }
-        setSortConfig({ key, direction });
-    };
-
-    const sortedTables = () => {
-        if (!sortConfig.key) return tableList;
-        const sorted = [...tableList].sort((a, b) => {
-            if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'ascending' ? -1 : 1;
-            if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'ascending' ? 1 : -1;
-            return 0;
-        });
-        return sorted;
-    };
-
     const filteredTables = () => {
-        if (!searchQuery) return sortedTables();
-        return sortedTables().filter(table => table.tableTitle.toLowerCase().includes(searchQuery.toLowerCase()));
+        if (!searchQuery) return tableList;
+        return tableList.filter(table => table.tableTitle.toLowerCase().includes(searchQuery.toLowerCase()));
     };
 
     const handleNextPage = () => {
@@ -139,23 +117,10 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                     <table>
                         <thead>
                             <tr>
-                                <th onClick={() => handleSort('id')}>
-                                    <div className="header-cell">
-                                        ID 
-                                        <FaSort className='sort-icon' />
-                                    </div>
-                                </th>
-                                <th>Table Name</th>
-                                <th>
-                                    <div className="header-cell">
-                                        완료 여부
-                                    </div>
-                                </th>
-                                <th>
-                                    <div className="header-cell">
-                                        삭제/수정
-                                    </div>
-                                </th>
+                                <th>ID</th>
+                                <th>테이블 이름</th>
+                                <th>완료 여부</th>
+                                <th>삭제/수정</th>
                             </tr>
                         </thead>
                         <tbody>

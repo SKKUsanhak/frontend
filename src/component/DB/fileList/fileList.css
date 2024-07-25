@@ -13,7 +13,7 @@
     justify-content: center;
 }
 
-.file-list-container .table {
+.table {
     width: 100%;
     border-collapse: collapse;
     align-items: center;
@@ -21,7 +21,7 @@
     margin: 0 auto;
 }
 
-.file-list-container .table td {
+.table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
@@ -58,20 +58,6 @@
     color: blue;
 }
 
-.header-cell {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.sort-icon {
-    cursor: pointer;
-    margin-left: 5px;
-    width: 12px;
-    height: 12px;
-    margin-bottom: 5px;
-}
-
 .pagination {
     display: flex;
     justify-content: center;
@@ -100,12 +86,6 @@
     text-decoration: underline;
 }
 
-.empty-row td {
-    height: 48px; /* Ensure this matches the height of your filled rows */
-    border: 1px solid #ddd;
-    text-align: center;
-}
-
 .trash-icon {
     font-size: 16px;
     cursor: pointer;
@@ -121,11 +101,6 @@
 
 .trash-icon:active {
     color: red;
-}
-
-.empty-cell {
-    border: none; /* 테두리를 제거하여 빈칸으로 보이게 함 */
-    background: none; /* 배경 제거 */
 }
 
 .search-container {

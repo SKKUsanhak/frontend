@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './fileList.css';
-import { FaTrash, FaEdit, FaSort, FaSearch } from "react-icons/fa";
+import { FaTrash, FaEdit, FaSearch } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
 
 export default function FileList({ files, onFileSelect, fetchTables, onFileDelete }) {
     const [editingFileId, setEditingFileId] = useState(null);
     const [newFileName, setNewFileName] = useState('');
-    const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
     const itemsPerPage = 15; // 페이지 당 항목 수
@@ -49,30 +48,9 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
         }
     };
 
-    const handleSort = (key) => {
-        let direction = 'ascending';
-        if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-            direction = 'descending';
-        } else if (sortConfig.key === key && sortConfig.direction === 'descending') {
-            key = null;
-            direction = null;
-        }
-        setSortConfig({ key, direction });
-    };
-
-    const sortedFiles = () => {
-        if (!sortConfig.key) return files;
-        const sorted = [...files].sort((a, b) => {
-            if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'ascending' ? -1 : 1;
-            if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'ascending' ? 1 : -1;
-            return 0;
-        });
-        return sorted;
-    };
-
     const filteredFiles = () => {
-        if (!searchQuery) return sortedFiles();
-        return sortedFiles().filter(file => file.fileName.toLowerCase().includes(searchQuery.toLowerCase()));
+        if (!searchQuery) return files;
+        return files.filter(file => file.fileName.toLowerCase().includes(searchQuery.toLowerCase()));
     };
 
     const handleFileNameClick = (id) => {
@@ -115,25 +93,10 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
                     <table className='table'>
                         <thead>
                             <tr>
-                                <th onClick={() => handleSort('id')}>
-                                    <div className="header-cell">
-                                        File ID 
-                                        <FaSort className='sort-icon' />
-                                    </div>
-                                </th>
+                                <th>ID</th>
                                 <th>파일 이름</th>
-                                <th onClick={() => handleSort('createTime')}>
-                                    <div className="header-cell">
-                                        업로드 날짜
-                                        <FaSort className='sort-icon' />
-                                    </div>
-                                </th>
-                                <th onClick={() => handleSort('updateTime')}>
-                                    <div className="header-cell">
-                                        최종 수정일
-                                        <FaSort className='sort-icon' />
-                                    </div>
-                                </th>
+                                <th>업로드 날짜</th>
+                                <th>최종 수정일</th>
                                 <th>삭제/수정</th>
                             </tr>
                         </thead>
