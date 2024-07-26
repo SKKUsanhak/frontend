@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import Upload from './component/upload/Upload.jsx';
 import ExcelEditor from './component/excelEditor/ExcelEditor.jsx';
 import Header from './component/header/header.jsx';
@@ -9,10 +9,12 @@ import Login from './component/login/login.jsx';
 import Register from './component/register/register.jsx';
 
 function App() {
+    const location = useLocation();
+    const isHome = location.pathname === '/';
 
     return (
-        <Router>
-            <Header />
+        <div>
+            {!isHome && <Header />}
             <div className='main-content'>
                 <Routes>
                     <Route path="/" element={<Home />} /> {/* 홈페이지 */}
@@ -24,7 +26,7 @@ function App() {
                     <Route path="*" element={<Navigate to="/" />} /> {/* 지정되지 않은 페이지 */}
                 </Routes>
             </div>
-        </Router>
+        </div>
     );
 }
 
