@@ -295,7 +295,7 @@ export default function ExcelEditor() {
                             onChange={(e) => setRowIndex(e.target.value === '' ? '' : Math.min(Number(e.target.value), data[currentSheetIndex]?.rows.length ?? 0))}
                             placeholder="행 지정"
                             min="0"
-                            max={data[currentSheetIndex]?.rows.length ?? 0}
+                            max={(data[currentSheetIndex]?.rows.length ?? 1) - 1} // max 값이 NaN이 되지 않도록 수정
                         />
                         <button onClick={() => handleAddRow(rowIndex)}>행 추가</button>
                         <button onClick={() => confirmAndDeleteRow(rowIndex)}>행 삭제</button>
@@ -308,7 +308,7 @@ export default function ExcelEditor() {
                             onChange={(e) => setColIndex(e.target.value === '' ? '' : Math.min(Number(e.target.value), data[currentSheetIndex]?.columns.length ?? 0))}
                             placeholder="열 지정"
                             min="0"
-                            max={data[currentSheetIndex]?.columns.length ?? 0}
+                            max={(data[currentSheetIndex]?.columns.length ?? 1) - 1} // max 값이 NaN이 되지 않도록 수정
                         />
                         <button onClick={() => handleAddColumn(colIndex)}>열 추가</button>
                         <button onClick={() => confirmAndDeleteColumn(colIndex)}>열 삭제</button>
@@ -322,7 +322,7 @@ export default function ExcelEditor() {
                             placeholder="시작 행"
                             value={RowRanges[currentSheetIndex]?.startRow !== undefined ? RowRanges[currentSheetIndex]?.startRow : ''}
                             min="0"
-                            max={data[currentSheetIndex]?.rows.length - 1 ?? 0}
+                            max={(data[currentSheetIndex]?.rows.length ?? 1) - 1} // max 값이 NaN이 되지 않도록 수정
                             onChange={(e) => handleRowRangeChange(currentSheetIndex, e)}
                         />
                         <input
@@ -331,7 +331,7 @@ export default function ExcelEditor() {
                             placeholder="종료 행"
                             value={RowRanges[currentSheetIndex]?.endRow !== undefined ? RowRanges[currentSheetIndex]?.endRow : ''}
                             min="0"
-                            max={data[currentSheetIndex]?.rows.length - 1 ?? 0}
+                            max={(data[currentSheetIndex]?.rows.length ?? 1) - 1} // max 값이 NaN이 되지 않도록 수정
                             onChange={(e) => handleRowRangeChange(currentSheetIndex, e)}
                         />
                         <MergeHandler
