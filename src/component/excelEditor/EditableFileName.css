@@ -26,9 +26,16 @@
     background-color: #060429;
     color: white;
     border: none;
-    border-radius: 3px;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+
 }
 
 .editable-file-name button:hover {
     background-color: #252582;
+    transform: scale(1.05);
+}
+
+.editable-file-name button:active {
+    background-color: #6060a6;
 }
