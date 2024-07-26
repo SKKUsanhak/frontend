@@ -235,7 +235,7 @@
 }
 
 .function-explain {
-  font-size: 16px;
+  font-size: 14px;
   font-family: "LineFont";
   flex: 1; /* 제목과 나란히 배치되도록 */
   text-align: left;

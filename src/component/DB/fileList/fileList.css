@@ -20,7 +20,7 @@
     width: 20%; /* 필요에 따라 너비 조절 */
     background-color: white;
     padding: 20px;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    box-shadow: -2px 0 5px #ddd;
     overflow-y: auto;
     z-index: 1000; /* 다른 요소들 위에 표시되도록 설정 */
     font-family: "LineFont";
