@@ -210,7 +210,7 @@
   border:none;
 }
 
-.highlight-row-range th {
+.highlight-row-range th:first-child {
   border-left: 2px dashed cornflowerblue;
 }
 
