@@ -13,7 +13,7 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
     const [searchQuery, setSearchQuery] = useState('');
     const fileListContainerRef = useRef(null);
     const fileDetailsRef = useRef(null);
-    const itemsPerPage = 15; // 페이지 당 항목 수
+    const itemsPerPage = 15;
 
     const formatDate = (dateString) => {
         const options = { 
@@ -23,7 +23,7 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
             hour: '2-digit', 
             minute: '2-digit', 
             second: '2-digit',
-            hour12: false // 24시간제로 설정
+            hour12: false 
         };
         return new Date(dateString).toLocaleString('ko-KR', options);
     };
@@ -44,8 +44,8 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
             await axios.patch(url, { contents: newFileName });
             alert("파일 이름이 성공적으로 수정되었습니다.");
             setEditingFileId(null);
-            fetchTables(); // Fetch the updated table list
-            setSelectedFile((prevFile) => ({ ...prevFile, fileName: newFileName })); // Update the selected file name
+            fetchTables();
+            setSelectedFile((prevFile) => ({ ...prevFile, fileName: newFileName }));
         } catch (error) {
             console.error("파일 이름 수정 중 오류 발생:", error);
             alert("파일 이름 수정 중 오류가 발생했습니다.");
@@ -57,25 +57,24 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
         event.stopPropagation();
         setSelectedFile(file);
         onFileSelect(file.id);
-        // console.log(file.id);
     };
 
     useEffect(() => {
         if (selectedFile) {
             setTimeout(() => {
                 if (fileListContainerRef.current) {
-                    fileListContainerRef.current.classList.add('expanded'); // Add expanded class
+                    fileListContainerRef.current.classList.add('expanded');
                 }
                 if (fileDetailsRef.current) {
-                    fileDetailsRef.current.classList.add('visible'); // Add visible class
+                    fileDetailsRef.current.classList.add('visible');
                 }
-            }, 10); // 애니메이션이 자연스럽게 작동하도록 약간의 지연시간 추가
+            }, 10);
         } else {
             if (fileListContainerRef.current) {
-                fileListContainerRef.current.classList.remove('expanded'); // Remove expanded class
+                fileListContainerRef.current.classList.remove('expanded');
             }
             if (fileDetailsRef.current) {
-                fileDetailsRef.current.classList.remove('visible'); // Remove visible class
+                fileDetailsRef.current.classList.remove('visible');
             }
         }
     }, [selectedFile]);
@@ -131,7 +130,7 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
                         value={searchQuery}
                         onChange={(e) => {
                             setSearchQuery(e.target.value);
-                            setCurrentPage(1); // 검색할 때 첫 페이지로 이동
+                            setCurrentPage(1);
                         }}
                     />
                     <FaSearch className="search-icon" />
@@ -197,7 +196,6 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
                         <div className="file-action-buttons">
                             <div className="edit-name-wrapper">
                                 <div className="edit-name-container">
-                                    <span>파일 이름 수정</span>
                                     {editingFileId === selectedFile.id ? (
                                         <>
                                             <input
@@ -211,13 +209,16 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
                                             />
                                         </>
                                     ) : (
-                                        <FaEdit
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleEditFileName(selectedFile);
-                                            }}
-                                            className="edit-file-button"
-                                        />
+                                        <>
+                                            <span>파일 이름 수정</span>
+                                            <FaEdit
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleEditFileName(selectedFile);
+                                                }}
+                                                className="edit-file-button"
+                                            />
+                                        </>
                                     )}
                                 </div>
                             </div>

@@ -169,21 +169,7 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                                     {paginatedTables.map((table, index) => (
                                         <tr key={index} onClick={() => handleTableNameClick(table)} className={selectedTable && selectedTable.id === table.id ? 'selected' : ''}>
                                             <td>
-                                                {editingTableId === table.id ? (
-                                                    <div className="edit-name-container">
-                                                        <input
-                                                            type="text"
-                                                            value={newTableName}
-                                                            onChange={(e) => setNewTableName(e.target.value)}
-                                                        />
-                                                    </div>
-                                                ) : (
-                                                    <div className="table-name-container">
-                                                        <span className="table-name">
-                                                            {table.tableTitle}
-                                                        </span>
-                                                    </div>
-                                                )}
+                                                {table.tableTitle}
                                             </td>
                                             <td>{table.finalData !== undefined ? (table.finalData ? 'O' : 'X') : 'N/A'}</td> {/* finalData가 undefined일 경우 'N/A'로 표시 */}
                                         </tr>
@@ -222,7 +208,6 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                         <div className="table-action-buttons">
                             <div className="edit-name-wrapper">
                                 <div className="edit-name-container">
-                                    <span>테이블 이름 수정</span>
                                     {editingTableId === selectedTable.id ? (
                                         <>
                                             <input
@@ -236,13 +221,16 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                                             />
                                         </>
                                     ) : (
-                                        <FaEdit
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleEditTableName(selectedTable);
-                                            }}
-                                            className="edit-table-button"
-                                        />
+                                        <>
+                                            <span>테이블 이름 수정</span>
+                                            <FaEdit
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleEditTableName(selectedTable);
+                                                }}
+                                                className="edit-table-button"
+                                            />
+                                        </>
                                     )}
                                 </div>
                             </div>

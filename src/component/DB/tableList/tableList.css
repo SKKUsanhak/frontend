@@ -161,9 +161,17 @@
 .save-table-button {
     cursor: pointer;
     margin-left: 5px;
-    font-size: 18px;
     transition: color 0.3s;
     padding: 10px;
+}
+
+.save-table-button {
+    font-size: 24px;
+}
+
+.edit-table-button {
+    font-size: 18px;
+    margin-bottom: 3px;
 }
 
 .edit-table-button:hover,
@@ -207,8 +215,12 @@
 }
 
 .table-view-button:hover {
-    background-color: #2e22d1;
+    background-color: #252582;
     transform: scale(1.05);
+}
+
+.table-view-button:active{
+    background-color: #6060a6;
 }
 
 .table-view-button:disabled {
