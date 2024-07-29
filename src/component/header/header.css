@@ -55,7 +55,13 @@
 }
 
 .login-icon {
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
   color: #343a40;
+}
+
+.home-icon-container {
+  font-size: 20px;
+  vertical-align: center;
+  cursor: pointer;
 }

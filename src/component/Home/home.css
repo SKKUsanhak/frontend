@@ -1,22 +1,23 @@
 .home-container {
     width: 100%;
     position: relative;
-    height: 100vh;
+    height: 100vh; /* 패딩을 고려한 높이 설정 */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 20px;
+    box-sizing: border-box; /* 박스 사이즈 보더 박스로 설정 */
 }
 
-.auth-buttons {
+.home-container .auth-buttons {
     position: absolute;
     top: 20px;
     right: 20px;
     display: flex;
 }
 
-.auth-button {
+.home-container .auth-button {
     background-color: #060429;
     color: white;
     padding: 10px 20px;
@@ -31,23 +32,23 @@
     text-decoration: none; /* 밑줄 제거 */
 }
 
-.auth-button:hover {
+.home-container .auth-button:hover {
     background-color: #252582;
     transform: scale(1.05);
 }
 
-.auth-button:active {
+.home-container .auth-button:active {
     background-color: #6060a6;
 }
 
-.main-content {
+.home-container .main-content {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 20px; /* 버튼 사이 간격 조정 */
 }
 
-.main-button {
+.home-container .main-button {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -56,7 +57,7 @@
     text-decoration: none;
 }
 
-.icon-1, .icon-2 {
+.home-container .icon-1, .icon-2 {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -74,28 +75,28 @@
     transition: background-color 0.5s ease, transform 0.5s ease, box-shadow 0.5s ease;
 }
 
-.icon-1 {
+.home-container .icon-1 {
     background-color: #0b0747;
 }
 
-.icon-2 {
+.home-container .icon-2 {
     background-color: #d35e2c;
 }
 
-.icon-1:hover, .icon-2:hover {
+.home-container .icon-1:hover, .icon-2:hover {
     transform: scale(1.03);
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
 }
 
-.icon-1:active, .icon-2:active {
+.home-container .icon-1:active, .icon-2:active {
     transform: scale(0.95);
 }
 
-.icon {
+.home-container .icon {
     margin-bottom: 20px;
     font-size: 80px; /* 아이콘 크기 */
 }
 
-.text {
+.home-container .text {
     font-size: 36px;
 }
