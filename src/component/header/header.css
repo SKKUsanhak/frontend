@@ -65,3 +65,35 @@
   vertical-align: center;
   cursor: pointer;
 }
+
+.login-icon-container, .home-icon-container {
+  position: relative; /* 가상 요소의 위치 기준을 설정 */
+}
+
+.login-icon-container::after, .home-icon-container::after {
+  content: ""; 
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  width: 30px; /* 원의 초기 크기 설정 */
+  height: 30px; /* 원의 초기 크기 설정 */
+  background-color: rgba(128, 128, 128, 0); /* 초기 상태에서 배경색 투명 */
+  border-radius: 50%; 
+  transform: translate(-50%, -50%); 
+  transition: background-color 0.3s ease; /* 색상 변경에 대한 트랜지션 효과만 추가 */
+  z-index: -1;
+}
+
+.login-icon-container:hover::after, .home-icon-container:hover::after {
+  background-color: rgba(128, 128, 128, 0.304); /* 호버 시 회색으로 변경 */
+}
+
+.login-icon, .home-icon {
+  position: relative; /* 가상 요소와 함께 쓰이므로 relative 설정 필요 */
+  z-index: 1; /* 아이콘이 원 위에 보이도록 z-index 설정 */
+  width: 100%; /* 아이콘의 크기를 컨테이너에 맞춤 */
+  height: 100%; /* 아이콘의 크기를 컨테이너에 맞춤 */
+  display: flex; /* flexbox를 사용하여 중앙 정렬 */
+  align-items: center; /* 세로 방향 중앙 정렬 */
+  justify-content: center; /* 가로 방향 중앙 정렬 */
+}
