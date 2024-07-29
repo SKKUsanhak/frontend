@@ -16,7 +16,7 @@
     display: flex;
 }
 
-.auth-buttons .button {
+.auth-button {
     background-color: #060429;
     color: white;
     padding: 10px 20px;
@@ -27,44 +27,75 @@
     transition: background-color 0.5s ease, transform 0.5s ease;
     margin-top: 10px;
     margin-left: 15px;
-    font-family: "LineFont";
+    font-family: "LineFontBold";
     text-decoration: none; /* 밑줄 제거 */
 }
 
-.auth-buttons .button:hover {
+.auth-button:hover {
     background-color: #252582;
     transform: scale(1.05);
 }
 
-.auth-buttons .button:active {
+.auth-button:active {
     background-color: #6060a6;
 }
 
-.home-container .main-content {
+.main-content {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%; /* 부모의 높이를 차지하도록 설정 */
+    gap: 20px; /* 버튼 사이 간격 조정 */
 }
 
-.home-container .button {
-    display: inline-block;
-    background-color: #007bff;
-    color: white;
-    padding: 30px 60px;
+.main-button {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+.icon-1, .icon-2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 400px; /* 버튼 너비 */
+    height: 500px; /* 버튼 높이 */
+    padding: 40px; /* 패딩 추가 */
     margin: 20px;
     font-size: 28px;
     text-align: center;
-    text-decoration: none;
-    border-radius: 10px;
-    transition: background-color 0.3s ease;
+    border-radius: 20px; /* 모서리를 더 둥글게 */
+    font-family: "LineFontBold";
+    color: white; /* 텍스트 색상 */
+    text-decoration: none; /* 밑줄 제거 */
+    transition: background-color 0.5s ease, transform 0.5s ease, box-shadow 0.5s ease;
 }
 
-.home-container .button:hover {
-    background-color: #0056b3;
+.icon-1 {
+    background-color: #0b0747;
 }
 
-.home-container .button.large-button {
-    padding: 30px 60px;
-    font-size: 28px;
+.icon-2 {
+    background-color: #d35e2c;
+}
+
+.icon-1:hover, .icon-2:hover {
+    transform: scale(1.03);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+}
+
+.icon-1:active, .icon-2:active {
+    transform: scale(0.95);
+}
+
+.icon {
+    margin-bottom: 20px;
+    font-size: 80px; /* 아이콘 크기 */
+}
+
+.text {
+    font-size: 36px;
 }
