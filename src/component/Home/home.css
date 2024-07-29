@@ -40,14 +40,14 @@
     background-color: #6060a6;
 }
 
-.main-content {
+.home-container .main-content {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%; /* 부모의 높이를 차지하도록 설정 */
 }
 
-.button {
+.home-container .button {
     display: inline-block;
     background-color: #007bff;
     color: white;
@@ -60,11 +60,11 @@
     transition: background-color 0.3s ease;
 }
 
-.button:hover {
+.home-container .button:hover {
     background-color: #0056b3;
 }
 
-.button.large-button {
+.home-container .button.large-button {
     padding: 30px 60px;
     font-size: 28px;
 }

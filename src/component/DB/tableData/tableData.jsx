@@ -50,108 +50,118 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
         setColumns(newColumns);
     };
 
-    const handleHeaderContentBlur = (index, value) => {
+    const handleHeaderContentBlur = (fileId, tableId, index, value) => {
         setEditQueue([...editQueue, {
             method: 'patch',
-            url: '/update-column-name',
-            params: { tableid: tableId, columnnumber: index },
+            url: `/files/${fileId}/tables/${tableId}/columns/${index}`,
             data: { contents: value },
             headers: { 'Content-Type': 'application/json' }
         }]);
     };
 
-    const handleMakeHeader = () => {
+    const handleMakeHeader = (fileId, tableId, columns) => {
         const newColumnName = prompt("새로운 열 이름을 입력하세요:");
         if (!newColumnName) {
             alert("열 이름을 입력하지 않았습니다.");
             return;
         }
-
-        const newColumnIndex = columns.length;
+    
+        const newColumnIndex = columns.length; // 새로운 열 인덱스는 columns 배열의 길이
+        console.log(newColumnIndex)
         const newTable = table.map(row => [...row, { rowNumber: row[0].rowNumber, columnName: newColumnName, contents: '' }]);
-        
-        setColumns([...columns, newColumnName]);
-        setTable(newTable);
+    
+        setColumns([...columns, newColumnName]); // 열 목록 업데이트
+        setTable(newTable); // 테이블 데이터 업데이트
         setEditQueue([...editQueue, {
             method: 'post',
-            url: '/create-new-column',
+            url: `/files/${fileId}/tables/${tableId}/columns/${newColumnIndex}`,
             data: { contents: newColumnName },
-            params: { tableid: tableId, colindex: newColumnIndex },
             headers: { 'Content-Type': 'application/json' }
         }]);
     };
 
-    const handleMakeRow = () => {
-        const newRowIndex = Math.max(...rows) + 1;
+    const handleMakeRow = (fileId, tableId, rows, columns, table) => {
+        const newRowIndex = Math.max(...rows) + 1; // 가장 큰 행 인덱스 계산 후 1을 추가
         const newRow = columns.map(columnName => ({ rowNumber: newRowIndex, columnName, contents: '' }));
 
-        const newTable = [...table, newRow];
-        setRows([...rows, newRowIndex]);
-        setTable(newTable);
+        const newTable = [...table, newRow]; // 새로운 행을 테이블에 추가
+        setRows([...rows, newRowIndex]); // 행 상태 업데이트
+        setTable(newTable); // 테이블 상태 업데이트
         setEditQueue([...editQueue, {
             method: 'post',
-            url: '/create-new-row',
-            params: { tableid: tableId, rowindex: newRowIndex },
+            url: `/files/${fileId}/tables/${tableId}/rows/${newRowIndex}`,
             headers: { 'Content-Type': 'application/json' }
         }]);
     };
 
-    const handleDeleteRow = () => {
+    const handleDeleteRow = (fileId, tableId, rowIndex, table, rows, setSelectedCell, setDeleteEnabled) => {
+        // 실제 삭제할 행 번호 계산 (화면에 보이는 번호보다 2가 더 큰 값을 서버로 전송)
+        const actualRowIndex = rowIndex + 2;
+    
         if (!selectedCell) return; // 선택된 셀이 없으면 리턴
-
-        const rowIndex = selectedCell.rowIndex + 2; // 선택된 셀의 행 번호
-        if (isNaN(rowIndex) || !rows.includes(rowIndex)) {
+        if (isNaN(actualRowIndex) || !rows.includes(actualRowIndex)) {
             alert("유효하지 않은 행 번호입니다.");
             return;
         }
-
-        const confirmDelete = window.confirm(`정말로 ${rowIndex-2} 행을 삭제하시겠습니까?`);
+    
+        const confirmDelete = window.confirm(`정말로 ${rowIndex} 행을 삭제하시겠습니까?`);
         if (!confirmDelete) return;
-
-        setEditQueue([...editQueue, {
-            method: 'delete',
-            url: '/delete-row',
-            params: { tableid: tableId, rowindex: rowIndex },
-            headers: { 'Content-Type': 'application/json' }
-        }]);
-
-        const newTable = table.filter(row => row[0].rowNumber !== rowIndex).map((row, index) =>
-            row.map(cell => ({ ...cell, rowNumber: index + 2 }))
-        );
-        const newRows = newTable.map(row => row[0].rowNumber);
-
-        setTable(newTable);
-        setRows(newRows);
-        setSelectedCell(null); // 선택된 셀 초기화
-        setDeleteEnabled(false); // 버튼 비활성화
+    
+        axios.delete(`/files/${fileId}/tables/${tableId}/rows/${actualRowIndex}`)
+            .then(() => {
+                alert("행 삭제 성공");
+    
+                // 행 삭제 후 새 테이블 데이터 생성, 행 번호가 2부터 시작함을 고려
+                const newTable = table.filter(row => row[0].rowNumber !== actualRowIndex)
+                                      .map((row, index) => row.map(cell => ({
+                                          ...cell, 
+                                          // 행 번호를 새로 계산 (2를 더해줌)
+                                          rowNumber: index + 2
+                                      })));
+                const newRows = newTable.map(row => row[0].rowNumber);
+    
+                setTable(newTable);
+                setRows(newRows);
+                setSelectedCell(null); // 선택된 셀 초기화
+                setDeleteEnabled(false); // 버튼 비활성화
+            })
+            .catch(error => {
+                console.error("Error deleting row:", error);
+                alert("Error deleting the row.");
+            });
     };
 
-    const handleDeleteColumn = () => {
+    const handleDeleteColumn = (fileId, tableId, columnIndex, columns, setColumns, table, setTable, setSelectedCell, setDeleteEnabled) => {
         if (!selectedCell) return; // 선택된 셀이 없으면 리턴
-
-        const columnIndex = selectedCell.cellIndex;
+    
         if (isNaN(columnIndex) || columnIndex < 0 || columnIndex >= columns.length) {
             alert("유효한 열 번호를 입력하세요.");
             return;
         }
-
+    
         const confirmDelete = window.confirm(`정말로 ${columns[columnIndex]} 열을 삭제하시겠습니까?`);
         if (!confirmDelete) return;
-
-        setEditQueue([...editQueue, {
-            method: 'delete',
-            url: '/delete-column',
-            params: { tableid: tableId, columnindex: columnIndex },
-            headers: { 'Content-Type': 'application/json' }
-        }]);
-
-        const newTable = table.map(row => row.filter((_, index) => index !== columnIndex));
-        const newColumns = columns.filter((_, index) => index !== columnIndex);
-
-        setTable(newTable);
-        setColumns(newColumns);
-        setSelectedCell(null); // 선택된 셀 초기화
-        setDeleteEnabled(false); // 버튼 비활성화
+    
+        axios.delete(`/files/${fileId}/tables/${tableId}/columns/${columnIndex}`)
+            .then(() => {
+                alert("열 삭제 성공");
+                // 열 배열에서 해당 열 제거
+                const newColumns = columns.filter((_, idx) => idx !== columnIndex);
+                setColumns(newColumns);
+                
+                // 모든 행에서 해당 열의 데이터 제거
+                const newTable = table.map(row => 
+                    row.filter((_, idx) => idx !== columnIndex)
+                );
+                setTable(newTable);
+    
+                setSelectedCell(null); // 선택된 셀 초기화
+                setDeleteEnabled(false); // 버튼 비활성화
+            })
+            .catch(error => {
+                console.error("열 삭제 중 오류 발생:", error);
+                alert("열 삭제 실패");
+            });
     };
 
     const handleCellChange = (rowIndex, cellIndex, value) => {
@@ -160,17 +170,11 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
         setTable(newTable);
     };
 
-    const handleCellBlur = (rowIndex, cellIndex, value) => {
-        const cell = table[rowIndex][cellIndex];
+    const handleCellBlur = (fileId, tableId, rowIndex, cellIndex, value) => {
         setEditQueue([...editQueue, {
             method: 'patch',
-            url: '/update-cell',
-            data: {
-                tableId: tableId,
-                row: cell.rowNumber,
-                column: cell.columnNumber,
-                contents: value
-            },
+            url: `/files/${fileId}/tables/${tableId}/columns/${cellIndex}/rows/${rowIndex+2}`,
+            data: { contents: value },
             headers: { 'Content-Type': 'application/json' }
         }]);
     };
@@ -192,18 +196,24 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                 }
             }
             alert('모든 변경 사항이 성공적으로 저장되었습니다.');
-            if(toggle) {
-                axios.post('/save-final-table', null, {
-                    params: { tableid: tableId } ,
-                    headers: { 'Content-Type': 'application/json' }
-                })
-                alert('최종 데이터로 전환되었습니다.')
+            if (toggle) {
+                const finalResponse = await axios.post(`/files/${fileId}/finalTables/${tableId}`);
+                if (finalResponse.status === 200) {
+                    alert('최종 데이터로 전환되었습니다.');
+                } else {
+                    alert('최종 데이터 전환 실패');
+                }
             }
-            axios.patch('/update-date', null, {
-                params: { fileid: fileId },
-                headers: { 'Content-Type': 'application/json' }
-            })
-            fetchData(tableId);
+    
+            const updateDate = await axios.patch(`/files/${fileId}/updateDate`);
+            if(updateDate.status === 200){
+                console.log('최종 수정일 업데이트 완료');
+            }
+            else{
+                console.log('최종 수정일 업데이트 실패');
+            }
+
+            fetchData(fileId, tableId);
             setEditQueue([]);
         } catch (error) {
             alert('오류가 발생했습니다.');
@@ -242,7 +252,7 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                                                     type="text"
                                                     value={col}
                                                     onChange={(e) => handleHeaderContentChange(index, e.target.value)}
-                                                    onBlur={(e) => handleHeaderContentBlur(index, e.target.value)}
+                                                    onBlur={(e) => handleHeaderContentBlur(fileId, tableId, index, e.target.value)}
                                                 />
                                             </th>
                                         ))}
@@ -268,7 +278,7 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                                                         type="text"
                                                         value={cell.contents}
                                                         onChange={(e) => handleCellChange(rowIndex, cellIndex, e.target.value)}
-                                                        onBlur={(e) => handleCellBlur(rowIndex, cellIndex, e.target.value)}
+                                                        onBlur={(e) => handleCellBlur(fileId, tableId, rowIndex, cellIndex, e.target.value)}
                                                         className={selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex ? 'highlight-input' : ''} /* 선택된 셀의 input 강조 */
                                                     />
                                                 </td>
@@ -281,15 +291,18 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                     </div>
                     <div className='control-section'>
                         <div className='button-group'>
-                            <button className="add-button" onClick={handleMakeRow}>행 추가</button>
-                            <button className="delete-button" onClick={handleDeleteRow} disabled={!deleteEnabled}>행 삭제</button> {/* 선택된 셀이 없으면 버튼 비활성화 */}
+                            <button className="add-button" onClick={() => handleMakeRow(fileId, tableId, rows, columns, table, setSelectedCell, setDeleteEnabled)}>행 추가</button>
+                            <button className="delete-button" onClick={() => handleDeleteRow(fileId, tableId, selectedCell ? selectedCell.rowIndex : null, table, rows, setSelectedCell, setDeleteEnabled)} disabled={!deleteEnabled}>행 삭제</button>
                         </div>
                         <div className='button-group'>
-                            <button className="add-button" onClick={handleMakeHeader}>열 추가</button>
-                            <button className="delete-button" onClick={handleDeleteColumn} disabled={!deleteEnabled}>열 삭제</button> {/* 선택된 셀이 없으면 버튼 비활성화 */}
+                            <button className="add-button" onClick={() => handleMakeHeader(fileId, tableId, columns, table)}>열 추가</button>
+                            <button className="delete-button" onClick={() => handleDeleteColumn(
+                                fileId, tableId, selectedCell ? selectedCell.cellIndex : null, columns, setColumns,
+                                table, setTable, setSelectedCell, setDeleteEnabled
+                            )} disabled={!deleteEnabled}>열 삭제</button>
                         </div>
                         <div className='save-button-group'>
-                            {!isFinal && ( // isFinal이 true가 아닌 경우에만 토글 스위치를 표시
+                            {!isFinal && (
                                 <div className="toggle-container">
                                     <label className='toggle-switch'>
                                         <input type='checkbox' checked={toggle} onChange={handleToggleChange} />
@@ -301,7 +314,7 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                                     </div>
                                 </div>
                             )}
-                            <button className='save-button' onClick={handleSaveChanges}>저장</button>
+                            <button className='save-button' onClick={() => handleSaveChanges(fileId, tableId, editQueue, toggle, setEditQueue, fetchData)}>저장</button>
                         </div>
                     </div>
                 </div>

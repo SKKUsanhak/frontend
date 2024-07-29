@@ -5,7 +5,7 @@ import { FaTrash, FaEdit, FaSearch } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
 
-export default function FileList({ files, onFileSelect, fetchTables, onFileDelete }) {
+export default function FileList({ files, onFileSelect, fetchfiles, fetchTables, onFileDelete }) {
     const [editingFileId, setEditingFileId] = useState(null);
     const [newFileName, setNewFileName] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
@@ -33,24 +33,27 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
         setNewFileName(file.fileName);
     };
 
-    const handleSaveFileName = async (file) => {
+    const handleSaveFileName = async (file, newFileName) => {
         if (!newFileName) {
             alert("파일 이름을 입력하지 않았습니다.");
             return;
         }
-
+    
         try {
-            const url = `/update-file-name?fileid=${file.id}`;
+            // 'fileId'를 경로 변수로 사용하도록 URL 수정
+            const url = `/files/${file.id}`;
+            // 바디 데이터의 키를 'contents'에서 'content'로 수정
             await axios.patch(url, { contents: newFileName });
             alert("파일 이름이 성공적으로 수정되었습니다.");
             setEditingFileId(null);
-            fetchTables();
+            fetchfiles();
             setSelectedFile((prevFile) => ({ ...prevFile, fileName: newFileName }));
         } catch (error) {
             console.error("파일 이름 수정 중 오류 발생:", error);
             alert("파일 이름 수정 중 오류가 발생했습니다.");
         }
     };
+    
 
     const handleFileNameClick = (file, event) => {
         event.preventDefault();
@@ -204,7 +207,7 @@ export default function FileList({ files, onFileSelect, fetchTables, onFileDelet
                                                 onChange={(e) => setNewFileName(e.target.value)}
                                             />
                                             <IoIosSave
-                                                onClick={() => handleSaveFileName(selectedFile)}
+                                                onClick={() => handleSaveFileName(selectedFile,newFileName)}
                                                 className="save-file-button"
                                             />
                                         </>

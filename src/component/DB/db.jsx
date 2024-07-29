@@ -19,21 +19,20 @@ export default function DB() {
     }, []);
 
     const fetchFiles = () => {
-        // 서버에 '/show-file' 요청 보내기
-        axios.get('/show-file')
+        // 서버에 '/files' 요청 보내기
+        axios.get('/files')
             .then(response => {
                 // JSON 형태의 데이터를 받아서 files 상태로 설정
-                // console.log(response.data);
                 setFiles(response.data);
             })
             .catch(error => {
                 console.error('Error fetching files:', error);
             });
     }
-
-    const fetchTable = async (id) => {
-        // 서버에 '/show-table' 요청 보내기
-        axios.get('/show-table', { params: { id: id } })
+    
+    const fetchTable = async (fileId) => {
+        // 서버에 `/files/${fileId}/tables` 요청 보내기
+        axios.get(`/files/${fileId}/tables`)
         .then(response => {
             // JSON 형태의 데이터를 받아서 tableList 상태로 설정
             setTableList(response.data);
@@ -43,11 +42,12 @@ export default function DB() {
             console.error('Error fetching table data:', error);
         });
     }
-
-    const fetchData = async (id) => {
-        const selectedTable = tableList.find(table => table.id === id);
+    
+    const fetchData = async (fileId, tableId) => {
+        const selectedTable = tableList.find(table => table.id === tableId);
         setTableTitle(selectedTable ? selectedTable.tableTitle : '');
-        axios.get('/show-data', { params: { tableid: id } })
+        // 서버에 `/files/${fileId}/tables/${tableId}/datas` 요청 보내기
+        axios.get(`/files/${fileId}/tables/${tableId}/datas`)
             .then(response => {
                 // JSON 형태의 데이터를 받아서 tableData 상태로 설정
                 setTableData(response.data);
@@ -75,9 +75,7 @@ export default function DB() {
         if (!confirmDelete) return;
     
         try {
-            const response = await axios.delete(`/delete-file`, {
-                params: { id: fileId },
-            });
+            const response = await axios.delete(`/files/${fileId}`);
             if (response.status === 200) {
                 alert("파일 삭제 성공");
                 fetchFiles();
@@ -91,24 +89,22 @@ export default function DB() {
         }
     };
     
-    const handleTableDelete = async (tableId) => {
+    const handleTableDelete = async (fileId, tableId) => {
         const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
         if (!confirmDelete) return;
     
         try {
-            const response = await axios.delete(`/delete-table`, {
-                params: { tableid: tableId },
-            });
+            const response = await axios.delete(`/files/${fileId}/tables/${tableId}`);
             if (response.status === 200) {
                 alert("테이블 삭제 성공");
-                fetchTable(selectedFileId);
+                fetchTable(fileId);
                 // 테이블이 삭제된 후의 추가 작업이 필요하다면 여기에 작성합니다.
             } else {
                 throw new Error('테이블 삭제 실패');
             }
         } catch (error) {
             console.error('There was a problem with the axios operation:', error);
-            alert("There was an error deleting the table.");
+            alert("테이블 삭제 실패");
         }
     };
 
@@ -136,6 +132,7 @@ export default function DB() {
                     onFileSelect={handleFileSelect} 
                     fetchTables={fetchTable} 
                     onFileDelete={handleFileDelete} 
+                    fetchfiles={fetchFiles}
                 />
             )}
             {visible === 'tableList' && (

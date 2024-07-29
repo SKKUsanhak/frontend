@@ -12,8 +12,8 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTable, setSelectedTable] = useState(null);
-    const itemsPerPage = 15; // 페이지 당 항목 수
 
+    const itemsPerPage = 15;
     const tableDetailsRef = useRef(null);
     const tableListContainerRef = useRef(null);
 
@@ -23,9 +23,9 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
             alert("테이블 이름을 입력하지 않았습니다.");
             return;
         }
-
+    
         try {
-            const url = `/create-new-table?fileid=${fileId}`;
+            const url = `/files/${fileId}/tables`;
             await axios.post(
                 url,
                 { contents: newTableName },
@@ -48,19 +48,19 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
         setNewTableName(table.tableTitle);
     };
 
-    const handleSaveTableName = async (table) => {
+    const handleSaveTableName = async () => {
         if (!newTableName) {
             alert("테이블 이름을 입력하지 않았습니다.");
             return;
         }
-
+    
         try {
-            const url = `/update-table-name?tableid=${table.id}`;
+            const url = `/files/${fileId}/tables/${selectedTable.id}`;
             await axios.patch(url, { contents: newTableName });
             alert("테이블 이름이 성공적으로 수정되었습니다.");
             setEditingTableId(null);
-            fetchTables(fileId); // Fetch the updated table list
-            setSelectedTable((prevTable) => ({ ...prevTable, tableTitle: newTableName })); // Update the selected table name
+            fetchTables(fileId); // 업데이트된 테이블 리스트를 다시 불러옵니다.
+            setSelectedTable(prevTable => ({ ...prevTable, tableTitle: newTableName }));
         } catch (error) {
             console.error("테이블 이름 수정 중 오류 발생:", error);
             alert("테이블 이름 수정 중 오류가 발생했습니다.");
@@ -74,36 +74,35 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
 
     const handleNextPage = () => {
         if (currentPage * itemsPerPage < filteredTables().length) {
-            setCurrentPage((prevPage) => prevPage + 1);
+            setCurrentPage(prevPage => prevPage + 1);
         }
     };
 
     const handlePreviousPage = () => {
-        setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+        setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
     };
 
     const handleTableNameClick = (table) => {
         setSelectedTable(table);
         onTableSelect(table.id);
-        // console.log(table.id);
     };
 
     useEffect(() => {
         if (selectedTable) {
             setTimeout(() => {
                 if (tableListContainerRef.current) {
-                    tableListContainerRef.current.classList.add('expanded'); // Add expanded class
+                    tableListContainerRef.current.classList.add('expanded');
                 }
                 if (tableDetailsRef.current) {
-                    tableDetailsRef.current.classList.add('visible'); // Add visible class
+                    tableDetailsRef.current.classList.add('visible');
                 }
-            }, 10); // 애니메이션이 자연스럽게 작동하도록 약간의 지연시간 추가
+            }, 10);
         } else {
             if (tableListContainerRef.current) {
-                tableListContainerRef.current.classList.remove('expanded'); // Remove expanded class
+                tableListContainerRef.current.classList.remove('expanded');
             }
             if (tableDetailsRef.current) {
-                tableDetailsRef.current.classList.remove('visible'); // Remove visible class
+                tableDetailsRef.current.classList.remove('visible');
             }
         }
     }, [selectedTable]);
@@ -201,7 +200,7 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                                 </tr>
                                 <tr>
                                     <td><strong>완료 여부</strong></td>
-                                    <td>{selectedTable.finalData !== undefined ? (selectedTable.finalData ? 'O' : 'X') : 'N/A'}</td> {/* finalData가 undefined일 경우 'N/A'로 표시 */}
+                                    <td>{selectedTable.finalData !== undefined ? (selectedTable.finalData ? 'O' : 'X') : 'N/A'}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -216,7 +215,7 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                                                 onChange={(e) => setNewTableName(e.target.value)}
                                             />
                                             <IoIosSave
-                                                onClick={() => handleSaveTableName(selectedTable)}
+                                                onClick={() => handleSaveTableName(selectedTable, newTableName, fileId)}
                                                 className="save-table-button"
                                             />
                                         </>
@@ -236,11 +235,11 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                             </div>
                             <div className="delete-table-container">
                                 <span>테이블 삭제</span>
-                                <button className="trash-icon" onClick={() => onTableDelete(selectedTable.id)}>
+                                <button className="trash-icon" onClick={() => onTableDelete(fileId, selectedTable.id)}>
                                     <FaTrash />
                                 </button>
                             </div>
-                            <button className="table-view-button" onClick={() => fetchData(selectedTable.id)}>테이블 데이터 보기</button>
+                            <button className="table-view-button" onClick={() => fetchData(fileId, selectedTable.id)}>테이블 데이터 보기</button>
                         </div>
                     </div>
                 )}

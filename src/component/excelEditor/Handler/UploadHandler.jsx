@@ -30,7 +30,7 @@ export const UploadHandler = async (data, fileName) => {
         formData.append("fileName", fileName);
         
         // 파일 업로드
-        const response = await axios.post('/final-result', formData, {
+        const response = await axios.post('/files', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
