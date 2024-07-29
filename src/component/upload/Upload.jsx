@@ -79,7 +79,7 @@ export default function Upload() {
                 </label>
                 <p className="drop-text">{file ? file.name : '또는 여기에 파일을 드롭하세요'}</p>
             </div>
-            <button onClick={handleUpload} className="upload-button">업로드</button>
+            <button onClick={handleUpload} className="upload-button">데이터 추출</button>
             <div className={`loader-overlay ${loading ? '' : 'hidden'}`}>
                 <FadeLoader />
                 <p className="message">{message}</p>

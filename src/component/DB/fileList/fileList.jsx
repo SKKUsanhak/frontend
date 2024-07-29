@@ -38,7 +38,6 @@ export default function FileList({ files, onFileSelect, fetchfiles, fetchTables,
             alert("파일 이름을 입력하지 않았습니다.");
             return;
         }
-    
         try {
             // 'fileId'를 경로 변수로 사용하도록 URL 수정
             const url = `/files/${file.id}`;
