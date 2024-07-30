@@ -80,17 +80,16 @@ export default function Upload() {
 
     return (
         <div>
+            <div className={`loader-overlay ${loading ? '' : 'hidden'}`}>
+                <FadeLoader />
+                <p className="message">{message}</p>
+            </div>
             <div className="container">
                 <h1>File Upload</h1>
                 <div className="drop-area" onDrop={handleDrop} onDragOver={handleDragOver}>
                     <input type="file" onChange={handleFileChange} className="hidden-input" id="fileInput" />
                     <label htmlFor="fileInput" className="label">파일 선택</label>
                     <p className="drop-text">{file ? file.name : '또는 여기에 파일을 드롭하세요'}</p>
-                </div>
-                <button onClick={handleUpload} className="upload-button">데이터 추출</button>
-                <div className={`loader-overlay ${loading ? '' : 'hidden'}`}>
-                    <FadeLoader />
-                    <p className="message">{message}</p>
                 </div>
             </div>
             <div className={`panel-container ${panelVisible ? 'visible' : ''}`}>
@@ -127,6 +126,7 @@ export default function Upload() {
                             onChange={(e) => setComments(e.target.value)}
                         />
                     </div>
+                    <button onClick={handleUpload} className="upload-button">데이터 추출</button>
                 </div>
             </div>
         </div>

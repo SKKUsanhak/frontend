@@ -52,6 +52,8 @@
 }
 
 .upload-button {
+    display: flex;
+    align-self: center;
     margin-top: 20px;
     padding: 10px 20px;
     background-color: #28a745;
@@ -84,6 +86,7 @@
     justify-content: center;
     z-index: 10;
     backdrop-filter: blur(5px);
+    font-family: "LineFont";
 }
 
 .hidden {
