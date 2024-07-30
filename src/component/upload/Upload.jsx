@@ -7,19 +7,16 @@ import { FadeLoader } from 'react-spinners';
 export default function Upload() {
     const [file, setFile] = useState(null);
     const [message, setMessage] = useState('');
-    const [progress, setProgress] = useState(0);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
-        setProgress(0); // 파일 변경 시 진행률 초기화
     };
 
     const handleDrop = (event) => {
         event.preventDefault();
         setFile(event.dataTransfer.files[0]);
-        setProgress(0); // 파일 드롭 시 진행률 초기화
     };
 
     const handleDragOver = (event) => {
@@ -37,7 +34,6 @@ export default function Upload() {
 
         const formData = new FormData();
         formData.append('file', file);
-        setProgress(30);
         axios.post('/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -45,7 +41,6 @@ export default function Upload() {
             responseType: 'arraybuffer'
         })
         .then(response => {
-            setProgress(100);
             setTimeout(() => {
                 setLoading(false); // 로딩 상태 비활성화
                 navigate('/excelEditor', { state: { fileData: response.data, fileName: file.name } });
@@ -83,7 +78,6 @@ export default function Upload() {
             <div className={`loader-overlay ${loading ? '' : 'hidden'}`}>
                 <FadeLoader />
                 <p className="message">{message}</p>
-                <p>{progress}%</p>
             </div>
         </div>
     );
