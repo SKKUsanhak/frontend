@@ -80,7 +80,7 @@ export default function TableList() {
             const url = `/files/${fileId}/tables`;
             await axios.post(url, { contents: newTableName }, { headers: { 'Content-Type': 'application/json' } });
             alert("테이블이 성공적으로 추가되었습니다.");
-            fetchTable(fileId);
+            fetchTable();
         } catch (error) {
             console.error("테이블 추가 중 오류 발생:", error);
             alert("테이블 추가 중 오류가 발생했습니다.");
@@ -103,7 +103,7 @@ export default function TableList() {
             await axios.patch(url, { contents: newTableName });
             alert("테이블 이름이 성공적으로 수정되었습니다.");
             setEditingTableId(null);
-            fetchTable(fileId);
+            fetchTable();
             setSelectedTable(prevTable => ({ ...prevTable, tableTitle: newTableName }));
         } catch (error) {
             console.error("테이블 이름 수정 중 오류 발생:", error);
@@ -123,7 +123,7 @@ export default function TableList() {
             const response = await axios.delete(`/files/${fileId}/tables/${tableId}`);
             if (response.status === 200) {
                 alert("테이블 삭제 성공");
-                fetchTable(fileId);
+                fetchTable();
             } else {
                 throw new Error('테이블 삭제 실패');
             }
@@ -204,22 +204,22 @@ export default function TableList() {
                     </div>
                 </div>
             </div>
-            {selectedTable && (
-                <div className={`table-details ${selectedTable ? 'visible' : ''}`} ref={tableDetailsRef}>
+            <div className={`table-details ${selectedTable ? 'visible' : ''}`} ref={tableDetailsRef}>
+                {selectedTable && (
                     <div className='table-detail-container'>
                         <h3>테이블 상세 정보</h3>
                         <table className="detail-table">
                             <tbody>
                                 <tr>
-                                    <td><strong>테이블 ID</strong></td>
+                                    <td className='details-td'><strong>테이블 ID</strong></td>
                                     <td>{selectedTable.id}</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>테이블 이름</strong></td>
+                                    <td className='details-td'><strong>테이블 이름</strong></td>
                                     <td>{selectedTable.tableTitle}</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>완료 여부</strong></td>
+                                    <td className='details-td'><strong>완료 여부</strong></td>
                                     <td>{selectedTable.finalData !== undefined ? (selectedTable.finalData ? 'O' : 'X') : 'N/A'}</td>
                                 </tr>
                             </tbody>
@@ -262,8 +262,8 @@ export default function TableList() {
                             <button className="table-view-button" onClick={() => handleTableSelect(selectedTable.id)}>테이블 데이터 보기</button>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }

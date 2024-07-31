@@ -196,11 +196,11 @@ export default function BuildingList() {
                         <table className="detail-table">
                             <tbody>
                                 <tr>
-                                    <td className='detail-th'><strong>건물 ID</strong></td>
+                                    <td className='detail-td'><strong>건물 ID</strong></td>
                                     <td>{selectedBuilding.id}</td>
                                 </tr>
                                 <tr>
-                                    <td className='detail-th'><strong>건물 이름</strong></td>
+                                    <td className='detail-td'><strong>건물 이름</strong></td>
                                     <td>
                                         {editingBuildingId === selectedBuilding.id ? (
                                             <input
@@ -214,7 +214,7 @@ export default function BuildingList() {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td className='detail-th'><strong>주소</strong></td>
+                                    <td className='detail-td'><strong>주소</strong></td>
                                     <td>
                                         {editingBuildingId === selectedBuilding.id ? (
                                             <input
@@ -228,7 +228,7 @@ export default function BuildingList() {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td className='detail-th'><strong>총 면적</strong></td>
+                                    <td className='detail-td'><strong>총 면적</strong></td>
                                     <td>
                                         {editingBuildingId === selectedBuilding.id ? (
                                             <input
@@ -242,7 +242,7 @@ export default function BuildingList() {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td className='detail-th'><strong>지상 층수</strong></td>
+                                    <td className='detail-td'><strong>지상 층수</strong></td>
                                     <td>
                                         {editingBuildingId === selectedBuilding.id ? (
                                             <input
@@ -256,7 +256,7 @@ export default function BuildingList() {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td className='detail-th'><strong>지하 층수</strong></td>
+                                    <td className='detail-td'><strong>지하 층수</strong></td>
                                     <td>
                                         {editingBuildingId === selectedBuilding.id ? (
                                             <input

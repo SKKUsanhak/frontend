@@ -150,6 +150,10 @@
     border: 1px solid #ddd;
 }
 
+.detail-table .details-td {
+    white-space: nowrap;
+}
+
 .table-action-buttons {
     display: flex;
     flex-direction: column;

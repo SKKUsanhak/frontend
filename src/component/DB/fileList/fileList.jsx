@@ -215,19 +215,19 @@ export default function FileList() {
                         <table className="detail-table">
                             <tbody>
                                 <tr>
-                                    <td><strong>파일 ID</strong></td>
+                                    <td className='details-td'><strong>파일 ID</strong></td>
                                     <td>{selectedFile.id}</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>파일 이름</strong></td>
+                                    <td className='details-td'><strong>파일 이름</strong></td>
                                     <td>{selectedFile.fileName}</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>업로드 날짜</strong></td>
+                                    <td className='details-td'><strong>업로드 날짜</strong></td>
                                     <td>{formatDate(selectedFile.createTime)}</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>최종 수정일</strong></td>
+                                    <td className='details-td'><strong>최종 수정일</strong></td>
                                     <td>{formatDate(selectedFile.updateTime)}</td>
                                 </tr>
                             </tbody>

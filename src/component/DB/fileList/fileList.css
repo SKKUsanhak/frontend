@@ -91,6 +91,10 @@
     border: 1px solid #ddd;
 }
 
+.detail-table .details-td {
+    white-space: nowrap;
+}
+
 .edit-name-container,
 .file-name-container {
     display: flex;
