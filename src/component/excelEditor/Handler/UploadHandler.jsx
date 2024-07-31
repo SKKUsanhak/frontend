@@ -1,8 +1,7 @@
 import ExcelJS from 'exceljs';
 import axios from 'axios';
 
-export const UploadHandler = async (data, fileName, buildingName, buildingAddress, comments, navigate) => {
-
+export const FileUpload = async (data, fileName, buildingName, buildingAddress, comments, navigate) => {
     const workbook = new ExcelJS.Workbook();
 
     try {
@@ -16,7 +15,6 @@ export const UploadHandler = async (data, fileName, buildingName, buildingAddres
                 });
             });
         });
-
     } catch (error) {
         console.error("Error creating workbook:", error);
         return;
@@ -63,6 +61,6 @@ export const UploadHandler = async (data, fileName, buildingName, buildingAddres
 
     } catch (error) {
         console.error('DB 업로드 실패', error);
-        alert('DB 업로드 성공', error);
+        alert('DB 업로드 실패', error);
     }
 };
