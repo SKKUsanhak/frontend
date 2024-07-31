@@ -19,7 +19,7 @@ export default function Home() {
                     </Link>
                 </div>
                 <div className="main-button">
-                    <Link to="/database" className="icon-2">
+                    <Link to="/buildings" className="icon-2">
                         <TbDatabase className="icon" />
                         <span className="text">Database</span>
                     </Link>

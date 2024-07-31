@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './Upload.css';
+import './FileUpload.css';
 import { FadeLoader } from 'react-spinners';
 
 export default function Upload() {

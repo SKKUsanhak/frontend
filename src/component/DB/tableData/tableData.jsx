@@ -1,18 +1,36 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
 import { RiQuestionLine } from "react-icons/ri";
-import './tableData.css'
 import { TbArrowBackUp } from "react-icons/tb";
+import './tableData.css'
 
-export default function TableData({ fileId, tableData, tableId, fetchData, isFinal, BacktoTableList }) {
+export default function TableData() {
+    const { fileId, tableId } = useParams();
+    const [tableData, setTableData] = useState(null);
     const [columns, setColumns] = useState([]);
     const [rows, setRows] = useState([]);
     const [table, setTable] = useState([]);
     const [editQueue, setEditQueue] = useState([]);
-    const [toggle, setToggle] = useState();
-    const [selectedCell, setSelectedCell] = useState(null); // 추가된 상태
-    const [deleteEnabled, setDeleteEnabled] = useState(false); // 버튼 활성화 상태
+    const [toggle, setToggle] = useState(false);
+    const [selectedCell, setSelectedCell] = useState(null);
+    const [deleteEnabled, setDeleteEnabled] = useState(false);
     const containerRef = useRef(null);
+    const navigate = useNavigate();
+
+    const fetchData = useCallback(() => {
+        axios.get(`/files/${fileId}/tables/${tableId}/datas`)
+            .then(response => {
+                setTableData(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching table data:', error);
+            });
+    }, [fileId, tableId]);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
     useEffect(() => {
         if (tableData && tableData.length > 0) {
@@ -66,12 +84,11 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
             return;
         }
     
-        const newColumnIndex = columns.length; // 새로운 열 인덱스는 columns 배열의 길이
-        console.log(newColumnIndex)
+        const newColumnIndex = columns.length;
         const newTable = table.map(row => [...row, { rowNumber: row[0].rowNumber, columnName: newColumnName, contents: '' }]);
     
-        setColumns([...columns, newColumnName]); // 열 목록 업데이트
-        setTable(newTable); // 테이블 데이터 업데이트
+        setColumns([...columns, newColumnName]);
+        setTable(newTable);
         setEditQueue([...editQueue, {
             method: 'post',
             url: `/files/${fileId}/tables/${tableId}/columns/${newColumnIndex}`,
@@ -81,12 +98,12 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
     };
 
     const handleMakeRow = (fileId, tableId, rows, columns, table) => {
-        const newRowIndex = Math.max(...rows) + 1; // 가장 큰 행 인덱스 계산 후 1을 추가
+        const newRowIndex = Math.max(...rows) + 1;
         const newRow = columns.map(columnName => ({ rowNumber: newRowIndex, columnName, contents: '' }));
 
-        const newTable = [...table, newRow]; // 새로운 행을 테이블에 추가
-        setRows([...rows, newRowIndex]); // 행 상태 업데이트
-        setTable(newTable); // 테이블 상태 업데이트
+        const newTable = [...table, newRow];
+        setRows([...rows, newRowIndex]);
+        setTable(newTable);
         setEditQueue([...editQueue, {
             method: 'post',
             url: `/files/${fileId}/tables/${tableId}/rows/${newRowIndex}`,
@@ -94,36 +111,28 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
         }]);
     };
 
-    const handleDeleteRow = (fileId, tableId, rowIndex, table, rows, setSelectedCell, setDeleteEnabled) => {
-        // 실제 삭제할 행 번호 계산 (화면에 보이는 번호보다 2가 더 큰 값을 서버로 전송)
+    const handleDeleteRow = (fileId, tableId, rowIndex) => {
         const actualRowIndex = rowIndex + 2;
-    
-        if (!selectedCell) return; // 선택된 셀이 없으면 리턴
+        if (!selectedCell) return;
         if (isNaN(actualRowIndex) || !rows.includes(actualRowIndex)) {
             alert("유효하지 않은 행 번호입니다.");
             return;
         }
-    
         const confirmDelete = window.confirm(`정말로 ${rowIndex} 행을 삭제하시겠습니까?`);
         if (!confirmDelete) return;
-    
         axios.delete(`/files/${fileId}/tables/${tableId}/rows/${actualRowIndex}`)
             .then(() => {
                 alert("행 삭제 성공");
-    
-                // 행 삭제 후 새 테이블 데이터 생성, 행 번호가 2부터 시작함을 고려
                 const newTable = table.filter(row => row[0].rowNumber !== actualRowIndex)
                                       .map((row, index) => row.map(cell => ({
                                           ...cell, 
-                                          // 행 번호를 새로 계산 (2를 더해줌)
                                           rowNumber: index + 2
                                       })));
                 const newRows = newTable.map(row => row[0].rowNumber);
-    
                 setTable(newTable);
                 setRows(newRows);
-                setSelectedCell(null); // 선택된 셀 초기화
-                setDeleteEnabled(false); // 버튼 비활성화
+                setSelectedCell(null);
+                setDeleteEnabled(false);
             })
             .catch(error => {
                 console.error("Error deleting row:", error);
@@ -131,32 +140,23 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
             });
     };
 
-    const handleDeleteColumn = (fileId, tableId, columnIndex, columns, setColumns, table, setTable, setSelectedCell, setDeleteEnabled) => {
-        if (!selectedCell) return; // 선택된 셀이 없으면 리턴
-    
+    const handleDeleteColumn = (fileId, tableId, columnIndex) => {
+        if (!selectedCell) return;
         if (isNaN(columnIndex) || columnIndex < 0 || columnIndex >= columns.length) {
             alert("유효한 열 번호를 입력하세요.");
             return;
         }
-    
         const confirmDelete = window.confirm(`정말로 ${columns[columnIndex]} 열을 삭제하시겠습니까?`);
         if (!confirmDelete) return;
-    
         axios.delete(`/files/${fileId}/tables/${tableId}/columns/${columnIndex}`)
             .then(() => {
                 alert("열 삭제 성공");
-                // 열 배열에서 해당 열 제거
                 const newColumns = columns.filter((_, idx) => idx !== columnIndex);
                 setColumns(newColumns);
-                
-                // 모든 행에서 해당 열의 데이터 제거
-                const newTable = table.map(row => 
-                    row.filter((_, idx) => idx !== columnIndex)
-                );
+                const newTable = table.map(row => row.filter((_, idx) => idx !== columnIndex));
                 setTable(newTable);
-    
-                setSelectedCell(null); // 선택된 셀 초기화
-                setDeleteEnabled(false); // 버튼 비활성화
+                setSelectedCell(null);
+                setDeleteEnabled(false);
             })
             .catch(error => {
                 console.error("열 삭제 중 오류 발생:", error);
@@ -179,10 +179,9 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
         }]);
     };
 
-    // 선택된 셀을 처리하는 함수
     const handleCellClick = (rowIndex, cellIndex) => {
-        setSelectedCell({ rowIndex, cellIndex }); // 선택된 셀 상태 업데이트
-        setDeleteEnabled(true); // 버튼 활성화
+        setSelectedCell({ rowIndex, cellIndex });
+        setDeleteEnabled(true);
     };
 
     const handleSaveChanges = async () => {
@@ -204,15 +203,12 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                     alert('최종 데이터 전환 실패');
                 }
             }
-    
             const updateDate = await axios.patch(`/files/${fileId}/updateDate`);
             if(updateDate.status === 200){
                 console.log('최종 수정일 업데이트 완료');
-            }
-            else{
+            } else {
                 console.log('최종 수정일 업데이트 실패');
             }
-
             fetchData(fileId, tableId);
             setEditQueue([]);
         } catch (error) {
@@ -228,7 +224,7 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
 
     return (
         <div className='excel-editor-container'>
-            <div className='back-button-container' onClick={BacktoTableList}>
+            <div className='back-button-container' onClick={() => navigate(-1)}>
                 <TbArrowBackUp className='back-icon' size={24} />
                 <span>테이블 목록으로 돌아가기</span>
             </div>
@@ -270,16 +266,16 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                                                             ? 'highlight-cell highlight-cell-border highlight-cell-background'
                                                             : selectedCell && (selectedCell.rowIndex === rowIndex || selectedCell.cellIndex === cellIndex)
                                                                 ? 'highlight-cell'
-                                                                : '' /* 선택된 셀 테두리 강조 및 하이라이트 */
+                                                                : ''
                                                     }
-                                                    onClick={() => handleCellClick(rowIndex, cellIndex)} // 셀 클릭 시 선택된 셀 업데이트
+                                                    onClick={() => handleCellClick(rowIndex, cellIndex)}
                                                 >
                                                     <input
                                                         type="text"
                                                         value={cell.contents}
                                                         onChange={(e) => handleCellChange(rowIndex, cellIndex, e.target.value)}
                                                         onBlur={(e) => handleCellBlur(fileId, tableId, rowIndex, cellIndex, e.target.value)}
-                                                        className={selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex ? 'highlight-input' : ''} /* 선택된 셀의 input 강조 */
+                                                        className={selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex ? 'highlight-input' : ''}
                                                     />
                                                 </td>
                                             ))}
@@ -291,30 +287,25 @@ export default function TableData({ fileId, tableData, tableId, fetchData, isFin
                     </div>
                     <div className='control-section'>
                         <div className='button-group'>
-                            <button className="add-button" onClick={() => handleMakeRow(fileId, tableId, rows, columns, table, setSelectedCell, setDeleteEnabled)}>행 추가</button>
-                            <button className="delete-button" onClick={() => handleDeleteRow(fileId, tableId, selectedCell ? selectedCell.rowIndex : null, table, rows, setSelectedCell, setDeleteEnabled)} disabled={!deleteEnabled}>행 삭제</button>
+                            <button className="add-button" onClick={() => handleMakeRow(fileId, tableId, rows, columns, table)}>행 추가</button>
+                            <button className="delete-button" onClick={() => handleDeleteRow(fileId, tableId, selectedCell ? selectedCell.rowIndex : null)} disabled={!deleteEnabled}>행 삭제</button>
                         </div>
                         <div className='button-group'>
-                            <button className="add-button" onClick={() => handleMakeHeader(fileId, tableId, columns, table)}>열 추가</button>
-                            <button className="delete-button" onClick={() => handleDeleteColumn(
-                                fileId, tableId, selectedCell ? selectedCell.cellIndex : null, columns, setColumns,
-                                table, setTable, setSelectedCell, setDeleteEnabled
-                            )} disabled={!deleteEnabled}>열 삭제</button>
+                            <button className="add-button" onClick={() => handleMakeHeader(fileId, tableId, columns)}>열 추가</button>
+                            <button className="delete-button" onClick={() => handleDeleteColumn(fileId, tableId, selectedCell ? selectedCell.cellIndex : null)} disabled={!deleteEnabled}>열 삭제</button>
                         </div>
                         <div className='save-button-group'>
-                            {!isFinal && (
-                                <div className="toggle-container">
-                                    <label className='toggle-switch'>
-                                        <input type='checkbox' checked={toggle} onChange={handleToggleChange} />
-                                        <span className='slider'></span>
-                                    </label>
-                                    <div className="tooltip-container">
-                                        <RiQuestionLine className='question' />
-                                        <div className="tooltip">토글 시 최종 데이터로 저장되며, 관리자만 수정 가능해집니다.</div>
-                                    </div>
+                            <div className="toggle-container">
+                                <label className='toggle-switch'>
+                                    <input type='checkbox' checked={toggle} onChange={handleToggleChange} />
+                                    <span className='slider'></span>
+                                </label>
+                                <div className="tooltip-container">
+                                    <RiQuestionLine className='question' />
+                                    <div className="tooltip">토글 시 최종 데이터로 저장되며, 관리자만 수정 가능해집니다.</div>
                                 </div>
-                            )}
-                            <button className='save-button' onClick={() => handleSaveChanges(fileId, tableId, editQueue, toggle, setEditQueue, fetchData)}>저장</button>
+                            </div>
+                            <button className='save-button' onClick={handleSaveChanges}>저장</button>
                         </div>
                     </div>
                 </div>

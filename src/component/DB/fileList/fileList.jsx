@@ -1,31 +1,33 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './fileList.css';
+import { useNavigate } from 'react-router-dom';
 import { FaTrash, FaEdit, FaSearch } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
 
-export default function FileList({ files, onFileSelect, fetchfiles, fetchTables, onFileDelete }) {
+export default function FileList() {
+    const [files, setFiles] = useState([]);
     const [editingFileId, setEditingFileId] = useState(null);
     const [newFileName, setNewFileName] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedFile, setSelectedFile] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const fileListContainerRef = useRef(null);
-    const fileDetailsRef = useRef(null);
     const itemsPerPage = 15;
+    const navigate = useNavigate();
 
-    const formatDate = (dateString) => {
-        const options = { 
-            year: 'numeric', 
-            month: '2-digit', 
-            day: '2-digit', 
-            hour: '2-digit', 
-            minute: '2-digit', 
-            second: '2-digit',
-            hour12: false 
-        };
-        return new Date(dateString).toLocaleString('ko-KR', options);
+    useEffect(() => {
+        fetchFiles();
+    }, []);
+
+    const fetchFiles = () => {
+        axios.get('/files')
+            .then(response => {
+                setFiles(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching files:', error);
+            });
     };
 
     const handleEditFileName = (file) => {
@@ -39,63 +41,45 @@ export default function FileList({ files, onFileSelect, fetchfiles, fetchTables,
             return;
         }
         try {
-            // 'fileId'를 경로 변수로 사용하도록 URL 수정
             const url = `/files/${file.id}`;
-            // 바디 데이터의 키를 'contents'에서 'content'로 수정
             await axios.patch(url, { contents: newFileName });
             alert("파일 이름이 성공적으로 수정되었습니다.");
             setEditingFileId(null);
-            fetchfiles();
+            fetchFiles();
             setSelectedFile((prevFile) => ({ ...prevFile, fileName: newFileName }));
         } catch (error) {
             console.error("파일 이름 수정 중 오류 발생:", error);
             alert("파일 이름 수정 중 오류가 발생했습니다.");
         }
     };
-    
 
     const handleFileNameClick = (file, event) => {
         event.preventDefault();
         event.stopPropagation();
         setSelectedFile(file);
-        onFileSelect(file.id);
     };
 
-    useEffect(() => {
-        if (selectedFile) {
-            setTimeout(() => {
-                if (fileListContainerRef.current) {
-                    fileListContainerRef.current.classList.add('expanded');
-                }
-                if (fileDetailsRef.current) {
-                    fileDetailsRef.current.classList.add('visible');
-                }
-            }, 10);
-        } else {
-            if (fileListContainerRef.current) {
-                fileListContainerRef.current.classList.remove('expanded');
+    const handleFileSelect = (id) => {
+        navigate(`/database/tables/${id}`);
+    };
+
+    const handleFileDelete = async (fileId) => {
+        const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
+        if (!confirmDelete) return;
+
+        try {
+            const response = await axios.delete(`/files/${fileId}`);
+            if (response.status === 200) {
+                alert("파일 삭제 성공");
+                fetchFiles();
+            } else {
+                throw new Error('파일 삭제 실패');
             }
-            if (fileDetailsRef.current) {
-                fileDetailsRef.current.classList.remove('visible');
-            }
+        } catch (error) {
+            console.error('There was a problem with the axios operation:', error);
+            alert("There was an error deleting the file.");
         }
-    }, [selectedFile]);
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (
-                fileDetailsRef.current && !fileDetailsRef.current.contains(event.target) &&
-                fileListContainerRef.current && !fileListContainerRef.current.contains(event.target)
-            ) {
-                setSelectedFile(null);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+    };
 
     const handleNextPage = () => {
         if (currentPage * itemsPerPage < filteredFiles().length) {
@@ -107,23 +91,30 @@ export default function FileList({ files, onFileSelect, fetchfiles, fetchTables,
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
 
-    const handleViewTablesClick = () => {
-        if (selectedFile) {
-            fetchTables(selectedFile.id);
-        }
-    };
-
     const filteredFiles = () => {
         if (!searchQuery) return files;
         return files.filter(file => file.fileName.toLowerCase().includes(searchQuery.toLowerCase()));
     };
 
+    const formatDate = (dateString) => {
+    const options = { 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit', 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit',
+        hour12: false 
+    };
+    return new Date(dateString).toLocaleString('ko-KR', options);
+};
+
     const paginatedFiles = filteredFiles().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
     const totalPages = Math.ceil(filteredFiles().length / itemsPerPage);
 
     return (
-        <div>
-            <div className="file-list-container" ref={fileListContainerRef}>
+        <div className="file-list-page">
+            <div className="file-list-container">
                 <h2>파일 목록</h2>
                 <div className="search-container">
                     <input
@@ -157,6 +148,7 @@ export default function FileList({ files, onFileSelect, fetchfiles, fetchTables,
                                                 <div className="file-name">
                                                     {file.fileName}
                                                 </div>
+                                                <button onClick={() => handleFileSelect(file.id)}>테이블 목록 보기</button>
                                             </td>
                                         </tr>
                                     ))}
@@ -171,7 +163,7 @@ export default function FileList({ files, onFileSelect, fetchfiles, fetchTables,
                     </div>
                 </div>
             </div>
-            <div className={`file-details ${selectedFile ? 'visible' : ''}`} ref={fileDetailsRef}>
+            <div className={`file-details ${selectedFile ? 'visible' : ''}`}>
                 {selectedFile && (
                     <div className='file-detail-container'>
                         <h3>파일 상세 정보</h3>
@@ -206,7 +198,7 @@ export default function FileList({ files, onFileSelect, fetchfiles, fetchTables,
                                                 onChange={(e) => setNewFileName(e.target.value)}
                                             />
                                             <IoIosSave
-                                                onClick={() => handleSaveFileName(selectedFile,newFileName)}
+                                                onClick={() => handleSaveFileName(selectedFile, newFileName)}
                                                 className="save-file-button"
                                             />
                                         </>
@@ -226,11 +218,10 @@ export default function FileList({ files, onFileSelect, fetchfiles, fetchTables,
                             </div>
                             <div className="delete-file-container">
                                 <span>파일 삭제</span>
-                                <button className="trash-icon" onClick={() => onFileDelete(selectedFile.id)}>
+                                <button className="trash-icon" onClick={() => handleFileDelete(selectedFile.id)}>
                                     <FaTrash />
                                 </button>
                             </div>
-                            <button className="table-view-button" onClick={handleViewTablesClick} disabled={!selectedFile}>테이블 목록 보기</button>
                         </div>
                     </div>
                 )}

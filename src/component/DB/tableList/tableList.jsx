@@ -1,21 +1,36 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { TbTablePlus, TbArrowBackUp } from "react-icons/tb";
 import { FaTrash, FaEdit, FaSearch } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
-import axios from 'axios';
 import './tableList.css';
 
-export default function TableList({ tableList, fileId, fetchTables, onTableSelect, fetchData, onTableDelete, BacktoFileList }) {
+export default function TableList() {
+    const { fileId } = useParams();
+    const [tableList, setTableList] = useState([]);
     const [editingTableId, setEditingTableId] = useState(null);
     const [newTableName, setNewTableName] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTable, setSelectedTable] = useState(null);
-
     const itemsPerPage = 15;
-    const tableDetailsRef = useRef(null);
-    const tableListContainerRef = useRef(null);
+    const navigate = useNavigate();
+
+    const fetchTable = useCallback(() => {
+        axios.get(`/files/${fileId}/tables`)
+            .then(response => {
+                setTableList(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching table data:', error);
+            });
+    }, [fileId]);
+
+    useEffect(() => {
+        fetchTable();
+    }, [fetchTable]);
 
     const handleAddTable = async () => {
         const newTableName = prompt("새로운 테이블 이름을 입력하세요:");
@@ -23,20 +38,12 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
             alert("테이블 이름을 입력하지 않았습니다.");
             return;
         }
-    
+
         try {
             const url = `/files/${fileId}/tables`;
-            await axios.post(
-                url,
-                { contents: newTableName },
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
+            await axios.post(url, { contents: newTableName }, { headers: { 'Content-Type': 'application/json' } });
             alert("테이블이 성공적으로 추가되었습니다.");
-            fetchTables(fileId); // Fetch the updated table list
+            fetchTable(fileId);
         } catch (error) {
             console.error("테이블 추가 중 오류 발생:", error);
             alert("테이블 추가 중 오류가 발생했습니다.");
@@ -48,22 +55,44 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
         setNewTableName(table.tableTitle);
     };
 
-    const handleSaveTableName = async () => {
+    const handleSaveTableName = async (table) => {
         if (!newTableName) {
             alert("테이블 이름을 입력하지 않았습니다.");
             return;
         }
-    
+
         try {
-            const url = `/files/${fileId}/tables/${selectedTable.id}`;
+            const url = `/files/${fileId}/tables/${table.id}`;
             await axios.patch(url, { contents: newTableName });
             alert("테이블 이름이 성공적으로 수정되었습니다.");
             setEditingTableId(null);
-            fetchTables(fileId); // 업데이트된 테이블 리스트를 다시 불러옵니다.
+            fetchTable(fileId);
             setSelectedTable(prevTable => ({ ...prevTable, tableTitle: newTableName }));
         } catch (error) {
             console.error("테이블 이름 수정 중 오류 발생:", error);
             alert("테이블 이름 수정 중 오류가 발생했습니다.");
+        }
+    };
+
+    const handleTableSelect = (id) => {
+        navigate(`/database/tables/${fileId}/data/${id}`);
+    };
+
+    const handleTableDelete = async (tableId) => {
+        const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
+        if (!confirmDelete) return;
+
+        try {
+            const response = await axios.delete(`/files/${fileId}/tables/${tableId}`);
+            if (response.status === 200) {
+                alert("테이블 삭제 성공");
+                fetchTable(fileId);
+            } else {
+                throw new Error('테이블 삭제 실패');
+            }
+        } catch (error) {
+            console.error('There was a problem with the axios operation:', error);
+            alert("테이블 삭제 실패");
         }
     };
 
@@ -82,56 +111,12 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
         setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
     };
 
-    const handleTableNameClick = (table) => {
-        setSelectedTable(table);
-        onTableSelect(table.id);
-    };
-
-    useEffect(() => {
-        if (selectedTable) {
-            setTimeout(() => {
-                if (tableListContainerRef.current) {
-                    tableListContainerRef.current.classList.add('expanded');
-                }
-                if (tableDetailsRef.current) {
-                    tableDetailsRef.current.classList.add('visible');
-                }
-            }, 10);
-        } else {
-            if (tableListContainerRef.current) {
-                tableListContainerRef.current.classList.remove('expanded');
-            }
-            if (tableDetailsRef.current) {
-                tableDetailsRef.current.classList.remove('visible');
-            }
-        }
-    }, [selectedTable]);
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (
-                tableDetailsRef.current && !tableDetailsRef.current.contains(event.target) &&
-                tableListContainerRef.current && !tableListContainerRef.current.contains(event.target)
-            ) {
-                setSelectedTable(null);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    const paginatedTables = filteredTables().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-    const totalPages = Math.ceil(filteredTables().length / itemsPerPage);
-
     return (
-        <div>
-            <div className="table-list-container" ref={tableListContainerRef}>
+        <div className="table-list-page">
+            <div className="table-list-container">
                 <h2 className='table-list-title'>테이블 목록</h2>
                 <div className='table-list-header'>
-                    <div className='back-container' onClick={BacktoFileList}>
+                    <div className='back-container' onClick={() => navigate(-1)}>
                         <TbArrowBackUp className='back-icon' size={24} />
                         <span>파일 목록으로 돌아가기</span>
                     </div>
@@ -142,7 +127,7 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                             value={searchQuery}
                             onChange={(e) => {
                                 setSearchQuery(e.target.value);
-                                setCurrentPage(1); // 검색할 때 첫 페이지로 이동
+                                setCurrentPage(1);
                             }}
                         />
                         <FaSearch className='search-icon' />
@@ -165,12 +150,10 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {paginatedTables.map((table, index) => (
-                                        <tr key={index} onClick={() => handleTableNameClick(table)} className={selectedTable && selectedTable.id === table.id ? 'selected' : ''}>
-                                            <td>
-                                                {table.tableTitle}
-                                            </td>
-                                            <td>{table.finalData !== undefined ? (table.finalData ? 'O' : 'X') : 'N/A'}</td> {/* finalData가 undefined일 경우 'N/A'로 표시 */}
+                                    {filteredTables().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((table, index) => (
+                                        <tr key={index} onClick={() => handleTableSelect(table.id)} className={selectedTable && selectedTable.id === table.id ? 'selected' : ''}>
+                                            <td>{table.tableTitle}</td>
+                                            <td>{table.finalData !== undefined ? (table.finalData ? 'O' : 'X') : 'N/A'}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -179,13 +162,13 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                         <div className="pagination">
                             <GoTriangleLeft onClick={handlePreviousPage} disabled={currentPage === 1} className='pagination-icon' />
                             <span>{currentPage}</span>
-                            <GoTriangleRight onClick={handleNextPage} disabled={currentPage === totalPages} className='pagination-icon' />
+                            <GoTriangleRight onClick={handleNextPage} disabled={currentPage === Math.ceil(filteredTables().length / itemsPerPage)} className='pagination-icon' />
                         </div>
                     </div>
                 </div>
             </div>
-            <div className={`table-details ${selectedTable ? 'visible' : ''}`} ref={tableDetailsRef}>
-                {selectedTable && (
+            {selectedTable && (
+                <div className={`table-details visible`}>
                     <div className='table-detail-container'>
                         <h3>테이블 상세 정보</h3>
                         <table className="detail-table">
@@ -215,7 +198,7 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                                                 onChange={(e) => setNewTableName(e.target.value)}
                                             />
                                             <IoIosSave
-                                                onClick={() => handleSaveTableName(selectedTable, newTableName, fileId)}
+                                                onClick={() => handleSaveTableName(selectedTable)}
                                                 className="save-table-button"
                                             />
                                         </>
@@ -235,15 +218,15 @@ export default function TableList({ tableList, fileId, fetchTables, onTableSelec
                             </div>
                             <div className="delete-table-container">
                                 <span>테이블 삭제</span>
-                                <button className="trash-icon" onClick={() => onTableDelete(fileId, selectedTable.id)}>
+                                <button className="trash-icon" onClick={() => handleTableDelete(selectedTable.id)}>
                                     <FaTrash />
                                 </button>
                             </div>
-                            <button className="table-view-button" onClick={() => fetchData(fileId, selectedTable.id)}>테이블 데이터 보기</button>
+                            <button className="table-view-button" onClick={() => handleTableSelect(selectedTable.id)}>테이블 데이터 보기</button>
                         </div>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     );
 }
