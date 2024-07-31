@@ -73,6 +73,9 @@ export default function ExcelEditor() {
                     });
 
                     setData(sheets);
+                }).catch(err => {
+                    console.error("Error loading workbook:", err);
+                    alert("파일을 처리하는 동안 오류가 발생했습니다.");
                 });
             }
         }

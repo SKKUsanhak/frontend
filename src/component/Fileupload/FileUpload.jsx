@@ -62,12 +62,11 @@ export default function Upload() {
         const formData = new FormData();
         formData.append('file', file);
 
-        console.log('파일 이름:', fileName);
-
         axios.post(`/upload`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
-            }
+            },
+            responseType: 'arraybuffer'
         })
         .then(response => {
             setLoading(false);
