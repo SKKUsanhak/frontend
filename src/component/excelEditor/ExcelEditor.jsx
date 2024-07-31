@@ -22,8 +22,6 @@ export default function ExcelEditor() {
     const [RowRanges, setRowRanges] = useState({}); // 행 범위 추가
     const [fileName, setFileName] = useState("");
     const [selectedCell, setSelectedCell] = useState(null); // 선택된 셀 상태 추가
-    const [buildingName, setBuildingName] = useState('');
-    const [buildingAddress, setBuildingAddress] = useState('');
     const [comments, setComments] = useState('');
 
     const { // 열 컨트롤 함수들 
@@ -37,8 +35,6 @@ export default function ExcelEditor() {
     } = useColumnHandler(data, setData, currentSheetIndex);
 
     useEffect(() => { // 파일 로딩 후 data로 엑셀 파일 매핑 
-        setBuildingName(location.state.buildingName);
-        setBuildingAddress(location.state.buildingAddress);
         setComments(location.state.comments);
         setFileName(location.state.fileName);
         if (location.state && location.state.fileData) {
@@ -206,7 +202,7 @@ export default function ExcelEditor() {
     }
 
     const handleUpload = () => {
-        UploadHandler(data, fileName, buildingName, buildingAddress, comments, navigate);
+        UploadHandler(data, fileName, comments, navigate);
     };
 
     return (

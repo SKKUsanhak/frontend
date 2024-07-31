@@ -1,0 +1,95 @@
+body {
+    padding: 50px;
+    font-family: "LineFont";
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: 100px auto 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container div {
+    margin-bottom: 15px;
+}
+
+.form-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-container input[type="text"],
+.form-container input[type="number"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 5px 0 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.address-search .address-input-container {
+    display: flex;
+    align-items: center;
+}
+
+.address-search input {
+    flex: 9;
+    padding: 10px;
+}
+
+.search-button {
+    flex: 1;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px;
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; /* 검색 버튼의 너비를 줄입니다 */
+    height: 30px; /* 입력 칸 높이 설정 */
+    margin-left: 5px;
+    margin-right: 40px;
+    margin-bottom: 4px;
+}
+
+.search-button:hover {
+    background-color: #45a049;
+}
+
+.form-container button {
+    width: 40%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    display: flex;
+    justify-content: center; /* 버튼을 중앙에 정렬 */
+    align-items: center;
+    margin: 0 auto; /* 버튼을 컨테이너 내에서 중앙 정렬 */
+}
+
+.form-container button:hover {
+    background-color: #45a049;
+}

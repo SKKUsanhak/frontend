@@ -1,7 +1,7 @@
 import ExcelJS from 'exceljs';
 import axios from 'axios';
 
-export const FileUpload = async (data, fileName, buildingName, buildingAddress, comments, navigate) => {
+export const UploadHandler = async (data, fileName, comments, navigate) => {
     const workbook = new ExcelJS.Workbook();
 
     try {
@@ -29,9 +29,7 @@ export const FileUpload = async (data, fileName, buildingName, buildingAddress, 
 
         // Create fileInformation object
         const fileInformation = {
-            address: buildingAddress,
             fileName: fileName,
-            buildingName: buildingName,
             note: comments
         };
 

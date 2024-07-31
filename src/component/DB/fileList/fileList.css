@@ -273,3 +273,15 @@
 .file-list p {
     text-align: center;
 }
+
+.add-file-icon {
+    transition: color 0.5s ease;
+}
+
+.add-file-icon:hover {
+    color: cornflowerblue;
+}
+
+.add-file-icon:active {
+    color: blue;
+}

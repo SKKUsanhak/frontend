@@ -9,9 +9,8 @@ export default function Upload() {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [panelVisible, setPanelVisible] = useState(false);
-    const [buildingName, setBuildingName] = useState('');
-    const [address, setAddress] = useState('');
     const [Comments, setComments] = useState('');
+    const [fileName, setFileName] = useState(''); // 파일 이름 상태 추가
     const navigate = useNavigate();
 
     const togglePanel = (isVisible) => {
@@ -25,7 +24,9 @@ export default function Upload() {
     };
 
     const handleFileChange = (event) => {
-        setFile(event.target.files[0]);
+        const selectedFile = event.target.files[0];
+        setFile(selectedFile);
+        setFileName(selectedFile.name); // 파일 이름 상태 설정
         togglePanel(true);
     };
 
@@ -33,6 +34,7 @@ export default function Upload() {
         event.preventDefault();
         const selectedFile = event.dataTransfer.files[0];
         setFile(selectedFile);
+        setFileName(selectedFile.name); // 파일 이름 상태 설정
         togglePanel(true);
     };
 
@@ -46,10 +48,9 @@ export default function Upload() {
             setLoading(false);
             return;
         }
-    
-        // Check if the building name or address is empty
-        if (!buildingName.trim() || !address.trim()) {
-            alert('건물명과 주소를 모두 입력해야 합니다.');
+
+        if (!fileName.trim()) {
+            alert('파일 이름은 빈칸일 수 없습니다.');
             setLoading(false);
             return;
         }
@@ -68,7 +69,7 @@ export default function Upload() {
         })
         .then(response => {
             setLoading(false);
-            navigate('/excelEditor', { state: { fileData: response.data, fileName: file.name, buildingName: buildingName, buildingAddress: address, comments: Comments } });
+            navigate('/excelEditor', { state: { fileData: response.data, fileName: fileName || file.name, comments: Comments } });
             togglePanel(false);
         })
         .catch(error => {
@@ -89,29 +90,19 @@ export default function Upload() {
                 <div className="drop-area" onDrop={handleDrop} onDragOver={handleDragOver}>
                     <input type="file" onChange={handleFileChange} className="hidden-input" id="fileInput" />
                     <label htmlFor="fileInput" className="label">파일 선택</label>
-                    <p className="drop-text">{file ? file.name : '또는 여기에 파일을 드롭하세요'}</p>
+                    <p className="drop-text">{file ? fileName : '또는 여기에 파일을 드롭하세요'}</p>
                 </div>
             </div>
             <div className={`panel-container ${panelVisible ? 'visible' : ''}`}>
                 <div className='file-info'>
                     <h2>파일 세부 사항 입력</h2>
                     <div>
-                        <span className="file-info-label">건물명:</span>
+                        <span className="file-info-label">파일 이름:</span>
                         <input
                             type="text"
-                            placeholder="건물명 입력"
-                            value={buildingName}
-                            onChange={(e) => setBuildingName(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <span className="file-info-label">주소:</span>
-                        <input
-                            type="text"
-                            placeholder="주소 입력"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
+                            placeholder="파일 이름 입력"
+                            value={fileName} // 파일 이름 상태를 사용
+                            onChange={(e) => setFileName(e.target.value)} // 파일 이름 상태 업데이트
                             required
                         />
                     </div>

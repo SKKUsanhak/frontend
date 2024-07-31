@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './fileList.css';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +14,8 @@ export default function FileList() {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedFile, setSelectedFile] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const fileListContainerRef = useRef(null);
+    const fileDetailsRef = useRef(null);
     const itemsPerPage = 15;
     const navigate = useNavigate();
 
@@ -30,6 +32,42 @@ export default function FileList() {
                 console.error('Error fetching files:', error);
             });
     };
+
+    useEffect(() => {
+        if (selectedFile) {
+            setTimeout(() => {
+                if (fileListContainerRef.current) {
+                    fileListContainerRef.current.classList.add('expanded');
+                }
+                if (fileDetailsRef.current) {
+                    fileDetailsRef.current.classList.add('visible');
+                }
+            }, 10);
+        } else {
+            if (fileListContainerRef.current) {
+                fileListContainerRef.current.classList.remove('expanded');
+            }
+            if (fileDetailsRef.current) {
+                fileDetailsRef.current.classList.remove('visible');
+            }
+        }
+    }, [selectedFile]);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                fileDetailsRef.current && !fileDetailsRef.current.contains(event.target) &&
+                fileListContainerRef.current && !fileListContainerRef.current.contains(event.target)
+            ) {
+                setSelectedFile(null);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const handleEditFileName = (file) => {
         setEditingFileId(file.id);
@@ -115,7 +153,7 @@ export default function FileList() {
 
     return (
         <div className="file-list-page">
-            <div className="file-list-container">
+            <div className="file-list-container" ref={fileListContainerRef}>
                 <h2>파일 목록</h2>
                 <div className='file-list-header'>
                     <div className="search-container">
@@ -155,7 +193,6 @@ export default function FileList() {
                                                 <div className="file-name">
                                                     {file.fileName}
                                                 </div>
-                                                <button onClick={() => handleFileSelect(file.id)}>테이블 목록 보기</button>
                                             </td>
                                         </tr>
                                     ))}
@@ -170,7 +207,7 @@ export default function FileList() {
                     </div>
                 </div>
             </div>
-            <div className={`file-details ${selectedFile ? 'visible' : ''}`}>
+            <div className={`file-details ${selectedFile ? 'visible' : ''}`} ref={fileDetailsRef}>
                 {selectedFile && (
                     <div className='file-detail-container'>
                         <h3>파일 상세 정보</h3>
@@ -229,6 +266,7 @@ export default function FileList() {
                                     <FaTrash />
                                 </button>
                             </div>
+                            <button className="table-view-button" onClick={() => handleFileSelect(selectedFile.id)}>테이블 목록 보기</button>
                         </div>
                     </div>
                 )}
