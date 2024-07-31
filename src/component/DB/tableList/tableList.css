@@ -46,6 +46,7 @@
 }
 
 .table-list-content {
+    margin-top: 5px;
     display: flex;
     width: 100%;
 }
