@@ -169,7 +169,7 @@ export default function FileList() {
                         />
                         <FaSearch className="search-icon" />
                     </div>
-                    <div className='add-container' onClick={() => navigate(`/buldings/${buildingId}/files/upload`)}>
+                    <div className='add-container' onClick={() => navigate(`/buildings/${buildingId}/files/upload`)}>
                         <span>파일 추가</span>
                         <FaFileCirclePlus className='add-file-icon' size={24} />
                     </div>

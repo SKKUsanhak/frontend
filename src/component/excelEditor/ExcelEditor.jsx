@@ -34,47 +34,47 @@ export default function ExcelEditor() {
         handleDeleteColumn
     } = useColumnHandler(data, setData, currentSheetIndex);
 
-    useEffect(() => { // 파일 로딩 후 data로 엑셀 파일 매핑 
-        setComments(location.state.comments);
-        setFileName(location.state.fileName);
-        if (location.state && location.state.fileData) {
-            const workbook = new ExcelJS.Workbook();
-            const buffer = location.state.fileData;
-            const loadedFileName = location.state.fileName;
+    useEffect(() => {
+        if (location.state) {
+            setComments(location.state.note || '');  // note가 없으면 빈 문자열로 설정
+            setFileName(location.state.fileName || '');  // fileName이 없으면 빈 문자열로 설정
+            if (location.state.fileData) {
+                const workbook = new ExcelJS.Workbook();
+                const buffer = location.state.fileData;
 
-            workbook.xlsx.load(buffer).then(() => {
-                const sheets = [];
-                workbook.worksheets.forEach((worksheet) => {
-                    const rows = [];
-                    let maxColumns = 0;
+                workbook.xlsx.load(buffer).then(() => {
+                    const sheets = [];
+                    workbook.worksheets.forEach((worksheet) => {
+                        const rows = [];
+                        let maxColumns = 0;
 
-                    worksheet.eachRow((row) => {
-                        const rowData = [];
-                        row.eachCell({ includeEmpty: true }, (cell) => {
-                            rowData.push(cell.value !== null ? cell.value : '');
+                        worksheet.eachRow((row) => {
+                            const rowData = [];
+                            row.eachCell({ includeEmpty: true }, (cell) => {
+                                rowData.push(cell.value !== null ? cell.value : '');
+                            });
+                            rows.push(rowData);
+                            if (rowData.length > maxColumns) {
+                                maxColumns = rowData.length;
+                            }
                         });
-                        rows.push(rowData);
-                        if (rowData.length > maxColumns) {
-                            maxColumns = rowData.length;
-                        }
+
+                        // 모든 행을 동일한 길이로 맞춤
+                        const normalizedRows = rows.map(row => {
+                            while (row.length < maxColumns) {
+                                row.push(''); // 빈 셀을 빈 문자열로 채움
+                            }
+                            return row;
+                        });
+
+                        const columns = new Array(maxColumns).fill(''); // 초기 열 상태 설정
+
+                        sheets.push({ rows: normalizedRows, columns: columns });
                     });
 
-                    // 모든 행을 동일한 길이로 맞춤
-                    const normalizedRows = rows.map(row => {
-                        while (row.length < maxColumns) {
-                            row.push(''); // 빈 셀을 빈 문자열로 채움
-                        }
-                        return row;
-                    });
-
-                    const columns = new Array(maxColumns).fill(''); // 초기 열 상태 설정
-
-                    sheets.push({ rows: normalizedRows, columns: columns });
+                    setData(sheets);
                 });
-
-                setData(sheets);
-                setFileName(loadedFileName);
-            });
+            }
         }
     }, [location.state]);
 

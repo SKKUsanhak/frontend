@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './FileUpload.css';
 import { FadeLoader } from 'react-spinners';
 
@@ -9,9 +9,10 @@ export default function Upload() {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [panelVisible, setPanelVisible] = useState(false);
-    const [Comments, setComments] = useState('');
-    const [fileName, setFileName] = useState(''); // 파일 이름 상태 추가
+    const [note, setNote] = useState('');
+    const [fileName, setFileName] = useState('');
     const navigate = useNavigate();
+    const { buildingId } = useParams();
 
     const togglePanel = (isVisible) => {
         setPanelVisible(isVisible);
@@ -26,7 +27,7 @@ export default function Upload() {
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
         setFile(selectedFile);
-        setFileName(selectedFile.name); // 파일 이름 상태 설정
+        setFileName(selectedFile.name);
         togglePanel(true);
     };
 
@@ -34,7 +35,7 @@ export default function Upload() {
         event.preventDefault();
         const selectedFile = event.dataTransfer.files[0];
         setFile(selectedFile);
-        setFileName(selectedFile.name); // 파일 이름 상태 설정
+        setFileName(selectedFile.name);
         togglePanel(true);
     };
 
@@ -61,21 +62,22 @@ export default function Upload() {
         const formData = new FormData();
         formData.append('file', file);
 
-        axios.post('/upload', formData, {
+        console.log('파일 이름:', fileName);
+
+        axios.post(`/upload`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
-            },
-            responseType: 'arraybuffer'
+            }
         })
         .then(response => {
             setLoading(false);
-            navigate('/excelEditor', { state: { fileData: response.data, fileName: fileName || file.name, comments: Comments } });
+            navigate('/excelEditor', { state: { fileData: response.data, buildingId: buildingId, fileName: fileName, note: note } });
             togglePanel(false);
         })
         .catch(error => {
             setLoading(false);
             setMessage('업로드에 실패하였습니다. 다시 시도해주세요.');
-            togglePanel(false);
+            alert('업로드 실패');
         });
     };
 
@@ -101,8 +103,8 @@ export default function Upload() {
                         <input
                             type="text"
                             placeholder="파일 이름 입력"
-                            value={fileName} // 파일 이름 상태를 사용
-                            onChange={(e) => setFileName(e.target.value)} // 파일 이름 상태 업데이트
+                            value={fileName}
+                            onChange={(e) => setFileName(e.target.value)}
                             required
                         />
                     </div>
@@ -113,8 +115,8 @@ export default function Upload() {
                         <textarea
                             placeholder="비고 (최대 200자)"
                             maxLength="200"
-                            value={Comments}
-                            onChange={(e) => setComments(e.target.value)}
+                            value={note}
+                            onChange={(e) => setNote(e.target.value)}
                         />
                     </div>
                     <button onClick={handleUpload} className="upload-button">데이터 추출</button>
