@@ -1,7 +1,7 @@
 import ExcelJS from 'exceljs';
 import axios from 'axios';
 
-export const UploadHandler = async (data, fileName, buildingName, buildingAddress, comments) => {
+export const UploadHandler = async (data, fileName, buildingName, buildingAddress, comments, navigate) => {
 
     const workbook = new ExcelJS.Workbook();
 
@@ -53,7 +53,14 @@ export const UploadHandler = async (data, fileName, buildingName, buildingAddres
             }
         });
 
+        // Assuming response.data contains the buildingId
+        const buildingId = response.data.buildingId;
+
         alert('DB 업로드 성공', response.data);
+
+        // Navigate to the new URL
+        navigate(`/buildings/${buildingId}/files`);
+
     } catch (error) {
         console.error('DB 업로드 실패', error);
         alert('DB 업로드 성공', error);

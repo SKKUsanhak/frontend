@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ExcelJS from 'exceljs';
 import './ExcelEditor.css';
 import { useRowHandler } from './Handler/RowHandler';
@@ -12,6 +13,7 @@ import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
 
 export default function ExcelEditor() {
     const location = useLocation(); // 파일 로딩을 위한 location
+    const navigate = useNavigate();
     const [currentSheetIndex, setCurrentSheetIndex] = useState(0); // 현재 시트 인덱스 추가
     const [data, setData] = useState([]); // 테이블 데이터 추가
     const [rowIndex, setRowIndex] = useState(''); // 행 인덱싱 추가
@@ -204,7 +206,7 @@ export default function ExcelEditor() {
     }
 
     const handleUpload = () => {
-        UploadHandler(data, fileName, buildingName, buildingAddress, comments);
+        UploadHandler(data, fileName, buildingName, buildingAddress, comments, navigate);
     };
 
     return (

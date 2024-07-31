@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaTrash, FaEdit, FaSearch } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
+import { FaFileCirclePlus } from "react-icons/fa6";
 
 export default function FileList() {
     const [files, setFiles] = useState([]);
@@ -97,17 +98,17 @@ export default function FileList() {
     };
 
     const formatDate = (dateString) => {
-    const options = { 
-        year: 'numeric', 
-        month: '2-digit', 
-        day: '2-digit', 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        second: '2-digit',
-        hour12: false 
+        const options = { 
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit', 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit',
+            hour12: false 
+        };
+        return new Date(dateString).toLocaleString('ko-KR', options);
     };
-    return new Date(dateString).toLocaleString('ko-KR', options);
-};
 
     const paginatedFiles = filteredFiles().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
     const totalPages = Math.ceil(filteredFiles().length / itemsPerPage);
@@ -116,17 +117,23 @@ export default function FileList() {
         <div className="file-list-page">
             <div className="file-list-container">
                 <h2>파일 목록</h2>
-                <div className="search-container">
-                    <input
-                        type="text"
-                        placeholder="파일 이름으로 검색..."
-                        value={searchQuery}
-                        onChange={(e) => {
-                            setSearchQuery(e.target.value);
-                            setCurrentPage(1);
-                        }}
-                    />
-                    <FaSearch className="search-icon" />
+                <div className='file-list-header'>
+                    <div className="search-container">
+                        <input
+                            type="text"
+                            placeholder="파일 이름으로 검색..."
+                            value={searchQuery}
+                            onChange={(e) => {
+                                setSearchQuery(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                        />
+                        <FaSearch className="search-icon" />
+                    </div>
+                    <div className='add-container' onClick={() => navigate('/file-upload')}>
+                        <span>파일 추가</span>
+                        <FaFileCirclePlus className='add-file-icon' size={24} />
+                    </div>
                 </div>
                 <div className="file-list-content">
                     <div className="file-list">
