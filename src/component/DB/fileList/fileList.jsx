@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import axios from 'axios';
 import './fileList.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FaTrash, FaEdit, FaSearch } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
@@ -18,20 +18,21 @@ export default function FileList() {
     const fileDetailsRef = useRef(null);
     const itemsPerPage = 15;
     const navigate = useNavigate();
+    const { buildingId } = useParams();
 
-    useEffect(() => {
-        fetchFiles();
-    }, []);
-
-    const fetchFiles = () => {
-        axios.get('/files')
+    const fetchFiles = useCallback(() => {
+        axios.get(`/buildings/${buildingId}/files`)
             .then(response => {
                 setFiles(response.data);
             })
             .catch(error => {
                 console.error('Error fetching files:', error);
             });
-    };
+    }, [buildingId]);
+    
+    useEffect(() => {
+        fetchFiles();
+    }, [fetchFiles]);
 
     useEffect(() => {
         if (selectedFile) {
@@ -168,7 +169,7 @@ export default function FileList() {
                         />
                         <FaSearch className="search-icon" />
                     </div>
-                    <div className='add-container' onClick={() => navigate('/file-upload')}>
+                    <div className='add-container' onClick={() => navigate(`/buldings/${buildingId}/files/upload`)}>
                         <span>파일 추가</span>
                         <FaFileCirclePlus className='add-file-icon' size={24} />
                     </div>

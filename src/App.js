@@ -23,9 +23,9 @@ function App() {
             <div className='main-content'>
                 <Routes>
                     <Route path="/" element={<Home />} /> {/* 홈페이지 */}
-                    <Route path="/file-upload" element={<FileUpload />} /> {/* 파일 업로드 페이지 */}
+                    <Route path="/buildings/:buildingId/files/upload" element={<FileUpload />} /> {/* 파일 업로드 페이지 */}
                     <Route path="/excelEditor" element={<ExcelEditor />} /> {/* 파일 수정 페이지 */}
-                    <Route path="/upload" element={<BuildingUpload />} /> {/*빌딩 추가 페이지*/}
+                    <Route path="/buildings/upload" element={<BuildingUpload />} /> {/*빌딩 추가 페이지*/}
                     <Route path="/buildings" element={<BuildingList />} /> {/* 건물 리스트  */}
                     <Route path="/buildings/:buildingId/files" element={<FileList />} /> {/* 파일 리스트  */}
                     <Route path="/buildings/:buildingId/files/:fileId/tables" element={<TableList />} /> {/* 테이블 리스트  */}

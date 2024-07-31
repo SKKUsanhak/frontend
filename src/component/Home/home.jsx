@@ -13,7 +13,7 @@ export default function Home() {
             </div>
             <div className="main-content">
                 <div className="main-button">
-                    <Link to="/upload" className="icon-1">
+                    <Link to="/buildings/upload" className="icon-1">
                         <MdOutlineUploadFile className="icon" />
                         <span className="text">Upload</span>
                     </Link>

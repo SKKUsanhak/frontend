@@ -10,8 +10,8 @@ const BuildingUpload = () => {
         buildingName: '',
         address: '',
         totalArea: '',
-        GroundFloors: '',
-        BasementFloors: ''
+        groundFloors: '',
+        basementFloors: ''
     });
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,10 +35,13 @@ const BuildingUpload = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Submitting form data:', formData); // 요청 데이터 출력
+        if (!formData.buildingName.trim() || !formData.address.trim()) {
+            alert('이름과 주소지를 입력해 주세요.');
+            return;
+        }
+        // console.log('Submitting form data:', formData); // 요청 데이터 출력
         try {
             await axios.post('/buildings', formData);
-            console.log('Form Data Submitted:', formData);
             navigate('/buildings');
         } catch (error) {
             console.error('There was an error submitting the form!', error.response.data); // 에러 응답 데이터 출력
@@ -81,27 +84,24 @@ const BuildingUpload = () => {
                         name="totalArea"
                         value={formData.totalArea}
                         onChange={handleChange}
-                        required
                     />
                 </div>
                 <div>
                     <label>지상 층수:</label>
                     <input
                         type="number"
-                        name="GroundFloors"
-                        value={formData.GroundFloors}
+                        name="groundFloors"
+                        value={formData.groundFloors}
                         onChange={handleChange}
-                        required
                     />
                 </div>
                 <div>
                     <label>지하 층수:</label>
                     <input
                         type="number"
-                        name="BasementFloors"
-                        value={formData.BasementFloors}
+                        name="basementFloors"
+                        value={formData.basementFloors}
                         onChange={handleChange}
-                        required
                     />
                 </div>
                 <button type="submit">업로드</button>
