@@ -1,7 +1,7 @@
 import ExcelJS from 'exceljs';
 import axios from 'axios';
 
-export const UploadHandler = async (data, fileName, comments, navigate) => {
+export const UploadHandler = async (data, fileName, comments, navigate, buildingId) => {
     const workbook = new ExcelJS.Workbook();
 
     try {
@@ -27,30 +27,27 @@ export const UploadHandler = async (data, fileName, comments, navigate) => {
         const formData = new FormData();
         formData.append("file", new File([blob], fileName, { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
 
-        // Create fileInformation object
-        const fileInformation = {
+        // Create fileInfo object
+        const fileInfo = {
             fileName: fileName,
             note: comments
         };
 
-        // Convert fileInformation object to a JSON string
-        const fileInformationJson = JSON.stringify(fileInformation);
+        // Convert fileInfo object to a JSON string
+        const fileInfoJson = JSON.stringify(fileInfo);
 
-        // Create a Blob for the fileInformation JSON string
-        const fileInformationBlob = new Blob([fileInformationJson], { type: 'application/json' });
+        // Create a Blob for the fileInfo JSON string
+        const fileInfoBlob = new Blob([fileInfoJson], { type: 'application/json' });
 
-        // Append the fileInformation Blob to the FormData
-        formData.append("fileInformation", fileInformationBlob);
+        // Append the fileInfo Blob to the FormData
+        formData.append("fileInfo", fileInfoBlob);
 
         // File upload
-        const response = await axios.post('/files', formData, {
+        const response = await axios.post(`/buildings/${buildingId}/files`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         });
-
-        // Assuming response.data contains the buildingId
-        const buildingId = response.data.buildingId;
 
         alert('DB 업로드 성공', response.data);
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { TbTablePlus, TbArrowBackUp } from "react-icons/tb";
@@ -8,7 +8,7 @@ import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
 import './tableList.css';
 
 export default function TableList() {
-    const { fileId } = useParams();
+    const { fileId, buildingId } = useParams();
     const [tableList, setTableList] = useState([]);
     const [editingTableId, setEditingTableId] = useState(null);
     const [newTableName, setNewTableName] = useState('');
@@ -16,21 +16,58 @@ export default function TableList() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTable, setSelectedTable] = useState(null);
     const itemsPerPage = 15;
+
+    const tableDetailsRef = useRef(null);
+    const tableListContainerRef = useRef(null);
     const navigate = useNavigate();
 
     const fetchTable = useCallback(() => {
-        axios.get(`/files/${fileId}/tables`)
+        axios.get(`/buildings/${buildingId}/files/${fileId}/tables`)
             .then(response => {
                 setTableList(response.data);
             })
             .catch(error => {
                 console.error('Error fetching table data:', error);
             });
-    }, [fileId]);
+    }, [fileId, buildingId]);
 
     useEffect(() => {
         fetchTable();
     }, [fetchTable]);
+
+    useEffect(() => {
+        if (selectedTable) {
+            if (tableListContainerRef.current) {
+                tableListContainerRef.current.classList.add('expanded');
+            }
+            if (tableDetailsRef.current) {
+                tableDetailsRef.current.classList.add('visible');
+            }
+        } else {
+            if (tableListContainerRef.current) {
+                tableListContainerRef.current.classList.remove('expanded');
+            }
+            if (tableDetailsRef.current) {
+                tableDetailsRef.current.classList.remove('visible');
+            }
+        }
+    }, [selectedTable]);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                tableDetailsRef.current && !tableDetailsRef.current.contains(event.target) &&
+                tableListContainerRef.current && !tableListContainerRef.current.contains(event.target)
+            ) {
+                setSelectedTable(null);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const handleAddTable = async () => {
         const newTableName = prompt("새로운 테이블 이름을 입력하세요:");
@@ -113,7 +150,7 @@ export default function TableList() {
 
     return (
         <div className="table-list-page">
-            <div className="table-list-container">
+            <div className="table-list-container" ref={tableListContainerRef}>
                 <h2 className='table-list-title'>테이블 목록</h2>
                 <div className='table-list-header'>
                     <div className='back-container' onClick={() => navigate(-1)}>
@@ -151,7 +188,7 @@ export default function TableList() {
                                 </thead>
                                 <tbody>
                                     {filteredTables().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((table, index) => (
-                                        <tr key={index} onClick={() => handleTableSelect(table.id)} className={selectedTable && selectedTable.id === table.id ? 'selected' : ''}>
+                                        <tr key={index} onClick={() => setSelectedTable(table)} className={selectedTable && selectedTable.id === table.id ? 'selected' : ''}>
                                             <td>{table.tableTitle}</td>
                                             <td>{table.finalData !== undefined ? (table.finalData ? 'O' : 'X') : 'N/A'}</td>
                                         </tr>
@@ -168,7 +205,7 @@ export default function TableList() {
                 </div>
             </div>
             {selectedTable && (
-                <div className={`table-details visible`}>
+                <div className={`table-details ${selectedTable ? 'visible' : ''}`} ref={tableDetailsRef}>
                     <div className='table-detail-container'>
                         <h3>테이블 상세 정보</h3>
                         <table className="detail-table">

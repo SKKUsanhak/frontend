@@ -99,8 +99,8 @@ export default function FileList() {
         setSelectedFile(file);
     };
 
-    const handleFileSelect = (id) => {
-        navigate(`/database/tables/${id}`);
+    const handleFileSelect = (buildingId, fileId) => {
+        navigate(`/buildings/${buildingId}/files/${fileId}/tables`);
     };
 
     const handleFileDelete = async (fileId) => {
@@ -169,7 +169,7 @@ export default function FileList() {
                         />
                         <FaSearch className="search-icon" />
                     </div>
-                    <div className='add-container' onClick={() => navigate(`/buildings/${buildingId}/files/upload`)}>
+                    <div className='add-container' onClick={() => navigate(`/buildings/${buildingId}/files/upload`, { state: { buildingId } })}>
                         <span>파일 추가</span>
                         <FaFileCirclePlus className='add-file-icon' size={24} />
                     </div>
@@ -267,7 +267,7 @@ export default function FileList() {
                                     <FaTrash />
                                 </button>
                             </div>
-                            <button className="table-view-button" onClick={() => handleFileSelect(selectedFile.id)}>테이블 목록 보기</button>
+                            <button className="table-view-button" onClick={() => handleFileSelect(buildingId, selectedFile.id)}>테이블 목록 보기</button>
                         </div>
                     </div>
                 )}
