@@ -99,7 +99,7 @@ export default function TableList() {
         }
 
         try {
-            const url = `/files/${fileId}/tables/${table.id}`;
+            const url = `/buildings/${buildingId}/files/${fileId}/tables/${table.id}`;
             await axios.patch(url, { contents: newTableName });
             alert("테이블 이름이 성공적으로 수정되었습니다.");
             setEditingTableId(null);
@@ -111,8 +111,8 @@ export default function TableList() {
         }
     };
 
-    const handleTableSelect = (id) => {
-        navigate(`/database/tables/${fileId}/data/${id}`);
+    const handleTableSelect = (buildingId, fileId, tableId) => {
+        navigate(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas`);
     };
 
     const handleTableDelete = async (tableId) => {
@@ -120,7 +120,7 @@ export default function TableList() {
         if (!confirmDelete) return;
 
         try {
-            const response = await axios.delete(`/files/${fileId}/tables/${tableId}`);
+            const response = await axios.delete(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}`);
             if (response.status === 200) {
                 alert("테이블 삭제 성공");
                 fetchTable();
@@ -259,7 +259,7 @@ export default function TableList() {
                                     <FaTrash />
                                 </button>
                             </div>
-                            <button className="table-view-button" onClick={() => handleTableSelect(selectedTable.id)}>테이블 데이터 보기</button>
+                            <button className="table-view-button" onClick={() => handleTableSelect(buildingId, fileId, selectedTable.id)}>테이블 데이터 보기</button>
                         </div>
                     </div>
                 )}
