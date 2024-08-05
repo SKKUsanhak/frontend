@@ -10,7 +10,7 @@ import { FaFileCirclePlus } from "react-icons/fa6";
 export default function FileList() {
     const [files, setFiles] = useState([]);
     const [editingFileId, setEditingFileId] = useState(null);
-    const [newFileName, setNewFileName] = useState('');
+    const [newFileData, setNewFileData] = useState({ fileName: '', note: '' });
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedFile, setSelectedFile] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
@@ -20,19 +20,23 @@ export default function FileList() {
     const navigate = useNavigate();
     const { buildingId } = useParams();
 
-    const fetchFiles = useCallback(() => {
+    const fetchFiles = useCallback(() => { // 파일 Read 기능 
         axios.get(`/buildings/${buildingId}/files`)
             .then(response => {
-                setFiles(response.data);
+                if (Array.isArray(response.data)) {
+                    setFiles(response.data);
+                } else {
+                    setFiles([]);
+                }
             })
             .catch(error => {
                 console.error('Error fetching files:', error);
             });
     }, [buildingId]);
-    
+
     useEffect(() => {
         fetchFiles();
-    }, [fetchFiles]);
+    }, [navigate, fetchFiles]);
 
     useEffect(() => {
         if (selectedFile) {
@@ -70,26 +74,26 @@ export default function FileList() {
         };
     }, []);
 
-    const handleEditFileName = (file) => {
+    const handleEditFile = (file) => {
         setEditingFileId(file.id);
-        setNewFileName(file.fileName);
+        setNewFileData({ fileName: file.fileName, note: file.note });
     };
 
-    const handleSaveFileName = async (file, newFileName) => {
-        if (!newFileName) {
+    const handleFileSave = async (file) => { // 파일 Update 기능
+        if (!newFileData.fileName) {
             alert("파일 이름을 입력하지 않았습니다.");
             return;
         }
         try {
-            const url = `/files/${file.id}`;
-            await axios.patch(url, { contents: newFileName });
-            alert("파일 이름이 성공적으로 수정되었습니다.");
+            const url = `/buildings/${buildingId}/files/${file.id}`;
+            await axios.patch(url, newFileData);
+            alert("파일 정보가 성공적으로 수정되었습니다.");
             setEditingFileId(null);
             fetchFiles();
-            setSelectedFile((prevFile) => ({ ...prevFile, fileName: newFileName }));
+            setSelectedFile((prevFile) => ({ ...prevFile, ...newFileData }));
         } catch (error) {
-            console.error("파일 이름 수정 중 오류 발생:", error);
-            alert("파일 이름 수정 중 오류가 발생했습니다.");
+            console.error("파일 정보 수정 중 오류 발생:", error);
+            alert("파일 정보 수정 중 오류가 발생했습니다.");
         }
     };
 
@@ -99,19 +103,23 @@ export default function FileList() {
         setSelectedFile(file);
     };
 
-    const handleFileSelect = (buildingId, fileId) => {
+    const handleFileSelect = (buildingId, fileId) => { // TableList로 이동
         navigate(`/buildings/${buildingId}/files/${fileId}/tables`);
     };
 
-    const handleFileDelete = async (fileId) => {
+    const handleFileDelete = async (buildingId, fileId) => { // 파일 Delete 기능
         const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
         if (!confirmDelete) return;
 
         try {
-            const response = await axios.delete(`/files/${fileId}`);
+            const response = await axios.delete(`/buildings/${buildingId}/files/${fileId}`);
             if (response.status === 200) {
                 alert("파일 삭제 성공");
                 fetchFiles();
+                if (files.length === 1) {
+                    setFiles([]);
+                }
+                setSelectedFile(null);
             } else {
                 throw new Error('파일 삭제 실패');
             }
@@ -136,20 +144,7 @@ export default function FileList() {
         return files.filter(file => file.fileName.toLowerCase().includes(searchQuery.toLowerCase()));
     };
 
-    const formatDate = (dateString) => {
-        const options = { 
-            year: 'numeric', 
-            month: '2-digit', 
-            day: '2-digit', 
-            hour: '2-digit', 
-            minute: '2-digit', 
-            second: '2-digit',
-            hour12: false 
-        };
-        return new Date(dateString).toLocaleString('ko-KR', options);
-    };
-
-    const paginatedFiles = filteredFiles().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const paginatedFiles = Array.isArray(filteredFiles()) ? filteredFiles().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : [];
     const totalPages = Math.ceil(filteredFiles().length / itemsPerPage);
 
     return (
@@ -220,50 +215,55 @@ export default function FileList() {
                                 </tr>
                                 <tr>
                                     <td className='details-td'><strong>파일 이름</strong></td>
-                                    <td>{selectedFile.fileName}</td>
+                                    <td>{editingFileId === selectedFile.id ? (
+                                        <input
+                                            type="text"
+                                            value={newFileData.fileName}
+                                            onChange={(e) => setNewFileData({ ...newFileData, fileName: e.target.value })}
+                                        />
+                                    ) : (
+                                        selectedFile.fileName
+                                    )}</td>
                                 </tr>
                                 <tr>
-                                    <td className='details-td'><strong>업로드 날짜</strong></td>
-                                    <td>{formatDate(selectedFile.createTime)}</td>
-                                </tr>
-                                <tr>
-                                    <td className='details-td'><strong>최종 수정일</strong></td>
-                                    <td>{formatDate(selectedFile.updateTime)}</td>
+                                    <td className='details-td'><strong>비고</strong></td>
+                                    <td>{editingFileId === selectedFile.id ? (
+                                        <input
+                                            type="text"
+                                            value={newFileData.note}
+                                            onChange={(e) => setNewFileData({ ...newFileData, note: e.target.value })}
+                                        />
+                                    ) : (
+                                        selectedFile.note
+                                    )}</td>
                                 </tr>
                             </tbody>
                         </table>
                         <div className="file-action-buttons">
                             <div className="edit-name-wrapper">
                                 <div className="edit-name-container">
+                                    <span>파일 정보 수정</span>
                                     {editingFileId === selectedFile.id ? (
                                         <>
-                                            <input
-                                                type="text"
-                                                value={newFileName}
-                                                onChange={(e) => setNewFileName(e.target.value)}
-                                            />
                                             <IoIosSave
-                                                onClick={() => handleSaveFileName(selectedFile, newFileName)}
+                                                onClick={() => handleFileSave(selectedFile)}
                                                 className="save-file-button"
                                             />
                                         </>
                                     ) : (
-                                        <>
-                                            <span>파일 이름 수정</span>
-                                            <FaEdit
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleEditFileName(selectedFile);
-                                                }}
-                                                className="edit-file-button"
-                                            />
-                                        </>
+                                        <FaEdit
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleEditFile(selectedFile);
+                                            }}
+                                            className="edit-file-button"
+                                        />
                                     )}
                                 </div>
                             </div>
                             <div className="delete-file-container">
                                 <span>파일 삭제</span>
-                                <button className="trash-icon" onClick={() => handleFileDelete(selectedFile.id)}>
+                                <button className="trash-icon" onClick={() => handleFileDelete(buildingId, selectedFile.id)}>
                                     <FaTrash />
                                 </button>
                             </div>

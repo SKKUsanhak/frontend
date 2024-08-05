@@ -237,6 +237,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-family: "LineFont";
+    margin-bottom: 5px;
 }
 
 .delete-building-container {

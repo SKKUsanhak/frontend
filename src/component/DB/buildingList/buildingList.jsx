@@ -22,7 +22,7 @@ export default function BuildingList() {
         fetchBuildings();
     }, []);
 
-    const fetchBuildings = () => {
+    const fetchBuildings = () => { // 빌딩 Read 기능 
         axios.get('/buildings')
             .then(response => {
                 setBuildings(response.data);
@@ -73,7 +73,7 @@ export default function BuildingList() {
         setNewBuildingData(building);
     };
 
-    const handleSaveBuilding = async () => {
+    const handleSaveBuilding = async () => { // 빌딩 Update 기능
         if (!newBuildingData.buildingName || !newBuildingData.address) {
             alert("건물 이름과 주소를 입력해 주세요.");
             return;
@@ -97,15 +97,19 @@ export default function BuildingList() {
         setSelectedBuilding(building);
     };
 
-    const handleBuildingDelete = async (buildingId) => {
+    const handleBuildingDelete = async (buildingId) => { // 빌딩 Delete 기능
         const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
         if (!confirmDelete) return;
 
         try {
             const response = await axios.delete(`/buildings/${buildingId}`);
-            if (response.status === 204) {
+            if (response.status === 200) {
                 alert("건물 삭제 성공");
                 fetchBuildings();
+                if (buildings.length === 1) {
+                    setBuildings([]);
+                }
+                setSelectedBuilding(null);
             } else {
                 throw new Error('건물 삭제 실패');
             }
@@ -130,11 +134,11 @@ export default function BuildingList() {
         return buildings.filter(building => building.buildingName.toLowerCase().includes(searchQuery.toLowerCase()));
     };
 
-    const handleBuildingSelect = (buildingId) => {
+    const handleBuildingSelect = (buildingId) => { // FileList로 이동
         navigate(`/buildings/${buildingId}/files`);
     }
 
-    const paginatedBuildings = filteredBuildings().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    const paginatedBuildings = Array.isArray(filteredBuildings()) ? filteredBuildings().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : [];
     const totalPages = Math.ceil(filteredBuildings().length / itemsPerPage);
 
     return (
@@ -157,7 +161,7 @@ export default function BuildingList() {
                 </div>
                 <div className="building-list-content">
                     <div className="building-list">
-                        {buildings && buildings.length === 0 ? (
+                        {buildings.length === 0 ? (
                             <p>현재 DB에 건물이 없습니다.</p>
                         ) : (
                             <table className="table">
@@ -181,11 +185,13 @@ export default function BuildingList() {
                                 </tbody>
                             </table>
                         )}
-                        <div className="pagination">
-                            <GoTriangleLeft onClick={handlePreviousPage} disabled={currentPage === 1} className="pagination-icon" />
-                            <span>{currentPage}</span>
-                            <GoTriangleRight onClick={handleNextPage} disabled={currentPage === totalPages} className="pagination-icon" />
-                        </div>
+                        {buildings.length > 0 && (
+                            <div className="pagination">
+                                <GoTriangleLeft onClick={handlePreviousPage} disabled={currentPage === 1} className="pagination-icon" />
+                                <span>{currentPage}</span>
+                                <GoTriangleRight onClick={handleNextPage} disabled={currentPage === totalPages} className="pagination-icon" />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -205,7 +211,7 @@ export default function BuildingList() {
                                         {editingBuildingId === selectedBuilding.id ? (
                                             <input
                                                 type="text"
-                                                value={newBuildingData.buildingName}
+                                                value={newBuildingData.buildingName || ''}
                                                 onChange={(e) => setNewBuildingData({ ...newBuildingData, buildingName: e.target.value })}
                                             />
                                         ) : (
@@ -219,7 +225,7 @@ export default function BuildingList() {
                                         {editingBuildingId === selectedBuilding.id ? (
                                             <input
                                                 type="text"
-                                                value={newBuildingData.address}
+                                                value={newBuildingData.address || ''}
                                                 onChange={(e) => setNewBuildingData({ ...newBuildingData, address: e.target.value })}
                                             />
                                         ) : (
@@ -233,7 +239,7 @@ export default function BuildingList() {
                                         {editingBuildingId === selectedBuilding.id ? (
                                             <input
                                                 type="text"
-                                                value={newBuildingData.totalArea}
+                                                value={newBuildingData.totalArea || ''}
                                                 onChange={(e) => setNewBuildingData({ ...newBuildingData, totalArea: e.target.value })}
                                             />
                                         ) : (
@@ -247,7 +253,7 @@ export default function BuildingList() {
                                         {editingBuildingId === selectedBuilding.id ? (
                                             <input
                                                 type="number"
-                                                value={newBuildingData.groundFloors}
+                                                value={newBuildingData.groundFloors || ''}
                                                 onChange={(e) => setNewBuildingData({ ...newBuildingData, groundFloors: e.target.value })}
                                             />
                                         ) : (
@@ -261,7 +267,7 @@ export default function BuildingList() {
                                         {editingBuildingId === selectedBuilding.id ? (
                                             <input
                                                 type="number"
-                                                value={newBuildingData.basementFloors}
+                                                value={newBuildingData.basementFloors || ''}
                                                 onChange={(e) => setNewBuildingData({ ...newBuildingData, basementFloors: e.target.value })}
                                             />
                                         ) : (

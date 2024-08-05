@@ -220,6 +220,7 @@
     justify-content: space-between;
     align-items: center;
     vertical-align: middle;
+    margin-bottom: 5px;
 }
 
 .file-list-header .search-container {

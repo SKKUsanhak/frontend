@@ -43,13 +43,13 @@ export const UploadHandler = async (data, fileName, comments, navigate, building
         formData.append("fileInfo", fileInfoBlob);
 
         // File upload
-        const response = await axios.post(`/buildings/${buildingId}/files`, formData, {
+        await axios.post(`/buildings/${buildingId}/files`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         });
 
-        alert('DB 업로드 성공', response.data);
+        alert('DB 업로드 성공');
 
         // Navigate to the new URL
         navigate(`/buildings/${buildingId}/files`);

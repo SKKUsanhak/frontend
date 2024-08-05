@@ -21,7 +21,7 @@ export default function TableList() {
     const tableListContainerRef = useRef(null);
     const navigate = useNavigate();
 
-    const fetchTable = useCallback(() => {
+    const fetchTable = useCallback(() => { // 테이블 Read 기능 
         axios.get(`/buildings/${buildingId}/files/${fileId}/tables`)
             .then(response => {
                 setTableList(response.data);
@@ -69,7 +69,7 @@ export default function TableList() {
         };
     }, []);
 
-    const handleAddTable = async () => {
+    const handleAddTable = async () => { // 테이블 Create 기능
         const newTableName = prompt("새로운 테이블 이름을 입력하세요:");
         if (!newTableName) {
             alert("테이블 이름을 입력하지 않았습니다.");
@@ -77,8 +77,8 @@ export default function TableList() {
         }
 
         try {
-            const url = `/files/${fileId}/tables`;
-            await axios.post(url, { contents: newTableName }, { headers: { 'Content-Type': 'application/json' } });
+            const url = `/buildings/${buildingId}/files/${fileId}/tables`;
+            await axios.post(url, { name: newTableName }, { headers: { 'Content-Type': 'application/json' } });
             alert("테이블이 성공적으로 추가되었습니다.");
             fetchTable();
         } catch (error) {
@@ -92,7 +92,7 @@ export default function TableList() {
         setNewTableName(table.tableTitle);
     };
 
-    const handleSaveTableName = async (table) => {
+    const handleSaveTableName = async (table) => { // 테이블 Update 기능
         if (!newTableName) {
             alert("테이블 이름을 입력하지 않았습니다.");
             return;
@@ -100,7 +100,7 @@ export default function TableList() {
 
         try {
             const url = `/buildings/${buildingId}/files/${fileId}/tables/${table.id}`;
-            await axios.patch(url, { contents: newTableName });
+            await axios.patch(url, { name: newTableName });
             alert("테이블 이름이 성공적으로 수정되었습니다.");
             setEditingTableId(null);
             fetchTable();
@@ -111,11 +111,11 @@ export default function TableList() {
         }
     };
 
-    const handleTableSelect = (buildingId, fileId, tableId) => {
+    const handleTableSelect = (buildingId, fileId, tableId) => { // 테이블 데이터로 이동 
         navigate(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas`);
     };
 
-    const handleTableDelete = async (tableId) => {
+    const handleTableDelete = async (tableId) => { // 테이블 Delete 기능
         const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
         if (!confirmDelete) return;
 
@@ -146,6 +146,19 @@ export default function TableList() {
 
     const handlePreviousPage = () => {
         setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
+    };
+
+    const formatDate = (dateString) => {
+        const options = { 
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit', 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit',
+            hour12: false 
+        };
+        return new Date(dateString).toLocaleString('ko-KR', options);
     };
 
     return (
@@ -216,7 +229,15 @@ export default function TableList() {
                                 </tr>
                                 <tr>
                                     <td className='details-td'><strong>테이블 이름</strong></td>
-                                    <td>{selectedTable.tableTitle}</td>
+                                    <td>{editingTableId === selectedTable.id ? (
+                                        <input
+                                            type="text"
+                                            value={newTableName}
+                                            onChange={(e) => setNewTableName(e.target.value)}
+                                        />
+                                    ) : (
+                                        selectedTable.tableTitle
+                                    )}</td>
                                 </tr>
                                 <tr>
                                     <td className='details-td'><strong>완료 여부</strong></td>
@@ -227,29 +248,22 @@ export default function TableList() {
                         <div className="table-action-buttons">
                             <div className="edit-name-wrapper">
                                 <div className="edit-name-container">
+                                    <span>테이블 이름 수정</span>
                                     {editingTableId === selectedTable.id ? (
                                         <>
-                                            <input
-                                                type="text"
-                                                value={newTableName}
-                                                onChange={(e) => setNewTableName(e.target.value)}
-                                            />
                                             <IoIosSave
                                                 onClick={() => handleSaveTableName(selectedTable)}
                                                 className="save-table-button"
                                             />
                                         </>
                                     ) : (
-                                        <>
-                                            <span>테이블 이름 수정</span>
-                                            <FaEdit
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleEditTableName(selectedTable);
-                                                }}
-                                                className="edit-table-button"
-                                            />
-                                        </>
+                                        <FaEdit
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleEditTableName(selectedTable);
+                                            }}
+                                            className="edit-table-button"
+                                        />
                                     )}
                                 </div>
                             </div>
