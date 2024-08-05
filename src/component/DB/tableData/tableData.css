@@ -7,6 +7,18 @@
     overflow: hidden; /* 웹페이지 전체에 스크롤이 생기지 않도록 설정 */
 }
 
+.title-name {
+    margin-top: 80px;
+    font-family: "LineFont";
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    white-space: nowrap;
+    box-sizing: content-box; /* Ensure the input width includes the padding */
+}
+
 .table-section {
     display: flex;
     flex-direction: column;
@@ -312,4 +324,45 @@ input:checked + .slider:before {
     margin-right: 5px;
     display: flex;
     align-items: center;
+}
+
+.version-note {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.version-note > div {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.note-textarea {
+    width: 100%;
+    height: 300px;
+    margin-left: 10px;
+    margin-right: 10px;
+    resize: none;
+    font-family: "LineFont";
+}
+
+.version-note div {
+    display: flex;
+    width: 100%;
+    align-items: flex-start; /* 왼쪽 정렬 */
+    align-items: center;
+}
+
+.version-note .file-info-label {
+    white-space: nowrap; /* 라벨이 줄바꿈 되지 않도록 설정 */
+    margin-right: 5px; /* 라벨과 입력 필드 사이 간격 */
+    margin-left: 10px;
+    font-family: "LineFont";
+}
+
+.version-note input {
+    flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
+    margin-right: 10px;
+    font-family: "LineFont";
 }

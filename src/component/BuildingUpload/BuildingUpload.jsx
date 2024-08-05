@@ -20,6 +20,12 @@ const BuildingUpload = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+
+        if ((name === 'groundFloors' || name === 'basementFloors') && value < 0) {
+            alert('음수는 입력할 수 없습니다.');
+            return;
+        }
+
         setFormData({
             ...formData,
             [name]: value
@@ -36,7 +42,7 @@ const BuildingUpload = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!formData.buildingName.trim() || !formData.address.trim()) {
-            alert('이름과 주소지를 입력해 주세요.');
+            alert('건물명과 주소지는 필수 입력 항목입니다.');
             return;
         }
         // console.log('Submitting form data:', formData); // 요청 데이터 출력
@@ -58,7 +64,6 @@ const BuildingUpload = () => {
                         name="buildingName"
                         value={formData.buildingName}
                         onChange={handleChange}
-                        required
                     />
                 </div>
                 <div className="address-search">
@@ -69,8 +74,7 @@ const BuildingUpload = () => {
                             name="address"
                             value={formData.address}
                             onChange={handleChange}
-                            readOnly
-                            required
+                            
                         />
                         <button type="button" className="search-button" onClick={() => setIsModalOpen(true)}>
                             <FaSearch />
@@ -91,6 +95,7 @@ const BuildingUpload = () => {
                     <input
                         type="number"
                         name="groundFloors"
+                        min="0"
                         value={formData.groundFloors}
                         onChange={handleChange}
                     />
@@ -100,6 +105,7 @@ const BuildingUpload = () => {
                     <input
                         type="number"
                         name="basementFloors"
+                        min="0"
                         value={formData.basementFloors}
                         onChange={handleChange}
                     />

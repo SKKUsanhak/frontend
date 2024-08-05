@@ -23,7 +23,7 @@ const Header = () => {
                 </div>
                 <nav className="header__nav" role="navigation" aria-label="메인 메뉴">
                     <ul className="nav__list">
-                        <li className="nav__item"><a href="/buildings/upload">File Upload</a></li>
+                        <li className="nav__item"><a href="/buildings/upload">Upload</a></li>
                         <li className="nav__item"><a href="/buildings">DataBase</a></li>
                     </ul>
                 </nav>

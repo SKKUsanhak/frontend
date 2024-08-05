@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { RiQuestionLine } from "react-icons/ri";
 import { TbArrowBackUp } from "react-icons/tb";
-import './tableData.css'
+import './tableData.css';
 
 export default function TableData() {
-    const { fileId, tableId } = useParams();
+    const { buildingId, fileId, tableId } = useParams();
+    const location = useLocation();
+    const versionId = new URLSearchParams(location.search).get('versionId');
     const [tableData, setTableData] = useState(null);
     const [columns, setColumns] = useState([]);
     const [rows, setRows] = useState([]);
@@ -15,18 +17,24 @@ export default function TableData() {
     const [toggle, setToggle] = useState(false);
     const [selectedCell, setSelectedCell] = useState(null);
     const [deleteEnabled, setDeleteEnabled] = useState(false);
+    const [versionName, setVersionName] = useState('');
+    const [note, setNote] = useState('');
     const containerRef = useRef(null);
     const navigate = useNavigate();
 
     const fetchData = useCallback(() => {
-        axios.get(`/files/${fileId}/tables/${tableId}/datas`)
+        axios.get(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas`, {
+            params: { versionId: versionId },
+            headers: { 'Content-Type': 'application/json' }
+        })
             .then(response => {
                 setTableData(response.data);
+                console.log(response.data);
             })
             .catch(error => {
                 console.error('Error fetching table data:', error);
             });
-    }, [fileId, tableId]);
+    }, [buildingId, fileId, tableId, versionId]);
 
     useEffect(() => {
         fetchData();
@@ -68,36 +76,38 @@ export default function TableData() {
         setColumns(newColumns);
     };
 
-    const handleHeaderContentBlur = (fileId, tableId, index, value) => {
+    const handleHeaderContentBlur = (buildingId, fileId, tableId, columnIndex, value) => {
         setEditQueue([...editQueue, {
             method: 'patch',
-            url: `/files/${fileId}/tables/${tableId}/columns/${index}`,
-            data: { contents: value },
+            url: `/buildings/${buildingId}/files/${fileId}/tables/${tableId}/columns`,
+            params: { columnIndex },
+            data: { name: value },
             headers: { 'Content-Type': 'application/json' }
         }]);
     };
 
-    const handleMakeHeader = (fileId, tableId, columns) => {
+    const handleMakeHeader = (buildingId, fileId, tableId, columns) => {
         const newColumnName = prompt("새로운 열 이름을 입력하세요:");
         if (!newColumnName) {
             alert("열 이름을 입력하지 않았습니다.");
             return;
         }
-    
+
         const newColumnIndex = columns.length;
         const newTable = table.map(row => [...row, { rowNumber: row[0].rowNumber, columnName: newColumnName, contents: '' }]);
-    
+
         setColumns([...columns, newColumnName]);
         setTable(newTable);
         setEditQueue([...editQueue, {
             method: 'post',
-            url: `/files/${fileId}/tables/${tableId}/columns/${newColumnIndex}`,
-            data: { contents: newColumnName },
+            url: `/buildings/${buildingId}/files/${fileId}/tables/${tableId}/columns`,
+            params: { columnIndex: newColumnIndex },
+            data: { name: newColumnName },
             headers: { 'Content-Type': 'application/json' }
         }]);
     };
 
-    const handleMakeRow = (fileId, tableId, rows, columns, table) => {
+    const handleMakeRow = (buildingId, fileId, tableId, rows, columns, table) => {
         const newRowIndex = Math.max(...rows) + 1;
         const newRow = columns.map(columnName => ({ rowNumber: newRowIndex, columnName, contents: '' }));
 
@@ -106,12 +116,13 @@ export default function TableData() {
         setTable(newTable);
         setEditQueue([...editQueue, {
             method: 'post',
-            url: `/files/${fileId}/tables/${tableId}/rows/${newRowIndex}`,
+            url: `/buildings/${buildingId}/files/${fileId}/tables/${tableId}/rows`,
+            params: { rowIndex: newRowIndex },
             headers: { 'Content-Type': 'application/json' }
         }]);
     };
 
-    const handleDeleteRow = (fileId, tableId, rowIndex) => {
+    const handleDeleteRow = (buildingId, fileId, tableId, rowIndex) => {
         const actualRowIndex = rowIndex + 2;
         if (!selectedCell) return;
         if (isNaN(actualRowIndex) || !rows.includes(actualRowIndex)) {
@@ -120,27 +131,29 @@ export default function TableData() {
         }
         const confirmDelete = window.confirm(`정말로 ${rowIndex} 행을 삭제하시겠습니까?`);
         if (!confirmDelete) return;
-        axios.delete(`/files/${fileId}/tables/${tableId}/rows/${actualRowIndex}`)
-            .then(() => {
-                alert("행 삭제 성공");
-                const newTable = table.filter(row => row[0].rowNumber !== actualRowIndex)
-                                      .map((row, index) => row.map(cell => ({
-                                          ...cell, 
-                                          rowNumber: index + 2
-                                      })));
-                const newRows = newTable.map(row => row[0].rowNumber);
-                setTable(newTable);
-                setRows(newRows);
-                setSelectedCell(null);
-                setDeleteEnabled(false);
-            })
-            .catch(error => {
-                console.error("Error deleting row:", error);
-                alert("Error deleting the row.");
-            });
+        axios.delete(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/rows`, {
+            params: { rowIndex: actualRowIndex }
+        })
+        .then(() => {
+            alert("행 삭제 성공");
+            const newTable = table.filter(row => row[0].rowNumber !== actualRowIndex)
+                                  .map((row, index) => row.map(cell => ({
+                                      ...cell, 
+                                      rowNumber: index + 2
+                                  })));
+            const newRows = newTable.map(row => row[0].rowNumber);
+            setTable(newTable);
+            setRows(newRows);
+            setSelectedCell(null);
+            setDeleteEnabled(false);
+        })
+        .catch(error => {
+            console.error("Error deleting row:", error);
+            alert("Error deleting the row.");
+        });
     };
 
-    const handleDeleteColumn = (fileId, tableId, columnIndex) => {
+    const handleDeleteColumn = (buildingId, fileId, tableId, columnIndex) => {
         if (!selectedCell) return;
         if (isNaN(columnIndex) || columnIndex < 0 || columnIndex >= columns.length) {
             alert("유효한 열 번호를 입력하세요.");
@@ -148,20 +161,22 @@ export default function TableData() {
         }
         const confirmDelete = window.confirm(`정말로 ${columns[columnIndex]} 열을 삭제하시겠습니까?`);
         if (!confirmDelete) return;
-        axios.delete(`/files/${fileId}/tables/${tableId}/columns/${columnIndex}`)
-            .then(() => {
-                alert("열 삭제 성공");
-                const newColumns = columns.filter((_, idx) => idx !== columnIndex);
-                setColumns(newColumns);
-                const newTable = table.map(row => row.filter((_, idx) => idx !== columnIndex));
-                setTable(newTable);
-                setSelectedCell(null);
-                setDeleteEnabled(false);
-            })
-            .catch(error => {
-                console.error("열 삭제 중 오류 발생:", error);
-                alert("열 삭제 실패");
-            });
+        axios.delete(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/columns`, {
+            params: { columnIndex }
+        })
+        .then(() => {
+            alert("열 삭제 성공");
+            const newColumns = columns.filter((_, idx) => idx !== columnIndex);
+            setColumns(newColumns);
+            const newTable = table.map(row => row.filter((_, idx) => idx !== columnIndex));
+            setTable(newTable);
+            setSelectedCell(null);
+            setDeleteEnabled(false);
+        })
+        .catch(error => {
+            console.error("열 삭제 중 오류 발생:", error);
+            alert("열 삭제 실패");
+        });
     };
 
     const handleCellChange = (rowIndex, cellIndex, value) => {
@@ -170,10 +185,11 @@ export default function TableData() {
         setTable(newTable);
     };
 
-    const handleCellBlur = (fileId, tableId, rowIndex, cellIndex, value) => {
+    const handleCellBlur = (buildingId, fileId, tableId, rowIndex, columnIndex, value) => {
         setEditQueue([...editQueue, {
             method: 'patch',
-            url: `/files/${fileId}/tables/${tableId}/columns/${cellIndex}/rows/${rowIndex+2}`,
+            url: `/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas`,
+            params: { columnIndex, rowIndex },
             data: { contents: value },
             headers: { 'Content-Type': 'application/json' }
         }]);
@@ -186,31 +202,23 @@ export default function TableData() {
 
     const handleSaveChanges = async () => {
         try {
-            for (const request of editQueue) {
-                const response = await axios(request);
-                if (response.status !== 200) {
-                    alert('일부 변경 사항 저장 실패');
-                    setEditQueue([]);
-                    return;
+            const versioningDto = { version: versionName, note };
+            const response = await axios.post(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/versions`, versioningDto, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            console.log(response.status)
+            if (response.status === 201) {
+                const newVersionId = response.data.id;
+                for (const request of editQueue) {
+                    request.url += `?versionId=${newVersionId}`;
+                    await axios(request);
                 }
-            }
-            alert('모든 변경 사항이 성공적으로 저장되었습니다.');
-            if (toggle) {
-                const finalResponse = await axios.post(`/files/${fileId}/finalTables/${tableId}`);
-                if (finalResponse.status === 200) {
-                    alert('최종 데이터로 전환되었습니다.');
-                } else {
-                    alert('최종 데이터 전환 실패');
-                }
-            }
-            const updateDate = await axios.patch(`/files/${fileId}/updateDate`);
-            if(updateDate.status === 200){
-                console.log('최종 수정일 업데이트 완료');
+                alert('모든 변경 사항이 성공적으로 저장되었습니다.');
+                fetchData(fileId, tableId);
+                setEditQueue([]);
             } else {
-                console.log('최종 수정일 업데이트 실패');
+                alert('버전 생성 실패');
             }
-            fetchData(fileId, tableId);
-            setEditQueue([]);
         } catch (error) {
             alert('오류가 발생했습니다.');
             console.error('Error:', error);
@@ -248,7 +256,7 @@ export default function TableData() {
                                                     type="text"
                                                     value={col}
                                                     onChange={(e) => handleHeaderContentChange(index, e.target.value)}
-                                                    onBlur={(e) => handleHeaderContentBlur(fileId, tableId, index, e.target.value)}
+                                                    onBlur={(e) => handleHeaderContentBlur(buildingId, fileId, tableId, index, e.target.value)}
                                                 />
                                             </th>
                                         ))}
@@ -274,7 +282,7 @@ export default function TableData() {
                                                         type="text"
                                                         value={cell.contents}
                                                         onChange={(e) => handleCellChange(rowIndex, cellIndex, e.target.value)}
-                                                        onBlur={(e) => handleCellBlur(fileId, tableId, rowIndex, cellIndex, e.target.value)}
+                                                        onBlur={(e) => handleCellBlur(buildingId, fileId, tableId, rowIndex, cellIndex, e.target.value)}
                                                         className={selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex ? 'highlight-input' : ''}
                                                     />
                                                 </td>
@@ -287,12 +295,36 @@ export default function TableData() {
                     </div>
                     <div className='control-section'>
                         <div className='button-group'>
-                            <button className="add-button" onClick={() => handleMakeRow(fileId, tableId, rows, columns, table)}>행 추가</button>
-                            <button className="delete-button" onClick={() => handleDeleteRow(fileId, tableId, selectedCell ? selectedCell.rowIndex : null)} disabled={!deleteEnabled}>행 삭제</button>
+                            <button className="add-button" onClick={() => handleMakeRow(buildingId, fileId, tableId, rows, columns, table)}>행 추가</button>
+                            <button className="delete-button" onClick={() => handleDeleteRow(buildingId, fileId, tableId, selectedCell ? selectedCell.rowIndex : null)} disabled={!deleteEnabled}>행 삭제</button>
                         </div>
                         <div className='button-group'>
-                            <button className="add-button" onClick={() => handleMakeHeader(fileId, tableId, columns)}>열 추가</button>
-                            <button className="delete-button" onClick={() => handleDeleteColumn(fileId, tableId, selectedCell ? selectedCell.cellIndex : null)} disabled={!deleteEnabled}>열 삭제</button>
+                            <button className="add-button" onClick={() => handleMakeHeader(buildingId, fileId, tableId, columns)}>열 추가</button>
+                            <button className="delete-button" onClick={() => handleDeleteColumn(buildingId, fileId, tableId, selectedCell ? selectedCell.cellIndex : null)} disabled={!deleteEnabled}>열 삭제</button>
+                        </div>
+                        <div className='version-note'>
+                            <div>
+                                <span className="file-info-label">버전 이름:</span>
+                                <input
+                                    type="text"
+                                    placeholder="버전 이름 입력"
+                                    value={versionName}
+                                    onChange={(e) => setVersionName(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <span className="file-info-label">비고</span>
+                            </div>
+                            <div>
+                                <textarea
+                                    className='note-textarea'
+                                    placeholder="비고 (최대 200자)"
+                                    maxLength="200"
+                                    value={note}
+                                    onChange={(e) => setNote(e.target.value)}
+                                />
+                            </div>
                         </div>
                         <div className='save-button-group'>
                             <div className="toggle-container">

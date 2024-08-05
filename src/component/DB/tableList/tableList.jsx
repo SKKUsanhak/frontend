@@ -12,19 +12,32 @@ export default function TableList() {
     const [tableList, setTableList] = useState([]);
     const [editingTableId, setEditingTableId] = useState(null);
     const [newTableName, setNewTableName] = useState('');
+    const [newNote, setNewNote] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTable, setSelectedTable] = useState(null);
+    const [versionList, setVersionList] = useState([]);
+    const [selectedVersions, setSelectedVersions] = useState({});
     const itemsPerPage = 15;
 
     const tableDetailsRef = useRef(null);
     const tableListContainerRef = useRef(null);
+    const dropdownRef = useRef(null);
     const navigate = useNavigate();
 
-    const fetchTable = useCallback(() => { // 테이블 Read 기능 
+    const fetchTable = useCallback(() => { // 테이블 Read 기능
         axios.get(`/buildings/${buildingId}/files/${fileId}/tables`)
             .then(response => {
                 setTableList(response.data);
+                // 테이블 목록이 로드될 때 각 테이블의 최신 버전을 선택
+                const initialVersions = {};
+                response.data.forEach(table => {
+                    if (table.dataVersionList.length > 0) {
+                        initialVersions[table.id] = table.dataVersionList[table.dataVersionList.length - 1].id;
+                    }
+                });
+                setSelectedVersions(initialVersions);
+                console.log(response.data);
             })
             .catch(error => {
                 console.error('Error fetching table data:', error);
@@ -43,6 +56,10 @@ export default function TableList() {
             if (tableDetailsRef.current) {
                 tableDetailsRef.current.classList.add('visible');
             }
+
+            setVersionList(selectedTable.dataVersionList);
+            const latestVersion = selectedTable.dataVersionList[selectedTable.dataVersionList.length - 1].id;
+            setSelectedVersions(prev => ({ ...prev, [selectedTable.id]: latestVersion }));
         } else {
             if (tableListContainerRef.current) {
                 tableListContainerRef.current.classList.remove('expanded');
@@ -57,7 +74,8 @@ export default function TableList() {
         const handleClickOutside = (event) => {
             if (
                 tableDetailsRef.current && !tableDetailsRef.current.contains(event.target) &&
-                tableListContainerRef.current && !tableListContainerRef.current.contains(event.target)
+                tableListContainerRef.current && !tableListContainerRef.current.contains(event.target) &&
+                !dropdownRef.current.contains(event.target)
             ) {
                 setSelectedTable(null);
             }
@@ -87,12 +105,13 @@ export default function TableList() {
         }
     };
 
-    const handleEditTableName = (table) => {
+    const handleEditTableName = (table) => { 
         setEditingTableId(table.id);
         setNewTableName(table.tableTitle);
+        setNewNote(table.dataVersionList.find(version => version.id === selectedVersions[table.id])?.note || '');
     };
 
-    const handleSaveTableName = async (table) => { // 테이블 Update 기능
+    const handleSaveTableName = async (table) => { // 테이블 Update 기능 (이름만)
         if (!newTableName) {
             alert("테이블 이름을 입력하지 않았습니다.");
             return;
@@ -100,22 +119,22 @@ export default function TableList() {
 
         try {
             const url = `/buildings/${buildingId}/files/${fileId}/tables/${table.id}`;
-            await axios.patch(url, { name: newTableName });
-            alert("테이블 이름이 성공적으로 수정되었습니다.");
+            await axios.patch(url, { name: newTableName, note: newNote });
+            alert("테이블 정보가 성공적으로 수정되었습니다.");
             setEditingTableId(null);
             fetchTable();
             setSelectedTable(prevTable => ({ ...prevTable, tableTitle: newTableName }));
         } catch (error) {
-            console.error("테이블 이름 수정 중 오류 발생:", error);
-            alert("테이블 이름 수정 중 오류가 발생했습니다.");
+            console.error("테이블 정보 수정 중 오류 발생:", error);
+            alert("테이블 정보 수정 중 오류가 발생했습니다.");
         }
     };
 
-    const handleTableSelect = (buildingId, fileId, tableId) => { // 테이블 데이터로 이동 
-        navigate(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas`);
+    const handleTableSelect = (buildingId, fileId, tableId, versionId) => { // 테이블 데이터 보기
+        navigate(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas?versionId=${versionId}`);
     };
 
-    const handleTableDelete = async (tableId) => { // 테이블 Delete 기능
+    const handleTableDelete = async (tableId) => { // 테이블 Delete 기능 
         const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
         if (!confirmDelete) return;
 
@@ -124,6 +143,10 @@ export default function TableList() {
             if (response.status === 200) {
                 alert("테이블 삭제 성공");
                 fetchTable();
+                if (tableList.length === 1) {
+                    setTableList([]);
+                }
+                setSelectedTable(null);
             } else {
                 throw new Error('테이블 삭제 실패');
             }
@@ -196,15 +219,26 @@ export default function TableList() {
                                 <thead>
                                     <tr>
                                         <th>테이블 이름</th>
-                                        <th>완료 여부</th>
+                                        <th>버전 정보</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {filteredTables().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((table, index) => (
                                         <tr key={index} onClick={() => setSelectedTable(table)} className={selectedTable && selectedTable.id === table.id ? 'selected' : ''}>
-                                            <td>{table.tableTitle}</td>
-                                            <td>{table.finalData !== undefined ? (table.finalData ? 'O' : 'X') : 'N/A'}</td>
-                                        </tr>
+                                        <td>{table.tableTitle}</td>
+                                        <td className='drop-down'>
+                                            <select
+                                                ref={dropdownRef}
+                                                value={selectedVersions[table.id] || ''}
+                                                onClick={(e) => e.stopPropagation()}
+                                                onChange={(e) => setSelectedVersions(prev => ({ ...prev, [table.id]: e.target.value }))}
+                                            >
+                                                {table.dataVersionList.map(version => (
+                                                    <option key={version.id} value={version.id}>{version.version}</option>
+                                                ))}
+                                            </select>
+                                        </td>
+                                    </tr>
                                     ))}
                                 </tbody>
                             </table>
@@ -240,15 +274,31 @@ export default function TableList() {
                                     )}</td>
                                 </tr>
                                 <tr>
-                                    <td className='details-td'><strong>완료 여부</strong></td>
-                                    <td>{selectedTable.finalData !== undefined ? (selectedTable.finalData ? 'O' : 'X') : 'N/A'}</td>
+                                    <td className='details-td'><strong>최종 수정일</strong></td>
+                                    <td>{formatDate(selectedTable.dataVersionList.find(version => version.id === selectedVersions[selectedTable.id])?.updateTime)}</td>
+                                </tr>
+                                <tr>
+                                    <td className='details-td'><strong>비고</strong></td>
+                                    <td>{editingTableId === selectedTable.id ? (
+                                        <input
+                                            type="text"
+                                            value={newNote}
+                                            onChange={(e) => setNewNote(e.target.value)}
+                                        />
+                                    ) : (
+                                        selectedTable.dataVersionList.find(version => version.id === selectedVersions[selectedTable.id])?.note
+                                    )}</td>
+                                </tr>
+                                <tr>
+                                    <td className='details-td'><strong>버전</strong></td>
+                                    <td>{selectedTable.dataVersionList.find(version => version.id === selectedVersions[selectedTable.id])?.version}</td>
                                 </tr>
                             </tbody>
                         </table>
                         <div className="table-action-buttons">
                             <div className="edit-name-wrapper">
                                 <div className="edit-name-container">
-                                    <span>테이블 이름 수정</span>
+                                    <span>테이블 정보 수정</span>
                                     {editingTableId === selectedTable.id ? (
                                         <>
                                             <IoIosSave
@@ -273,7 +323,7 @@ export default function TableList() {
                                     <FaTrash />
                                 </button>
                             </div>
-                            <button className="table-view-button" onClick={() => handleTableSelect(buildingId, fileId, selectedTable.id)}>테이블 데이터 보기</button>
+                            <button className="table-view-button" onClick={() => handleTableSelect(buildingId, fileId, selectedTable.id, selectedVersions[selectedTable.id])}>테이블 데이터 보기</button>
                         </div>
                     </div>
                 )}
