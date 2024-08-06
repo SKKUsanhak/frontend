@@ -22,7 +22,7 @@ export default function ExcelEditor() {
     const [RowRanges, setRowRanges] = useState({}); // 행 범위 추가
     const [selectedCell, setSelectedCell] = useState(null); // 선택된 셀 상태 추가
     const [fileName, setFileName] = useState(location.state?.fileName || ''); // 파일 이름 상태 추가
-    const [comments, setComments] = useState(location.state?.note || ''); // 비고 상태 추가
+    const [comments] = useState(location.state?.note || ''); // 비고 상태 추가
     const { fileData, buildingId } = location.state || {};
 
     const { // 열 컨트롤 함수들 
@@ -130,6 +130,10 @@ export default function ExcelEditor() {
     const handleRowRangeChange = (sheetIndex, e) => { // 행 범위 변경
         const { name, value } = e.target;
         const intValue = value === '' ? '' : parseInt(value, 10);
+        if (intValue < 0) {
+            alert("음수는 입력할 수 없습니다.");
+            return;
+        }
         const maxRow = data[currentSheetIndex]?.rows.length - 1 ?? 0;
     
         setRowRanges(prevRanges => {
@@ -208,6 +212,36 @@ export default function ExcelEditor() {
     const handleUpload = () => {
         UploadHandler(data, fileName, comments, navigate, buildingId);
     };
+
+    const handleTableIndexChange = (e) => {
+        const inputValue = e.target.value;
+        const value = inputValue === '' ? '' : Number(inputValue);
+        if (value < 0) {
+            alert("음수는 입력할 수 없습니다.");
+            return;
+        }
+        const limitedValue = value === '' ? '' : Math.min(Math.max(value, 1), data.length);
+        setTableIndex(limitedValue);
+    }
+    
+
+    const handleRowIndexChange = (e) => {
+        const value = e.target.value === '' ? '' : Math.min(Number(e.target.value), data[currentSheetIndex]?.rows.length ?? 0);
+        if (value < 0) {
+            alert("음수는 입력할 수 없습니다.");
+            return;
+        }
+        setRowIndex(value === '' ? '' : value);
+    }
+
+    const handleColIndexChange = (e) => {
+        const value = e.target.value === '' ? '' : Math.min(Number(e.target.value), data[currentSheetIndex]?.columns.length ?? 0);
+        if (value < 0) {
+            alert("음수는 입력할 수 없습니다.");
+            return;
+        }
+        setColIndex(value === '' ? '' : value);
+    }
 
     return (
         <div className="excel-editor-container">
@@ -289,12 +323,9 @@ export default function ExcelEditor() {
                         <input
                             type="number"
                             value={tableIndex}
-                            onChange={(e) => {
-                                const value = e.target.value === '' ? '' : Math.min(Math.max(Number(e.target.value), 1), data.length); // 사용자 입력값을 현재 테이블 범위 내로 제한
-                                setTableIndex(value === '' ? '' : value);
-                            }}
+                            onChange={handleTableIndexChange}
                             placeholder="테이블 번호 지정"
-                            min="1"
+                            min="0"
                             max={data.length + 1}
                         />
                         <button onClick={() => addTable(tableIndex - 1)}>테이블 추가</button>
@@ -305,7 +336,7 @@ export default function ExcelEditor() {
                         <input
                             type="number"
                             value={rowIndex}
-                            onChange={(e) => setRowIndex(e.target.value === '' ? '' : Math.min(Number(e.target.value), data[currentSheetIndex]?.rows.length ?? 0))}
+                            onChange={handleRowIndexChange}
                             placeholder="행 지정"
                             min="0"
                             max={(data[currentSheetIndex]?.rows.length ?? 1) - 1} // max 값이 NaN이 되지 않도록 수정
@@ -318,7 +349,7 @@ export default function ExcelEditor() {
                         <input
                             type="number"
                             value={colIndex}
-                            onChange={(e) => setColIndex(e.target.value === '' ? '' : Math.min(Number(e.target.value), data[currentSheetIndex]?.columns.length ?? 0))}
+                            onChange={handleColIndexChange}
                             placeholder="열 지정"
                             min="0"
                             max={(data[currentSheetIndex]?.columns.length ?? 1) - 1} // max 값이 NaN이 되지 않도록 수정

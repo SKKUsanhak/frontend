@@ -211,23 +211,18 @@
 .building-list-header {
     display: flex;
     width: 100%;
-    justify-content: space-between;
+    justify-content: center; /* 중앙 정렬 */
     align-items: center;
     vertical-align: middle;
 }
 
 .building-list-header .search-container {
-    font-family: "LineFont";
     display: flex;
     align-items: center;
     vertical-align: middle;
     margin-left: auto;
     margin-right: auto;
-}
-
-.building-list-header .search-container .search-icon {
-    margin-left: 10px;
-    vertical-align: middle;
+    position: relative; /* 부모 요소를 기준으로 위치 설정 */
 }
 
 .building-list-header .search-container input {
@@ -238,7 +233,18 @@
     border-radius: 4px;
     font-family: "LineFont";
     margin-bottom: 5px;
+    padding-right: 30px; /* 아이콘 공간 확보 */
+    line-height: 1.5; /* 텍스트 수직 정렬 */
 }
+
+.building-list-header .search-container .search-icon {
+    position: absolute;
+    right: 10px;
+    font-size: 18px;
+    color: #aaa;
+    transform: translateY(-10%); /* 아이콘을 중앙 정렬 */
+}
+
 
 .delete-building-container {
     margin-top: auto;

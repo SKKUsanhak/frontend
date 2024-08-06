@@ -57,8 +57,10 @@
 
 .table-list-header {
     display: flex;
-    justify-content: space-between; /* back-container와 add-container를 양 끝으로 배치 */
+    justify-content: flex-start; /* back-container와 add-container를 양 끝으로 배치 */
     width: 100%; /* 한 줄에 위치하도록 너비를 100%로 설정 */
+    position: relative; /* 자식 요소를 기준으로 위치 설정 */
+    margin-bottom: 10px;
 }
 
 .table {
@@ -114,30 +116,43 @@
 .table-list-header .search-container {
     display: flex;
     align-items: center;
-}
-
-.table-list-header .search-container .search-icon {
-    margin-left: 10px;
+    vertical-align: middle;
+    position: absolute; /* 부모 요소를 기준으로 위치 설정 */
+    left: 50%; /* 부모 요소의 왼쪽에서 50% 이동 */
+    transform: translateX(-50%); /* 자신의 너비의 50%만큼 왼쪽으로 이동 */
+    font-family: "LineFont";
 }
 
 .table-list-header .search-container input {
-    flex: 1;
-    padding: 5px;
+    padding: 5px; /* 텍스트와 아이콘 간격 확보 */
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-family: "LineFont";
+    padding-right: 30px; /* 아이콘 공간 확보 */
+    box-sizing: border-box;
 }
 
-.table-list-header .back-container, .add-container {
-    display: flex;
-    align-items: center;
+.table-list-header .search-container .search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%); /* 아이콘을 중앙 정렬 */
+    font-size: 18px;
+    color: #aaa;
+}
+
+.table-list-header .add-container {
+    display: flex; /* Flexbox 사용 */
+    align-items: center; /* 요소들을 수직 정렬 */
+    margin-left: auto;
     cursor: pointer;
 }
 
-.table-list-header .back-container span, .add-container span {
+.table-list-header .add-container span {
     margin-left: 5px;
     margin-right: 5px;
+    vertical-align: middle;
 }
 
 .detail-table {
@@ -235,16 +250,8 @@
     transform: none;
 }
 
-.back-icon, .add-table-icon {
+.add-table-icon {
     transition: color 0.3s;
-}
-
-.back-icon:hover {
-    color: cornflowerblue;
-}
-
-.back-icon:active {
-    color: blue;
 }
 
 .add-table-icon:hover {

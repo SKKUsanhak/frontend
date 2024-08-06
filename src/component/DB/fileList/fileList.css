@@ -222,39 +222,47 @@
     align-items: center;
     vertical-align: middle;
     margin-bottom: 5px;
+    position: relative; /* 자식 요소를 기준으로 위치 설정 */
 }
 
 .file-list-header .search-container {
-    font-family: "LineFont";
     display: flex;
     align-items: center;
     vertical-align: middle;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.file-list-header .search-container .search-icon {
-    margin-left: 10px;
-    vertical-align: middle;
+    position: absolute; /* 부모 요소를 기준으로 위치 설정 */
+    left: 50%; /* 부모 요소의 왼쪽에서 50% 이동 */
+    transform: translateX(-50%); /* 자신의 너비의 50%만큼 왼쪽으로 이동 */
+    font-family: "LineFont";
 }
 
 .file-list-header .search-container input {
-    flex: 1;
-    padding: 5px;
+    padding: 5px 5px; /* 텍스트와 아이콘 간격 확보 */
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-family: "LineFont";
+    padding-right: 30px; /* 아이콘 공간 확보 */
+    box-sizing: border-box;
+    margin-bottom: 10px;
 }
 
-.file-list-header .add-file-container {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+.file-list-header .search-container .search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-80%); /* 아이콘을 중앙 정렬 */
+    font-size: 18px;
+    color: #aaa;
+}
+
+.file-list-header .add-container {
+    display: flex; /* Flexbox 사용 */
+    align-items: center; /* 요소들을 수직 정렬 */
     margin-left: auto;
+    cursor: pointer;
 }
 
-.file-list-header .add-file-container span {
+.file-list-header .add-container span {
     margin-left: 5px;
     margin-right: 10px;
 }
