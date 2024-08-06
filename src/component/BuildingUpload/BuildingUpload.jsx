@@ -58,7 +58,7 @@ const BuildingUpload = () => {
         <div>
             <form className='form-container' onSubmit={handleSubmit}>
                 <div>
-                    <label>건물명:</label>
+                    <label>*건물명</label>
                     <input
                         type="text"
                         name="buildingName"
@@ -67,7 +67,7 @@ const BuildingUpload = () => {
                     />
                 </div>
                 <div className="address-search">
-                    <label>건물주소:</label>
+                    <label>*건물주소</label>
                     <div className="address-input-container">
                         <input
                             type="text"
@@ -82,7 +82,7 @@ const BuildingUpload = () => {
                     </div>
                 </div>
                 <div>
-                    <label>총면적:</label>
+                    <label>총면적</label>
                     <input
                         type="text"
                         name="totalArea"
@@ -91,7 +91,7 @@ const BuildingUpload = () => {
                     />
                 </div>
                 <div>
-                    <label>지상 층수:</label>
+                    <label>지상 층수</label>
                     <input
                         type="number"
                         name="groundFloors"
@@ -101,7 +101,7 @@ const BuildingUpload = () => {
                     />
                 </div>
                 <div>
-                    <label>지하 층수:</label>
+                    <label>지하 층수</label>
                     <input
                         type="number"
                         name="basementFloors"

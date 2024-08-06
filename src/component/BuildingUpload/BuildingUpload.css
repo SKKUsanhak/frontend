@@ -32,7 +32,7 @@ body {
 
 .form-container input[type="text"],
 .form-container input[type="number"] {
-    width: calc(100% - 20px);
+    width: 100%;
     padding: 10px;
     margin: 5px 0 10px 0;
     border: 1px solid #ccc;
@@ -42,39 +42,43 @@ body {
 
 .address-search .address-input-container {
     display: flex;
-    align-items: center;
+    position: relative; /* 추가: 버튼을 input 안에 넣기 위해 필요합니다 */
+    margin-bottom: 15px; /* input과 간격을 맞추기 위해 추가 */
 }
 
 .address-search input {
-    flex: 9;
+    flex: 1; /* 너비를 flex: 1로 설정하여 버튼과 함께 조정되도록 합니다 */
     padding: 10px;
+    padding-right: 50px; /* 추가: 버튼 공간 확보를 위해 padding 추가 */
+    margin: 5px 0 10px 0; /* 다른 input과 간격을 맞추기 위해 추가 */
+    border: 1px solid #ccc; /* 다른 input과 동일하게 설정 */
+    border-radius: 5px; /* 다른 input과 동일하게 설정 */
+    box-sizing: border-box; /* 다른 input과 동일하게 설정 */
 }
 
-.search-button {
-    flex: 1;
-    background-color: #4CAF50;
-    color: white;
+.address-input-container .search-button {
+    position: absolute; /* 추가: 버튼을 input 안에 위치시키기 위해 필요합니다 */
+    right: 5px; /* 오른쪽 끝으로 정렬 */
+    top: 50%; /* 세로 가운데 정렬 */
+    transform: translateY(-60%); /* 세로 가운데 정렬을 위해 필요합니다 */
+    background-color: rgba(0, 0, 0, 0);
+    color: black;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     padding: 10px;
-    margin-left: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px; /* 검색 버튼의 너비를 줄입니다 */
+    width: 40px; /* 검색 버튼의 너비 */
     height: 30px; /* 입력 칸 높이 설정 */
-    margin-left: 5px;
-    margin-right: 40px;
-    margin-bottom: 4px;
 }
 
-.search-button:hover {
-    background-color: #45a049;
+.address-input-container .search-button:hover {
+    background-color: white;
+    color: #e60d0d;
 }
 
 .form-container button {
+    font-family: "LineFont";
     width: 40%;
     padding: 10px;
     background-color: #4CAF50;
@@ -87,7 +91,7 @@ body {
     display: flex;
     justify-content: center; /* 버튼을 중앙에 정렬 */
     align-items: center;
-    margin: 0 auto; /* 버튼을 컨테이너 내에서 중앙 정렬 */
+    margin: 0 auto 15px auto; /* 버튼을 컨테이너 내에서 중앙 정렬 */
 }
 
 .form-container button:hover {
