@@ -282,7 +282,7 @@ export default function TableData() {
                                                         type="text"
                                                         value={cell.contents}
                                                         onChange={(e) => handleCellChange(rowIndex, cellIndex, e.target.value)}
-                                                        onBlur={(e) => handleCellBlur(buildingId, fileId, tableId, rowIndex, cellIndex, e.target.value)}
+                                                        onBlur={(e) => handleCellBlur(buildingId, fileId, tableId, rowIndex+2, cellIndex, e.target.value)}
                                                         className={selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex ? 'highlight-input' : ''}
                                                     />
                                                 </td>
