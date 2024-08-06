@@ -222,6 +222,7 @@ export default function TableData() {
             alert('오류가 발생했습니다.');
             console.error('Error:', error);
             setEditQueue([]);
+            window.location.reload(); // 오류 발생 시 새로고침
         }
     };
 
