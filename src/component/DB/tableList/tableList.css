@@ -208,6 +208,7 @@
 }
 
 .table-view-button {
+    font-family: "LineFont";
     background-color: #1c0e61;
     color: white;
     padding: 10px 20px;

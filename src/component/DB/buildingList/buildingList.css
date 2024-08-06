@@ -257,20 +257,21 @@
 }
 
 .file-view-button {
-    background-color: #060429;
+    font-family: "LineFont";
+    background-color: #1c0e61;
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 12px;
-    transition: background-color 0.5s ease;
-    margin-top: 10px;
-    font-family: "LineFont";
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 20px;
 }
 
 .file-view-button:hover {
     background-color: #252582;
+    transform: scale(1.05);
 }
 
 .file-view-button:active {

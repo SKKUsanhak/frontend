@@ -1,20 +1,18 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { RiQuestionLine } from "react-icons/ri";
-import { TbArrowBackUp } from "react-icons/tb";
 import './tableData.css';
 
 export default function TableData() {
     const { buildingId, fileId, tableId } = useParams();
     const location = useLocation();
     const versionId = new URLSearchParams(location.search).get('versionId');
+    const { tableTitle, isLastVersion, currentVersion } = location.state || {};
     const [tableData, setTableData] = useState(null);
     const [columns, setColumns] = useState([]);
     const [rows, setRows] = useState([]);
     const [table, setTable] = useState([]);
     const [editQueue, setEditQueue] = useState([]);
-    const [toggle, setToggle] = useState(false);
     const [selectedCell, setSelectedCell] = useState(null);
     const [deleteEnabled, setDeleteEnabled] = useState(false);
     const [versionName, setVersionName] = useState('');
@@ -29,7 +27,6 @@ export default function TableData() {
         })
             .then(response => {
                 setTableData(response.data);
-                console.log(response.data);
             })
             .catch(error => {
                 console.error('Error fetching table data:', error);
@@ -206,7 +203,6 @@ export default function TableData() {
             const response = await axios.post(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/versions`, versioningDto, {
                 headers: { 'Content-Type': 'application/json' }
             });
-            console.log(response.status)
             if (response.status === 201) {
                 for (const request of editQueue) {
                     await axios(request);
@@ -226,16 +222,10 @@ export default function TableData() {
         }
     };
 
-    const handleToggleChange = () => {
-        setToggle(!toggle);
-    };
-
     return (
         <div className='excel-editor-container'>
-            <div className='back-button-container' onClick={() => navigate(`/buildings/${buildingId}/files/${fileId}/tables`)}>
-                <TbArrowBackUp className='back-icon' size={24} />
-                <span>테이블 목록으로 돌아가기</span>
-            </div>
+            <h1 className='title-name'>{tableTitle}</h1>
+            <h3 className='current-version'>{currentVersion ? `${currentVersion}` : '버전 정보 없음'}</h3>
             <div ref={containerRef}>
                 <div className='excel-editor'>
                     <div className='table-section'>
@@ -293,24 +283,25 @@ export default function TableData() {
                             </table>
                         </div>
                     </div>
-                    <div className='control-section'>
+                    <div className={`control-section ${!isLastVersion ? 'disabled' : ''}`}>
                         <div className='button-group'>
-                            <button className="add-button" onClick={() => handleMakeRow(buildingId, fileId, tableId, rows, columns, table)}>행 추가</button>
-                            <button className="delete-button" onClick={() => handleDeleteRow(buildingId, fileId, tableId, selectedCell ? selectedCell.rowIndex : null)} disabled={!deleteEnabled}>행 삭제</button>
+                            <button className="add-button" onClick={() => handleMakeRow(buildingId, fileId, tableId, rows, columns, table)} disabled={!isLastVersion}>행 추가</button>
+                            <button className="delete-button" onClick={() => handleDeleteRow(buildingId, fileId, tableId, selectedCell ? selectedCell.rowIndex : null)} disabled={!isLastVersion || !deleteEnabled}>행 삭제</button>
                         </div>
                         <div className='button-group'>
-                            <button className="add-button" onClick={() => handleMakeHeader(buildingId, fileId, tableId, columns)}>열 추가</button>
-                            <button className="delete-button" onClick={() => handleDeleteColumn(buildingId, fileId, tableId, selectedCell ? selectedCell.cellIndex : null)} disabled={!deleteEnabled}>열 삭제</button>
+                            <button className="add-button" onClick={() => handleMakeHeader(buildingId, fileId, tableId, columns)} disabled={!isLastVersion}>열 추가</button>
+                            <button className="delete-button" onClick={() => handleDeleteColumn(buildingId, fileId, tableId, selectedCell ? selectedCell.cellIndex : null)} disabled={!isLastVersion || !deleteEnabled}>열 삭제</button>
                         </div>
                         <div className='version-note'>
                             <div>
                                 <span className="file-info-label">버전 이름:</span>
                                 <input
                                     type="text"
-                                    placeholder="버전 이름 입력"
+                                    placeholder="새로운 버전 이름 입력"
                                     value={versionName}
                                     onChange={(e) => setVersionName(e.target.value)}
                                     required
+                                    disabled={!isLastVersion}
                                 />
                             </div>
                             <div>
@@ -323,21 +314,12 @@ export default function TableData() {
                                     maxLength="200"
                                     value={note}
                                     onChange={(e) => setNote(e.target.value)}
+                                    disabled={!isLastVersion}
                                 />
                             </div>
                         </div>
                         <div className='save-button-group'>
-                            <div className="toggle-container">
-                                <label className='toggle-switch'>
-                                    <input type='checkbox' checked={toggle} onChange={handleToggleChange} />
-                                    <span className='slider'></span>
-                                </label>
-                                <div className="tooltip-container">
-                                    <RiQuestionLine className='question' />
-                                    <div className="tooltip">토글 시 최종 데이터로 저장되며, 관리자만 수정 가능해집니다.</div>
-                                </div>
-                            </div>
-                            <button className='save-button' onClick={handleSaveChanges}>저장</button>
+                            <button className='save-button' onClick={handleSaveChanges} disabled={!isLastVersion}>저장</button>
                         </div>
                     </div>
                 </div>

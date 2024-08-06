@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { TbTablePlus, TbArrowBackUp } from "react-icons/tb";
+import { TbTablePlus } from "react-icons/tb";
 import { FaTrash, FaEdit, FaSearch } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
@@ -133,8 +133,17 @@ export default function TableList() {
     };
 
     const handleTableSelect = (buildingId, fileId, tableId, versionId) => {
-        navigate(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas?versionId=${versionId}`);
+        const isLastVersion = selectedTable.dataVersionList[selectedTable.dataVersionList.length - 1].id === versionId;
+        const versionName = selectedTable.dataVersionList.find(version => version.id === selectedVersions[selectedTable.id])?.version;
+        navigate(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas?versionId=${versionId}`, {
+            state: {
+                tableTitle: selectedTable.tableTitle,
+                isLastVersion: isLastVersion,
+                currentVersion: versionName 
+            }
+        });
     };
+    
 
     const handleTableDelete = async (tableId) => {
         const confirmDelete = window.confirm("정말로 삭제하시겠습니까?");
@@ -191,10 +200,6 @@ export default function TableList() {
             <div className="table-list-container" ref={tableListContainerRef}>
                 <h2 className='table-list-title'>테이블 목록</h2>
                 <div className='table-list-header'>
-                    <div className='back-container' onClick={() => navigate(`/buldings/${buildingId}/files`)}>
-                        <TbArrowBackUp className='back-icon' size={24} />
-                        <span>파일 목록으로 돌아가기</span>
-                    </div>
                     <div className='search-container'>
                         <input
                             type='text'

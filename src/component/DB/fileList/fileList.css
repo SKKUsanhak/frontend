@@ -154,6 +154,7 @@
 
 .table-view-button:hover {
     background-color: #252582;
+    transform: scale(1.05);
 }
 
 .table-view-button:active {

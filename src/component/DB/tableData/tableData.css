@@ -1,6 +1,6 @@
 .excel-editor {
     display: grid;
-    grid-template-columns: 75% 25%; /* 왼쪽에 테이블, 오른쪽에 컨트롤 */
+    grid-template-columns: 80% 20%; /* 왼쪽에 테이블, 오른쪽에 컨트롤 */
     gap: 20px;
     padding: 20px;
     font-family: "LineFont";
@@ -8,8 +8,9 @@
 }
 
 .title-name {
-    margin-top: 80px;
-    font-family: "LineFont";
+    margin-top: 20px;
+    margin-bottom: 0px;
+    font-family: "LineFontBold";
     font-size: 40px;
     display: flex;
     justify-content: center;
@@ -17,6 +18,18 @@
     text-align: center;
     white-space: nowrap;
     box-sizing: content-box; /* Ensure the input width includes the padding */
+}
+
+.current-version {
+    font-size: 16px; /* 폰트 크기를 16px로 줄임 */
+    font-family: "LineFontBold";
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    align-items: center; /* 가운데 정렬 */
+    text-align: center;
+    white-space: nowrap;
+    box-sizing: content-box;
+    opacity: 0.4; /* 반투명하게 설정 */
 }
 
 .table-section {
@@ -93,6 +106,12 @@
     border: 1px solid #ddd;
 }
 
+.control-section.disabled {
+    pointer-events: none; /* Disable all pointer events */
+    opacity: 0.5; /* Make it appear disabled */
+    cursor: not-allowed;
+}
+
 .button-group, .save-button-group {
     margin-top: 10px;
 }
@@ -156,97 +175,6 @@
     background-color: #6060a6;
 }
 
-.toggle-switch {
-    position: relative;
-    display: inline-block;
-    width: 40px;
-    height: 20px;
-    margin-bottom: 10px; /* 토글 스위치와 저장 버튼 사이의 간격 */
-}
-
-.toggle-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 20px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 14px;
-    width: 14px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
-}
-
-input:checked + .slider {
-    background-color: #6060a6;
-}
-
-input:checked + .slider:before {
-    transform: translateX(20px);
-}
-
-.toggle-container {
-    display: flex;
-    align-items: center; /* 아이템들을 세로로 가운데 정렬 */
-}
-
-.question {
-    font-size: 24px; /* 원하는 크기로 설정 */
-    color: gray; /* 색상을 회색으로 설정 */
-    margin-left: 5px; /* 토글 스위치와의 간격 설정 */
-    margin-bottom: 5px;
-    cursor: pointer;
-}
-
-.question:hover {
-    color: #6060a6;
-}
-
-.tooltip-container {
-    position: relative;
-    display: inline-block;
-}
-
-.tooltip {
-    visibility: hidden;
-    width: 120px; /* 말풍선의 너비 설정 */
-    background-color: gray;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    font-size: 13px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%; /* 아이콘 위에 말풍선 위치 */
-    left: 50%;
-    margin-left: -60px; /* 말풍선을 가운데로 맞추기 위해 조정 */
-    opacity: 0; /* 초기 상태에서는 숨김 */
-    transition: opacity 0.3s;
-}
-
-.tooltip-container:hover .tooltip {
-    visibility: visible;
-    opacity: 1; /* 호버 시 말풍선 표시 */
-}
-
 .highlight-cell {
     background-color: #f3f3f3; /* 하이라이트 셀의 배경색을 흰색으로 설정 */
 }
@@ -295,6 +223,7 @@ input:checked + .slider:before {
 .add-button {
     background-color: #0b0747;
     color: white;
+    margin-right: 5px;
 }
 
 .add-button:hover {
@@ -304,6 +233,7 @@ input:checked + .slider:before {
 .delete-button {
     background-color: #d35e2c;
     color: white;
+    margin-left: 5px;
 }
 
 .delete-button:hover {
