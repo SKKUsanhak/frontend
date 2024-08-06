@@ -208,14 +208,13 @@ export default function TableData() {
             });
             console.log(response.status)
             if (response.status === 201) {
-                const newVersionId = response.data.id;
                 for (const request of editQueue) {
-                    request.url += `?versionId=${newVersionId}`;
                     await axios(request);
                 }
                 alert('모든 변경 사항이 성공적으로 저장되었습니다.');
-                fetchData(fileId, tableId);
                 setEditQueue([]);
+                const newVersionId = response.data.id;
+                navigate(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas?versionId=${newVersionId}`);
             } else {
                 alert('버전 생성 실패');
             }
@@ -232,7 +231,7 @@ export default function TableData() {
 
     return (
         <div className='excel-editor-container'>
-            <div className='back-button-container' onClick={() => navigate(-1)}>
+            <div className='back-button-container' onClick={() => navigate(`/buildings/${buildingId}/files/${fileId}/tables`)}>
                 <TbArrowBackUp className='back-icon' size={24} />
                 <span>테이블 목록으로 돌아가기</span>
             </div>
