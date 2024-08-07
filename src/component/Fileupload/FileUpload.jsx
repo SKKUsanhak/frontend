@@ -16,27 +16,33 @@ export default function Upload() {
 
     const togglePanel = (isVisible) => {
         setPanelVisible(isVisible);
-        const container = document.querySelector('.container');
-        if (isVisible) {
-            container.classList.add('expanded');
-        } else {
-            container.classList.remove('expanded');
+        const container = document.querySelector('.file-upload-container');
+        if (container) {
+            if (isVisible) {
+                container.classList.add('expanded');
+            } else {
+                container.classList.remove('expanded');
+            }
         }
     };
 
     const handleFileChange = (event) => {
-        const selectedFile = event.target.files[0];
-        setFile(selectedFile);
-        setFileName(selectedFile.name);
-        togglePanel(true);
+        const selectedFile = event.target.files ? event.target.files[0] : null;
+        if (selectedFile) {
+            setFile(selectedFile);
+            setFileName(selectedFile.name);
+            togglePanel(true);
+        }
     };
 
     const handleDrop = (event) => {
         event.preventDefault();
-        const selectedFile = event.dataTransfer.files[0];
-        setFile(selectedFile);
-        setFileName(selectedFile.name);
-        togglePanel(true);
+        const selectedFile = event.dataTransfer.files ? event.dataTransfer.files[0] : null;
+        if (selectedFile) {
+            setFile(selectedFile);
+            setFileName(selectedFile.name);
+            togglePanel(true);
+        }
     };
 
     const handleDragOver = (event) => {
@@ -81,12 +87,12 @@ export default function Upload() {
     };
 
     return (
-        <div>
+        <div className="main-container">
             <div className={`loader-overlay ${loading ? '' : 'hidden'}`}>
                 <FadeLoader />
                 <p className="message">{message}</p>
             </div>
-            <div className="container">
+            <div className="file-upload-container">
                 <h1>File Upload</h1>
                 <div className="drop-area" onDrop={handleDrop} onDragOver={handleDragOver}>
                     <input type="file" onChange={handleFileChange} className="hidden-input" id="fileInput" />

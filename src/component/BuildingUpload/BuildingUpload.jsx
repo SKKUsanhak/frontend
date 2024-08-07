@@ -55,7 +55,7 @@ const BuildingUpload = () => {
     };
 
     return (
-        <div>
+        <div className='main-container'>
             <form className='form-container' onSubmit={handleSubmit}>
                 <div>
                     <label>*건물명</label>

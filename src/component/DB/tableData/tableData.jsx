@@ -131,23 +131,23 @@ export default function TableData() {
         axios.delete(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/rows`, {
             params: { rowIndex: actualRowIndex }
         })
-        .then(() => {
-            alert("행 삭제 성공");
-            const newTable = table.filter(row => row[0].rowNumber !== actualRowIndex)
-                                  .map((row, index) => row.map(cell => ({
-                                      ...cell, 
-                                      rowNumber: index + 2
-                                  })));
-            const newRows = newTable.map(row => row[0].rowNumber);
-            setTable(newTable);
-            setRows(newRows);
-            setSelectedCell(null);
-            setDeleteEnabled(false);
-        })
-        .catch(error => {
-            console.error("Error deleting row:", error);
-            alert("Error deleting the row.");
-        });
+            .then(() => {
+                alert("행 삭제 성공");
+                const newTable = table.filter(row => row[0].rowNumber !== actualRowIndex)
+                    .map((row, index) => row.map(cell => ({
+                        ...cell,
+                        rowNumber: index + 2
+                    })));
+                const newRows = newTable.map(row => row[0].rowNumber);
+                setTable(newTable);
+                setRows(newRows);
+                setSelectedCell(null);
+                setDeleteEnabled(false);
+            })
+            .catch(error => {
+                console.error("Error deleting row:", error);
+                alert("Error deleting the row.");
+            });
     };
 
     const handleDeleteColumn = (buildingId, fileId, tableId, columnIndex) => {
@@ -161,19 +161,19 @@ export default function TableData() {
         axios.delete(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/columns`, {
             params: { columnIndex }
         })
-        .then(() => {
-            alert("열 삭제 성공");
-            const newColumns = columns.filter((_, idx) => idx !== columnIndex);
-            setColumns(newColumns);
-            const newTable = table.map(row => row.filter((_, idx) => idx !== columnIndex));
-            setTable(newTable);
-            setSelectedCell(null);
-            setDeleteEnabled(false);
-        })
-        .catch(error => {
-            console.error("열 삭제 중 오류 발생:", error);
-            alert("열 삭제 실패");
-        });
+            .then(() => {
+                alert("열 삭제 성공");
+                const newColumns = columns.filter((_, idx) => idx !== columnIndex);
+                setColumns(newColumns);
+                const newTable = table.map(row => row.filter((_, idx) => idx !== columnIndex));
+                setTable(newTable);
+                setSelectedCell(null);
+                setDeleteEnabled(false);
+            })
+            .catch(error => {
+                console.error("열 삭제 중 오류 발생:", error);
+                alert("열 삭제 실패");
+            });
     };
 
     const handleCellChange = (rowIndex, cellIndex, value) => {
@@ -223,103 +223,105 @@ export default function TableData() {
     };
 
     return (
-        <div className='excel-editor-container'>
-            <h1 className='title-name'>{tableTitle}</h1>
-            <h3 className='current-version'>{currentVersion ? `${currentVersion}` : '버전 정보 없음'}</h3>
-            <div ref={containerRef}>
-                <div className='excel-editor'>
-                    <div className='table-section'>
-                        <div className='table-data-container'>
-                            <table className='db-table'>
-                                <thead>
-                                    <tr className='first-column'>
-                                        <th>#</th>
-                                        {columns.map((col, index) => (
-                                            <th key={index}>{index}</th>
-                                        ))}
-                                    </tr>
-                                    <tr>
-                                        <th> </th>
-                                        {columns.map((col, index) => (
-                                            <th key={index}>
-                                                <input
-                                                    type="text"
-                                                    value={col}
-                                                    onChange={(e) => handleHeaderContentChange(index, e.target.value)}
-                                                    onBlur={(e) => handleHeaderContentBlur(buildingId, fileId, tableId, index, e.target.value)}
-                                                />
-                                            </th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {table.map((row, rowIndex) => (
-                                        <tr key={rowIndex}>
-                                            <td>{rowIndex}</td>
-                                            {row.map((cell, cellIndex) => (
-                                                <td
-                                                    key={cellIndex}
-                                                    className={
-                                                        selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex
-                                                            ? 'highlight-cell highlight-cell-border highlight-cell-background'
-                                                            : selectedCell && (selectedCell.rowIndex === rowIndex || selectedCell.cellIndex === cellIndex)
-                                                                ? 'highlight-cell'
-                                                                : ''
-                                                    }
-                                                    onClick={() => handleCellClick(rowIndex, cellIndex)}
-                                                >
-                                                    <input
-                                                        type="text"
-                                                        value={cell.contents}
-                                                        onChange={(e) => handleCellChange(rowIndex, cellIndex, e.target.value)}
-                                                        onBlur={(e) => handleCellBlur(buildingId, fileId, tableId, rowIndex+2, cellIndex, e.target.value)}
-                                                        className={selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex ? 'highlight-input' : ''}
-                                                    />
-                                                </td>
+        <div className='main-container'>
+            <div className='excel-editor-container'>
+                <h1 className='title-name'>{tableTitle}</h1>
+                <h3 className='current-version'>{currentVersion ? `${currentVersion}` : '버전 정보 없음'}</h3>
+                <div ref={containerRef}>
+                    <div className='excel-editor'>
+                        <div className='table-section'>
+                            <div className='table-data-container'>
+                                <table className='db-table'>
+                                    <thead>
+                                        <tr className='first-column'>
+                                            <th>#</th>
+                                            {columns.map((col, index) => (
+                                                <th key={index}>{index}</th>
                                             ))}
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div className={`control-section ${!isLastVersion ? 'disabled' : ''}`}>
-                        <div className='button-group'>
-                            <button className="add-button" onClick={() => handleMakeRow(buildingId, fileId, tableId, rows, columns, table)} disabled={!isLastVersion}>행 추가</button>
-                            <button className="delete-button" onClick={() => handleDeleteRow(buildingId, fileId, tableId, selectedCell ? selectedCell.rowIndex : null)} disabled={!isLastVersion || !deleteEnabled}>행 삭제</button>
-                        </div>
-                        <div className='button-group'>
-                            <button className="add-button" onClick={() => handleMakeHeader(buildingId, fileId, tableId, columns)} disabled={!isLastVersion}>열 추가</button>
-                            <button className="delete-button" onClick={() => handleDeleteColumn(buildingId, fileId, tableId, selectedCell ? selectedCell.cellIndex : null)} disabled={!isLastVersion || !deleteEnabled}>열 삭제</button>
-                        </div>
-                        <div className='version-note'>
-                            <div>
-                                <span className="file-info-label">버전 이름:</span>
-                                <input
-                                    type="text"
-                                    placeholder="새로운 버전 이름 입력"
-                                    value={versionName}
-                                    onChange={(e) => setVersionName(e.target.value)}
-                                    required
-                                    disabled={!isLastVersion}
-                                />
+                                        <tr>
+                                            <th> </th>
+                                            {columns.map((col, index) => (
+                                                <th key={index}>
+                                                    <input
+                                                        type="text"
+                                                        value={col}
+                                                        onChange={(e) => handleHeaderContentChange(index, e.target.value)}
+                                                        onBlur={(e) => handleHeaderContentBlur(buildingId, fileId, tableId, index, e.target.value)}
+                                                    />
+                                                </th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {table.map((row, rowIndex) => (
+                                            <tr key={rowIndex}>
+                                                <td>{rowIndex}</td>
+                                                {row.map((cell, cellIndex) => (
+                                                    <td
+                                                        key={cellIndex}
+                                                        className={
+                                                            selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex
+                                                                ? 'highlight-cell highlight-cell-border highlight-cell-background'
+                                                                : selectedCell && (selectedCell.rowIndex === rowIndex || selectedCell.cellIndex === cellIndex)
+                                                                    ? 'highlight-cell'
+                                                                    : ''
+                                                        }
+                                                        onClick={() => handleCellClick(rowIndex, cellIndex)}
+                                                    >
+                                                        <input
+                                                            type="text"
+                                                            value={cell.contents}
+                                                            onChange={(e) => handleCellChange(rowIndex, cellIndex, e.target.value)}
+                                                            onBlur={(e) => handleCellBlur(buildingId, fileId, tableId, rowIndex + 2, cellIndex, e.target.value)}
+                                                            className={selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.cellIndex === cellIndex ? 'highlight-input' : ''}
+                                                        />
+                                                    </td>
+                                                ))}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
-                            <div>
-                                <span className="file-info-label">비고</span>
-                            </div>
-                            <div>
-                                <textarea
-                                    className='note-textarea'
-                                    placeholder="비고 (최대 200자)"
-                                    maxLength="200"
-                                    value={note}
-                                    onChange={(e) => setNote(e.target.value)}
-                                    disabled={!isLastVersion}
-                                />
-                            </div>
                         </div>
-                        <div className='save-button-group'>
-                            <button className='save-button' onClick={handleSaveChanges} disabled={!isLastVersion}>저장</button>
+                        <div className={`control-section ${!isLastVersion ? 'disabled' : ''}`}>
+                            <div className='button-group'>
+                                <button className="add-button" onClick={() => handleMakeRow(buildingId, fileId, tableId, rows, columns, table)} disabled={!isLastVersion}>행 추가</button>
+                                <button className="delete-button" onClick={() => handleDeleteRow(buildingId, fileId, tableId, selectedCell ? selectedCell.rowIndex : null)} disabled={!isLastVersion || !deleteEnabled}>행 삭제</button>
+                            </div>
+                            <div className='button-group'>
+                                <button className="add-button" onClick={() => handleMakeHeader(buildingId, fileId, tableId, columns)} disabled={!isLastVersion}>열 추가</button>
+                                <button className="delete-button" onClick={() => handleDeleteColumn(buildingId, fileId, tableId, selectedCell ? selectedCell.cellIndex : null)} disabled={!isLastVersion || !deleteEnabled}>열 삭제</button>
+                            </div>
+                            <div className='version-note'>
+                                <div>
+                                    <span className="file-info-label">버전 이름:</span>
+                                    <input
+                                        type="text"
+                                        placeholder="새로운 버전 이름 입력"
+                                        value={versionName}
+                                        onChange={(e) => setVersionName(e.target.value)}
+                                        required
+                                        disabled={!isLastVersion}
+                                    />
+                                </div>
+                                <div>
+                                    <span className="file-info-label">비고</span>
+                                </div>
+                                <div>
+                                    <textarea
+                                        className='note-textarea'
+                                        placeholder="비고 (최대 200자)"
+                                        maxLength="200"
+                                        value={note}
+                                        onChange={(e) => setNote(e.target.value)}
+                                        disabled={!isLastVersion}
+                                    />
+                                </div>
+                            </div>
+                            <div className='save-button-group'>
+                                <button className='save-button' onClick={handleSaveChanges} disabled={!isLastVersion}>저장</button>
+                            </div>
                         </div>
                     </div>
                 </div>

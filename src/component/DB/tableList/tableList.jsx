@@ -196,143 +196,145 @@ export default function TableList() {
     };
 
     return (
-        <div className="table-list-page">
-            <div className="table-list-container" ref={tableListContainerRef}>
-                <h2 className='table-list-title'>테이블 목록</h2>
-                <div className='table-list-header'>
-                    <div className='search-container'>
-                        <input
-                            type='text'
-                            placeholder='테이블 이름으로 검색...'
-                            value={searchQuery}
-                            onChange={(e) => {
-                                setSearchQuery(e.target.value);
-                                setCurrentPage(1);
-                            }}
-                        />
-                        <FaSearch className='search-icon' />
+        <div className='main-container'>
+            <div className="table-list-page">
+                <div className="table-list-container" ref={tableListContainerRef}>
+                    <h2 className='table-list-title'>테이블 목록</h2>
+                    <div className='table-list-header'>
+                        <div className='search-container'>
+                            <input
+                                type='text'
+                                placeholder='테이블 이름으로 검색...'
+                                value={searchQuery}
+                                onChange={(e) => {
+                                    setSearchQuery(e.target.value);
+                                    setCurrentPage(1);
+                                }}
+                            />
+                            <FaSearch className='search-icon' />
+                        </div>
+                        <div className='add-container' onClick={handleAddTable}>
+                            <span>테이블 추가</span>
+                            <TbTablePlus className='add-table-icon' size={24} />
+                        </div>
                     </div>
-                    <div className='add-container' onClick={handleAddTable}>
-                        <span>테이블 추가</span>
-                        <TbTablePlus className='add-table-icon' size={24} />
+                    <div className='table-list-content'>
+                        <div className='table-list'>
+                            {tableList.length === 0 ? (
+                                <p>현재 파일에 테이블이 없습니다.</p>
+                            ) : (
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th>테이블 이름</th>
+                                            <th>버전 정보</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredTables().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((table, index) => (
+                                            <tr key={index} onClick={() => {
+                                                setSelectedTable(table);
+                                            }} className={selectedTable && selectedTable.id === table.id ? 'selected' : ''}>
+                                                <td>{table.tableTitle}</td>
+                                                <td className='drop-down'>
+                                                    <select
+                                                        ref={dropdownRef}
+                                                        value={selectedVersions[table.id] || ''}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                        onChange={(e) => {
+                                                            const value = e.target.value;
+                                                            const selectedVersion = table.dataVersionList.find(version => version.id === parseInt(value, 10));
+                                                            setSelectedVersions(prev => ({ ...prev, [table.id]: selectedVersion.id }));
+                                                            setNewNote(selectedVersion?.note || '');
+                                                        }}
+                                                    >
+                                                        {table.dataVersionList.map(version => (
+                                                            <option key={version.id} value={version.id}>{version.version}</option>
+                                                        ))}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                            <div className="pagination">
+                                <GoTriangleLeft onClick={handlePreviousPage} disabled={currentPage === 1} className='pagination-icon' />
+                                <span>{currentPage}</span>
+                                <GoTriangleRight onClick={handleNextPage} disabled={currentPage === Math.ceil(filteredTables().length / itemsPerPage)} className='pagination-icon' />
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className='table-list-content'>
-                    <div className='table-list'>
-                        {tableList.length === 0 ? (
-                            <p>현재 파일에 테이블이 없습니다.</p>
-                        ) : (
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th>테이블 이름</th>
-                                        <th>버전 정보</th>
-                                    </tr>
-                                </thead>
+                <div className={`table-details ${selectedTable ? 'visible' : ''}`} ref={tableDetailsRef}>
+                    {selectedTable && (
+                        <div className='table-detail-container'>
+                            <h3>테이블 상세 정보</h3>
+                            <table className="detail-table">
                                 <tbody>
-                                    {filteredTables().slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((table, index) => (
-                                        <tr key={index} onClick={() => {
-                                            setSelectedTable(table);
-                                        }} className={selectedTable && selectedTable.id === table.id ? 'selected' : ''}>
-                                            <td>{table.tableTitle}</td>
-                                            <td className='drop-down'>
-                                                <select
-                                                    ref={dropdownRef}
-                                                    value={selectedVersions[table.id] || ''}
-                                                    onClick={(e) => e.stopPropagation()}
-                                                    onChange={(e) => {
-                                                        const value = e.target.value;
-                                                        const selectedVersion = table.dataVersionList.find(version => version.id === parseInt(value, 10));
-                                                        setSelectedVersions(prev => ({ ...prev, [table.id]: selectedVersion.id }));
-                                                        setNewNote(selectedVersion?.note || '');
-                                                    }}
-                                                >
-                                                    {table.dataVersionList.map(version => (
-                                                        <option key={version.id} value={version.id}>{version.version}</option>
-                                                    ))}
-                                                </select>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    <tr>
+                                        <td className='details-td'><strong>테이블 ID</strong></td>
+                                        <td>{selectedTable.id}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className='details-td'><strong>테이블 이름</strong></td>
+                                        <td>{editingTableId === selectedTable.id ? (
+                                            <input
+                                                type="text"
+                                                value={newTableName}
+                                                onChange={(e) => setNewTableName(e.target.value)}
+                                            />
+                                        ) : (
+                                            selectedTable.tableTitle
+                                        )}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className='details-td'><strong>최종 수정일</strong></td>
+                                        <td>{formatDate(selectedTable.dataVersionList.find(version => version.id === selectedVersions[selectedTable.id])?.updateTime)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className='details-td'><strong>비고</strong></td>
+                                        <td>{selectedTable.dataVersionList.find(version => version.id === selectedVersions[selectedTable.id])?.note}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className='details-td'><strong>버전</strong></td>
+                                        <td>{selectedTable.dataVersionList.find(version => version.id === selectedVersions[selectedTable.id])?.version}</td>
+                                    </tr>
                                 </tbody>
                             </table>
-                        )}
-                        <div className="pagination">
-                            <GoTriangleLeft onClick={handlePreviousPage} disabled={currentPage === 1} className='pagination-icon' />
-                            <span>{currentPage}</span>
-                            <GoTriangleRight onClick={handleNextPage} disabled={currentPage === Math.ceil(filteredTables().length / itemsPerPage)} className='pagination-icon' />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className={`table-details ${selectedTable ? 'visible' : ''}`} ref={tableDetailsRef}>
-                {selectedTable && (
-                    <div className='table-detail-container'>
-                        <h3>테이블 상세 정보</h3>
-                        <table className="detail-table">
-                            <tbody>
-                                <tr>
-                                    <td className='details-td'><strong>테이블 ID</strong></td>
-                                    <td>{selectedTable.id}</td>
-                                </tr>
-                                <tr>
-                                    <td className='details-td'><strong>테이블 이름</strong></td>
-                                    <td>{editingTableId === selectedTable.id ? (
-                                        <input
-                                            type="text"
-                                            value={newTableName}
-                                            onChange={(e) => setNewTableName(e.target.value)}
-                                        />
-                                    ) : (
-                                        selectedTable.tableTitle
-                                    )}</td>
-                                </tr>
-                                <tr>
-                                    <td className='details-td'><strong>최종 수정일</strong></td>
-                                    <td>{formatDate(selectedTable.dataVersionList.find(version => version.id === selectedVersions[selectedTable.id])?.updateTime)}</td>
-                                </tr>
-                                <tr>
-                                    <td className='details-td'><strong>비고</strong></td>
-                                    <td>{selectedTable.dataVersionList.find(version => version.id === selectedVersions[selectedTable.id])?.note}</td>
-                                </tr>
-                                <tr>
-                                    <td className='details-td'><strong>버전</strong></td>
-                                    <td>{selectedTable.dataVersionList.find(version => version.id === selectedVersions[selectedTable.id])?.version}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div className="table-action-buttons">
-                            <div className="edit-name-wrapper">
-                                <div className="edit-name-container">
-                                    <span>테이블 정보 수정</span>
-                                    {editingTableId === selectedTable.id ? (
-                                        <>
-                                            <IoIosSave
-                                                onClick={() => handleSaveTableName(selectedTable)}
-                                                className="save-table-button"
+                            <div className="table-action-buttons">
+                                <div className="edit-name-wrapper">
+                                    <div className="edit-name-container">
+                                        <span>테이블 정보 수정</span>
+                                        {editingTableId === selectedTable.id ? (
+                                            <>
+                                                <IoIosSave
+                                                    onClick={() => handleSaveTableName(selectedTable)}
+                                                    className="save-table-button"
+                                                />
+                                            </>
+                                        ) : (
+                                            <FaEdit
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleEditTableName(selectedTable);
+                                                }}
+                                                className="edit-table-button"
                                             />
-                                        </>
-                                    ) : (
-                                        <FaEdit
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleEditTableName(selectedTable);
-                                            }}
-                                            className="edit-table-button"
-                                        />
-                                    )}
+                                        )}
+                                    </div>
                                 </div>
+                                <div className="delete-table-container">
+                                    <span>테이블 삭제</span>
+                                    <button className="trash-icon" onClick={() => handleTableDelete(selectedTable.id)}>
+                                        <FaTrash />
+                                    </button>
+                                </div>
+                                <button className="table-view-button" onClick={() => handleTableSelect(buildingId, fileId, selectedTable.id, selectedVersions[selectedTable.id])}>테이블 데이터 보기</button>
                             </div>
-                            <div className="delete-table-container">
-                                <span>테이블 삭제</span>
-                                <button className="trash-icon" onClick={() => handleTableDelete(selectedTable.id)}>
-                                    <FaTrash />
-                                </button>
-                            </div>
-                            <button className="table-view-button" onClick={() => handleTableSelect(buildingId, fileId, selectedTable.id, selectedVersions[selectedTable.id])}>테이블 데이터 보기</button>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </div>
     );

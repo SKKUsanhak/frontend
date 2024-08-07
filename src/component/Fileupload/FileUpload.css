@@ -1,28 +1,27 @@
-/* Upload.css */
-
-/* Root container 설정 */
 body, html {
     height: 100%;
     margin: 0;
     overflow: hidden; /* 페이지 전체에 오버플로우 숨기기 적용 */
 }
 
-.container {
+.file-upload-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh; /* 초기 높이를 화면 전체로 설정 */
+    height: 100%; /* 중앙에 위치시키기 위해 높이를 80%로 설정 */
     text-align: center;
-    position: relative;
+    position: relative; /* 부모 요소로서 자식 요소들의 위치를 기준으로 삼음 */
+    transform: translateY(-50%); /* 세로 방향으로 중앙 정렬 */
+    top: 40%;
     font-family: "LineFont";
     transition: transform 0.5s ease-in-out, width 0.5s ease-in-out; /* 너비와 위치 변화 애니메이션 추가 */
     width: 100%; /* 기본 너비 */
     overflow: hidden; /* 가로 스크롤 방지 */
 }
 
-.container.expanded {
-    transform: translateX(-10%); /* 왼쪽으로 10% 이동 */
+.file-upload-container.expanded {
+    transform: translateY(-50%) translateX(-10%); /* 왼쪽으로 10% 이동 */
 }
 
 .drop-area {

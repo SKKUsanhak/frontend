@@ -25,35 +25,37 @@ function LoginPage() {
     };
 
     return (
-        <div className="login-container">
-            <h2>Login</h2>
-            <form onSubmit={handleLogin}>
-                <div className="form-group">
-                    <label htmlFor="username">ID</label>
-                    <input
-                        type="text"
-                        id="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">비밀번호</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                {error && <p className="error">{error}</p>}
-                <div className='login-button'>
-                    <button type="submit">로그인</button>
-                    <button type="button" onClick={redirectRegister}>회원가입</button>
-                </div>
-            </form>
+        <div className='main-container'>
+            <div className="login-container">
+                <h2>Login</h2>
+                <form onSubmit={handleLogin}>
+                    <div className="form-group">
+                        <label htmlFor="username">ID</label>
+                        <input
+                            type="text"
+                            id="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="password">비밀번호</label>
+                        <input
+                            type="password"
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    {error && <p className="error">{error}</p>}
+                    <div className='login-button'>
+                        <button type="submit">로그인</button>
+                        <button type="button" onClick={redirectRegister}>회원가입</button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }

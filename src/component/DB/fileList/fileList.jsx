@@ -148,129 +148,131 @@ export default function FileList() {
     const totalPages = Math.ceil(filteredFiles().length / itemsPerPage);
 
     return (
-        <div className="file-list-page">
-            <div className="file-list-container" ref={fileListContainerRef}>
-                <h2>파일 목록</h2>
-                <div className='file-list-header'>
-                    <div className="search-container">
-                        <input
-                            type="text"
-                            placeholder="파일 이름으로 검색..."
-                            value={searchQuery}
-                            onChange={(e) => {
-                                setSearchQuery(e.target.value);
-                                setCurrentPage(1);
-                            }}
-                        />
-                        <FaSearch className="search-icon" />
+        <div className='main-container'>
+            <div className="file-list-page">
+                <div className="file-list-container" ref={fileListContainerRef}>
+                    <h2>파일 목록</h2>
+                    <div className='file-list-header'>
+                        <div className="search-container">
+                            <input
+                                type="text"
+                                placeholder="파일 이름으로 검색..."
+                                value={searchQuery}
+                                onChange={(e) => {
+                                    setSearchQuery(e.target.value);
+                                    setCurrentPage(1);
+                                }}
+                            />
+                            <FaSearch className="search-icon" />
+                        </div>
+                        <div className='add-container' onClick={() => navigate(`/buildings/${buildingId}/files/upload`, { state: { buildingId } })}>
+                            <span>파일 추가</span>
+                            <FaFileCirclePlus className='add-file-icon' size={24} />
+                        </div>
                     </div>
-                    <div className='add-container' onClick={() => navigate(`/buildings/${buildingId}/files/upload`, { state: { buildingId } })}>
-                        <span>파일 추가</span>
-                        <FaFileCirclePlus className='add-file-icon' size={24} />
+                    <div className="file-list-content">
+                        <div className="file-list">
+                            {files && files.length === 0 ? (
+                                <p>현재 DB에 파일이 없습니다.</p>
+                            ) : (
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th className='header-cell'>
+                                                파일 이름
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {paginatedFiles.map((file, index) => (
+                                            <tr key={index} onClick={(e) => handleFileNameClick(file, e)} className={selectedFile && selectedFile.id === file.id ? 'selected' : ''}>
+                                                <td>
+                                                    <div className="file-name">
+                                                        {file.fileName}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                            <div className="pagination">
+                                <GoTriangleLeft onClick={handlePreviousPage} disabled={currentPage === 1} className="pagination-icon" />
+                                <span>{currentPage}</span>
+                                <GoTriangleRight onClick={handleNextPage} disabled={currentPage === totalPages} className="pagination-icon" />
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="file-list-content">
-                    <div className="file-list">
-                        {files && files.length === 0 ? (
-                            <p>현재 DB에 파일이 없습니다.</p>
-                        ) : (
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th className='header-cell'>
-                                            파일 이름
-                                        </th>
-                                    </tr>
-                                </thead>
+                <div className={`file-details ${selectedFile ? 'visible' : ''}`} ref={fileDetailsRef}>
+                    {selectedFile && (
+                        <div className='file-detail-container'>
+                            <h3>파일 상세 정보</h3>
+                            <table className="detail-table">
                                 <tbody>
-                                    {paginatedFiles.map((file, index) => (
-                                        <tr key={index} onClick={(e) => handleFileNameClick(file, e)} className={selectedFile && selectedFile.id === file.id ? 'selected' : ''}>
-                                            <td>
-                                                <div className="file-name">
-                                                    {file.fileName}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    <tr>
+                                        <td className='details-td'><strong>파일 ID</strong></td>
+                                        <td>{selectedFile.id}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className='details-td'><strong>파일 이름</strong></td>
+                                        <td>{editingFileId === selectedFile.id ? (
+                                            <input
+                                                type="text"
+                                                value={newFileData.fileName}
+                                                onChange={(e) => setNewFileData({ ...newFileData, fileName: e.target.value })}
+                                            />
+                                        ) : (
+                                            selectedFile.fileName
+                                        )}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className='details-td'><strong>비고</strong></td>
+                                        <td>{editingFileId === selectedFile.id ? (
+                                            <input
+                                                type="text"
+                                                value={newFileData.note}
+                                                onChange={(e) => setNewFileData({ ...newFileData, note: e.target.value })}
+                                            />
+                                        ) : (
+                                            selectedFile.note
+                                        )}</td>
+                                    </tr>
                                 </tbody>
                             </table>
-                        )}
-                        <div className="pagination">
-                            <GoTriangleLeft onClick={handlePreviousPage} disabled={currentPage === 1} className="pagination-icon" />
-                            <span>{currentPage}</span>
-                            <GoTriangleRight onClick={handleNextPage} disabled={currentPage === totalPages} className="pagination-icon" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className={`file-details ${selectedFile ? 'visible' : ''}`} ref={fileDetailsRef}>
-                {selectedFile && (
-                    <div className='file-detail-container'>
-                        <h3>파일 상세 정보</h3>
-                        <table className="detail-table">
-                            <tbody>
-                                <tr>
-                                    <td className='details-td'><strong>파일 ID</strong></td>
-                                    <td>{selectedFile.id}</td>
-                                </tr>
-                                <tr>
-                                    <td className='details-td'><strong>파일 이름</strong></td>
-                                    <td>{editingFileId === selectedFile.id ? (
-                                        <input
-                                            type="text"
-                                            value={newFileData.fileName}
-                                            onChange={(e) => setNewFileData({ ...newFileData, fileName: e.target.value })}
-                                        />
-                                    ) : (
-                                        selectedFile.fileName
-                                    )}</td>
-                                </tr>
-                                <tr>
-                                    <td className='details-td'><strong>비고</strong></td>
-                                    <td>{editingFileId === selectedFile.id ? (
-                                        <input
-                                            type="text"
-                                            value={newFileData.note}
-                                            onChange={(e) => setNewFileData({ ...newFileData, note: e.target.value })}
-                                        />
-                                    ) : (
-                                        selectedFile.note
-                                    )}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div className="file-action-buttons">
-                            <div className="edit-name-wrapper">
-                                <div className="edit-name-container">
-                                    <span>파일 정보 수정</span>
-                                    {editingFileId === selectedFile.id ? (
-                                        <>
-                                            <IoIosSave
-                                                onClick={() => handleFileSave(selectedFile)}
-                                                className="save-file-button"
+                            <div className="file-action-buttons">
+                                <div className="edit-name-wrapper">
+                                    <div className="edit-name-container">
+                                        <span>파일 정보 수정</span>
+                                        {editingFileId === selectedFile.id ? (
+                                            <>
+                                                <IoIosSave
+                                                    onClick={() => handleFileSave(selectedFile)}
+                                                    className="save-file-button"
+                                                />
+                                            </>
+                                        ) : (
+                                            <FaEdit
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleEditFile(selectedFile);
+                                                }}
+                                                className="edit-file-button"
                                             />
-                                        </>
-                                    ) : (
-                                        <FaEdit
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleEditFile(selectedFile);
-                                            }}
-                                            className="edit-file-button"
-                                        />
-                                    )}
+                                        )}
+                                    </div>
                                 </div>
+                                <div className="delete-file-container">
+                                    <span>파일 삭제</span>
+                                    <button className="trash-icon" onClick={() => handleFileDelete(buildingId, selectedFile.id)}>
+                                        <FaTrash />
+                                    </button>
+                                </div>
+                                <button className="table-view-button" onClick={() => handleFileSelect(buildingId, selectedFile.id)}>테이블 목록 보기</button>
                             </div>
-                            <div className="delete-file-container">
-                                <span>파일 삭제</span>
-                                <button className="trash-icon" onClick={() => handleFileDelete(buildingId, selectedFile.id)}>
-                                    <FaTrash />
-                                </button>
-                            </div>
-                            <button className="table-view-button" onClick={() => handleFileSelect(buildingId, selectedFile.id)}>테이블 목록 보기</button>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </div>
     );

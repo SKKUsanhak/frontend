@@ -3,97 +3,52 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 10000;
+  z-index: 100;
   background-color: white;
   box-shadow: 0 4px 6px rgb(250, 250, 250);
 }
 
 .header__inner {
   display: flex;
-  justify-content: center; /* 중앙 정렬 */
+  justify-content: flex-end; /* 오른쪽 정렬 */
   align-items: center;
   padding: 10px;
   font-family: "LineFont";
-  position: relative; /* login-icon-container 위치 조정을 위해 추가 */
-}
-
-.header__nav {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-  font-family: "LineFont";
-}
-
-.nav__list {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.nav__item {
-  margin: 0 15px;
-}
-
-.nav__item a {
-  color: rgb(65, 60, 60);
-  text-decoration: none;
-  font-family: "LineFont";
-  transition: color 0.3s ease-in-out;
-}
-
-.nav__item a:hover {
-  font-family: "LineFontBold";
+  position: relative;
 }
 
 .login-icon-container {
-  position: absolute; /* 중앙 정렬을 위해 absolute 위치 사용 */
-  right: 10px; /* 오른쪽으로 아이콘 위치 조정 */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative; /* 부모 요소에 대해 가상 요소 위치 조정을 위해 relative 설정 */
 }
 
 .login-icon {
   font-size: 20px;
   cursor: pointer;
   color: #343a40;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.home-icon-container {
-  font-size: 20px;
-  vertical-align: center;
-  cursor: pointer;
-}
-
-.login-icon-container, .home-icon-container {
-  position: relative; /* 가상 요소의 위치 기준을 설정 */
-}
-
-.login-icon-container::after, .home-icon-container::after {
-  content: ""; 
-  position: absolute; 
-  top: 50%; 
-  left: 50%; 
-  width: 30px; /* 원의 초기 크기 설정 */
-  height: 30px; /* 원의 초기 크기 설정 */
-  background-color: rgba(128, 128, 128, 0); /* 초기 상태에서 배경색 투명 */
-  border-radius: 50%; 
-  transform: translate(-50%, -50%); 
-  transition: background-color 0.3s ease; /* 색상 변경에 대한 트랜지션 효과만 추가 */
+.login-icon-container::after {
+  content: "";
+  position: absolute;
+  top: 50%; /* 부모 요소의 중앙에 위치 */
+  left: 50%; /* 부모 요소의 중앙에 위치 */
+  width: 30px;
+  height: 30px;
+  background-color: rgba(128, 128, 128, 0);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: background-color 0.3s ease;
   z-index: -1;
 }
 
-.login-icon-container:hover::after, .home-icon-container:hover::after {
-  background-color: rgba(128, 128, 128, 0.304); /* 호버 시 회색으로 변경 */
-}
-
-.login-icon, .home-icon {
-  position: relative; /* 가상 요소와 함께 쓰이므로 relative 설정 필요 */
-  z-index: 1; /* 아이콘이 원 위에 보이도록 z-index 설정 */
-  width: 100%; /* 아이콘의 크기를 컨테이너에 맞춤 */
-  height: 100%; /* 아이콘의 크기를 컨테이너에 맞춤 */
-  display: flex; /* flexbox를 사용하여 중앙 정렬 */
-  align-items: center; /* 세로 방향 중앙 정렬 */
-  justify-content: center; /* 가로 방향 중앙 정렬 */
+.login-icon-container:hover::after {
+  background-color: rgba(128, 128, 128, 0.304);
 }

@@ -142,171 +142,173 @@ export default function BuildingList() {
     const totalPages = Math.ceil(filteredBuildings().length / itemsPerPage);
 
     return (
-        <div className="building-list-page">
-            <div className="building-list-container" ref={buildingListContainerRef}>
-                <h2>건물 목록</h2>
-                <div className='building-list-header'>
-                    <div className="search-container">
-                        <input
-                            type="text"
-                            placeholder="건물 이름으로 검색..."
-                            value={searchQuery}
-                            onChange={(e) => {
-                                setSearchQuery(e.target.value);
-                                setCurrentPage(1);
-                            }}
-                        />
-                        <FaSearch className="search-icon" />
-                    </div>
-                </div>
-                <div className="building-list-content">
-                    <div className="building-list">
-                        {buildings.length === 0 ? (
-                            <p>현재 DB에 건물이 없습니다.</p>
-                        ) : (
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th className='header-cell'>
-                                            건물 이름
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {paginatedBuildings.map((building, index) => (
-                                        <tr key={index} onClick={(e) => handleBuildingNameClick(building, e)} className={selectedBuilding && selectedBuilding.id === building.id ? 'selected' : ''}>
-                                            <td>
-                                                <div className="building-name">
-                                                    {building.buildingName}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        )}
-                        {buildings.length > 0 && (
-                            <div className="pagination">
-                                <GoTriangleLeft onClick={handlePreviousPage} disabled={currentPage === 1} className="pagination-icon" />
-                                <span>{currentPage}</span>
-                                <GoTriangleRight onClick={handleNextPage} disabled={currentPage === totalPages} className="pagination-icon" />
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
-            <div className={`building-details ${selectedBuilding ? 'visible' : ''}`} ref={buildingDetailsRef}>
-                {selectedBuilding && (
-                    <div className='building-detail-container'>
-                        <h3>건물 상세 정보</h3>
-                        <table className="detail-table">
-                            <tbody>
-                                <tr>
-                                    <td className='detail-td'><strong>건물 ID</strong></td>
-                                    <td>{selectedBuilding.id}</td>
-                                </tr>
-                                <tr>
-                                    <td className='detail-td'><strong>건물 이름</strong></td>
-                                    <td>
-                                        {editingBuildingId === selectedBuilding.id ? (
-                                            <input
-                                                type="text"
-                                                value={newBuildingData.buildingName || ''}
-                                                onChange={(e) => setNewBuildingData({ ...newBuildingData, buildingName: e.target.value })}
-                                            />
-                                        ) : (
-                                            selectedBuilding.buildingName
-                                        )}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className='detail-td'><strong>주소</strong></td>
-                                    <td>
-                                        {editingBuildingId === selectedBuilding.id ? (
-                                            <input
-                                                type="text"
-                                                value={newBuildingData.address || ''}
-                                                onChange={(e) => setNewBuildingData({ ...newBuildingData, address: e.target.value })}
-                                            />
-                                        ) : (
-                                            selectedBuilding.address
-                                        )}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className='detail-td'><strong>총 면적</strong></td>
-                                    <td>
-                                        {editingBuildingId === selectedBuilding.id ? (
-                                            <input
-                                                type="text"
-                                                value={newBuildingData.totalArea || ''}
-                                                onChange={(e) => setNewBuildingData({ ...newBuildingData, totalArea: e.target.value })}
-                                            />
-                                        ) : (
-                                            selectedBuilding.totalArea
-                                        )}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className='detail-td'><strong>지상 층수</strong></td>
-                                    <td>
-                                        {editingBuildingId === selectedBuilding.id ? (
-                                            <input
-                                                type="number"
-                                                value={newBuildingData.groundFloors || ''}
-                                                onChange={(e) => setNewBuildingData({ ...newBuildingData, groundFloors: e.target.value })}
-                                            />
-                                        ) : (
-                                            selectedBuilding.groundFloors
-                                        )}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className='detail-td'><strong>지하 층수</strong></td>
-                                    <td>
-                                        {editingBuildingId === selectedBuilding.id ? (
-                                            <input
-                                                type="number"
-                                                value={newBuildingData.basementFloors || ''}
-                                                onChange={(e) => setNewBuildingData({ ...newBuildingData, basementFloors: e.target.value })}
-                                            />
-                                        ) : (
-                                            selectedBuilding.basementFloors
-                                        )}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div className="building-action-buttons">
-                            <div className="edit-name-wrapper">
-                                <div className="edit-name-container">
-                                    <span>건물 정보 수정</span>
-                                    {editingBuildingId === selectedBuilding.id ? (
-                                        <IoIosSave
-                                            onClick={handleSaveBuilding}
-                                            className="save-building-button"
-                                        />
-                                    ) : (
-                                        <FaEdit
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleEditBuilding(selectedBuilding);
-                                            }}
-                                            className="edit-building-button"
-                                        />
-                                    )}
-                                </div>
-                            </div>
-                            <div className="delete-building-container">
-                                <span>건물 삭제</span>
-                                <button className="trash-icon" onClick={() => handleBuildingDelete(selectedBuilding.id)}>
-                                    <FaTrash />
-                                </button>
-                            </div>
-                            <button onClick={() => handleBuildingSelect(selectedBuilding.id)} className='file-view-button'>파일 목록 보기</button>
+        <div className='main-container'>
+            <div className="building-list-page">
+                <div className="building-list-container" ref={buildingListContainerRef}>
+                    <h2>건물 목록</h2>
+                    <div className='building-list-header'>
+                        <div className="search-container">
+                            <input
+                                type="text"
+                                placeholder="건물 이름으로 검색..."
+                                value={searchQuery}
+                                onChange={(e) => {
+                                    setSearchQuery(e.target.value);
+                                    setCurrentPage(1);
+                                }}
+                            />
+                            <FaSearch className="search-icon" />
                         </div>
                     </div>
-                )}
+                    <div className="building-list-content">
+                        <div className="building-list">
+                            {buildings.length === 0 ? (
+                                <p>현재 DB에 건물이 없습니다.</p>
+                            ) : (
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th className='header-cell'>
+                                                건물 이름
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {paginatedBuildings.map((building, index) => (
+                                            <tr key={index} onClick={(e) => handleBuildingNameClick(building, e)} className={selectedBuilding && selectedBuilding.id === building.id ? 'selected' : ''}>
+                                                <td>
+                                                    <div className="building-name">
+                                                        {building.buildingName}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                            {buildings.length > 0 && (
+                                <div className="pagination">
+                                    <GoTriangleLeft onClick={handlePreviousPage} disabled={currentPage === 1} className="pagination-icon" />
+                                    <span>{currentPage}</span>
+                                    <GoTriangleRight onClick={handleNextPage} disabled={currentPage === totalPages} className="pagination-icon" />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+                <div className={`building-details ${selectedBuilding ? 'visible' : ''}`} ref={buildingDetailsRef}>
+                    {selectedBuilding && (
+                        <div className='building-detail-container'>
+                            <h3>건물 상세 정보</h3>
+                            <table className="detail-table">
+                                <tbody>
+                                    <tr>
+                                        <td className='detail-td'><strong>건물 ID</strong></td>
+                                        <td>{selectedBuilding.id}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className='detail-td'><strong>건물 이름</strong></td>
+                                        <td>
+                                            {editingBuildingId === selectedBuilding.id ? (
+                                                <input
+                                                    type="text"
+                                                    value={newBuildingData.buildingName || ''}
+                                                    onChange={(e) => setNewBuildingData({ ...newBuildingData, buildingName: e.target.value })}
+                                                />
+                                            ) : (
+                                                selectedBuilding.buildingName
+                                            )}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className='detail-td'><strong>주소</strong></td>
+                                        <td>
+                                            {editingBuildingId === selectedBuilding.id ? (
+                                                <input
+                                                    type="text"
+                                                    value={newBuildingData.address || ''}
+                                                    onChange={(e) => setNewBuildingData({ ...newBuildingData, address: e.target.value })}
+                                                />
+                                            ) : (
+                                                selectedBuilding.address
+                                            )}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className='detail-td'><strong>총 면적</strong></td>
+                                        <td>
+                                            {editingBuildingId === selectedBuilding.id ? (
+                                                <input
+                                                    type="text"
+                                                    value={newBuildingData.totalArea || ''}
+                                                    onChange={(e) => setNewBuildingData({ ...newBuildingData, totalArea: e.target.value })}
+                                                />
+                                            ) : (
+                                                selectedBuilding.totalArea
+                                            )}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className='detail-td'><strong>지상 층수</strong></td>
+                                        <td>
+                                            {editingBuildingId === selectedBuilding.id ? (
+                                                <input
+                                                    type="number"
+                                                    value={newBuildingData.groundFloors || ''}
+                                                    onChange={(e) => setNewBuildingData({ ...newBuildingData, groundFloors: e.target.value })}
+                                                />
+                                            ) : (
+                                                selectedBuilding.groundFloors
+                                            )}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className='detail-td'><strong>지하 층수</strong></td>
+                                        <td>
+                                            {editingBuildingId === selectedBuilding.id ? (
+                                                <input
+                                                    type="number"
+                                                    value={newBuildingData.basementFloors || ''}
+                                                    onChange={(e) => setNewBuildingData({ ...newBuildingData, basementFloors: e.target.value })}
+                                                />
+                                            ) : (
+                                                selectedBuilding.basementFloors
+                                            )}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div className="building-action-buttons">
+                                <div className="edit-name-wrapper">
+                                    <div className="edit-name-container">
+                                        <span>건물 정보 수정</span>
+                                        {editingBuildingId === selectedBuilding.id ? (
+                                            <IoIosSave
+                                                onClick={handleSaveBuilding}
+                                                className="save-building-button"
+                                            />
+                                        ) : (
+                                            <FaEdit
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleEditBuilding(selectedBuilding);
+                                                }}
+                                                className="edit-building-button"
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="delete-building-container">
+                                    <span>건물 삭제</span>
+                                    <button className="trash-icon" onClick={() => handleBuildingDelete(selectedBuilding.id)}>
+                                        <FaTrash />
+                                    </button>
+                                </div>
+                                <button onClick={() => handleBuildingSelect(selectedBuilding.id)} className='file-view-button'>파일 목록 보기</button>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
