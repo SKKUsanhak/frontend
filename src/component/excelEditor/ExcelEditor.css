@@ -26,7 +26,7 @@
 
 .excel-editor {
   display: grid;
-  grid-template-columns: 3fr 1fr; /* 왼쪽에 테이블, 오른쪽에 컨트롤 */
+  grid-template-columns: 4fr 1fr; /* 왼쪽에 테이블, 오른쪽에 컨트롤 */
   gap: 20px;
   padding: 20px;
   font-family: "LineFont";
@@ -40,7 +40,7 @@
   padding: 10px;
   font-family: "LineFont";
   overflow: hidden;
-  height: 80%;
+  height: 70%;
 }
 
 .controls-section {
@@ -52,7 +52,7 @@
   background-color: white;
   z-index: 1000;
   overflow: hidden;
-  height: 80%;
+  height: 70%;
 }
 
 .controls-section .controls-content {

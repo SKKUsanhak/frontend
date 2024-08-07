@@ -298,7 +298,6 @@ export default function ExcelEditor() {
                                 </tbody>
                             </table>
                         </div>
-
                         <div className="sheet-navigation">
                             <button onClick={handlePrevSheet} disabled={data.length === 0}>
                                 <FaArrowAltCircleLeft className="nav-icon" />
