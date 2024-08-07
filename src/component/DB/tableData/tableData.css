@@ -1,4 +1,4 @@
-.excel-editor {
+.db-excel-editor {
     display: grid;
     grid-template-columns: 80% 20%; /* 왼쪽에 테이블, 오른쪽에 컨트롤 */
     gap: 20px;
@@ -32,7 +32,7 @@
     opacity: 0.4; /* 반투명하게 설정 */
 }
 
-.table-section {
+.db-excel-editor .table-section {
     display: flex;
     flex-direction: column;
     border: 1px solid #ddd;
@@ -41,7 +41,7 @@
     height: 620px; /* 높이를 화면 높이에 맞추고 padding을 뺀 값 */
 }
 
-.table-data-container {
+.db-excel-editor .table-data-container {
     max-width: 100%;
     height: 100%;
     overflow: auto; /* 내용이 넘칠 경우 스크롤 생성 */
@@ -91,22 +91,20 @@
     background-color: rgb(205, 205, 205);
 }
 
-.control-section {
+.db-excel-editor .control-section {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
     font-family: "LineFont";
-    position: fixed;
-    right: 70px;
-    width: 15%;
-    height: 600px;
     background-color: white;
     z-index: 1000;
+    overflow: hidden;
     border: 1px solid #ddd;
+    height: 600px;
 }
 
-.control-section.disabled {
+.db-excel-editor .control-section.disabled {
     pointer-events: none; /* Disable all pointer events */
     opacity: 0.5; /* Make it appear disabled */
     cursor: not-allowed;
@@ -116,7 +114,7 @@
     margin-top: 10px;
 }
 
-.control-section .save-button-group {
+.db-excel-editor .control-section .save-button-group {
     margin-top: auto; 
 }
 
@@ -152,7 +150,7 @@
     text-align: center;
 }
 
-.control-section button {
+.db-excel-editor .control-section button {
     border: none;
     border-radius: 5px;
     padding: 10px 10px;

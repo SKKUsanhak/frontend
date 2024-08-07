@@ -86,7 +86,7 @@ body, html {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 10;
+    z-index: 100;
     backdrop-filter: blur(5px);
     font-family: "LineFont";
 }
@@ -105,7 +105,7 @@ body, html {
     padding: 20px;
     box-shadow: -2px 0 5px #ddd;
     overflow-y: auto;
-    z-index: 1000;
+    z-index: 10;
     font-family: "LineFont";
     transition: right 0.5s ease;
 }

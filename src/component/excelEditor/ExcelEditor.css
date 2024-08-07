@@ -14,6 +14,7 @@
   margin-top: 40px;
   padding: 20px;
   margin-left: 20px;
+  margin-bottom: 40px;
   position: relative;
 }
 
@@ -25,10 +26,11 @@
 
 .excel-editor {
   display: grid;
-  grid-template-columns: 75% 25%; /* 왼쪽에 테이블, 오른쪽에 컨트롤 */
+  grid-template-columns: 3fr 1fr; /* 왼쪽에 테이블, 오른쪽에 컨트롤 */
   gap: 20px;
   padding: 20px;
   font-family: "LineFont";
+  height: 100%; /* 화면 높이에서 상단과 하단 여백을 뺀 높이 */
 }
 
 .table-section {
@@ -37,42 +39,45 @@
   border: 1px solid #ddd;
   padding: 10px;
   font-family: "LineFont";
+  overflow: hidden;
+  height: 80%;
 }
 
 .controls-section {
-  /* border: 1px solid #ddd; */
   display: flex;
   flex-direction: column;
-  gap: 10px;
   align-items: center;
   padding: 20px;
   font-family: "LineFont";
-  position: fixed;
-  top: 200px;  /* Adjust this as needed depending on your header's height */
-  right: 50px;  /* Aligns the section to the right edge of the viewport */
-  width: 1fr;  /* Specifies the width of the controls section */
-  height: 600px;  /* Fixed height, can adjust if needed */
-  background-color: white;  /* Optional: sets a background color */
-  z-index: 1000;  /* Ensures it stays on top of other content */
+  background-color: white;
+  z-index: 1000;
+  overflow: hidden;
+  height: 80%;
+}
+
+.controls-section .controls-content {
+  width: 100%;
+  height: 100%;
 }
 
 .controls-section input {
   border: 1px solid #ccc; /* 연한 회색 테두리 */
   outline: none; /* 포커스 시 아웃라인 제거 */
-  padding: 8px;
+  padding: 5px;
+  margin-left: 5px;
   border-radius: 5px; /* 둥근 테두리 */
-  width: 100%;
+  width: 100%; /* 부모의 너비에 맞춤 */
   box-sizing: border-box; /* 패딩을 포함한 박스 크기 계산 */
   font-family: "LineFont";
 }
 
-/* 컨트롤 섹션 내의 버튼 스타일 */
 .controls-section button {
   background-color: #060429; 
   color: white;
   border: none;
   border-radius: 5px;
   padding: 10px 5px; 
+  margin-right: 5px;
   font-size: 12px; 
   cursor: pointer;
   transition: background-color 0.3s; 
@@ -159,17 +164,24 @@
 .controls-section .ColumnRanges,
 .controls-section .upload-button {
   margin-bottom: 20px;
+  width: 100%; /* 부모의 너비에 맞춤 */
 }
 
 .controls-section .ColumnRanges {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%; /* 부모의 너비에 맞춤 */
+}
+
+.controls-section .ColumnRanges input {
+  margin-top: 5px;
 }
 
 .controls-section .ColumnRanges button {
   margin: 15px;
   align-items: center;
+  width: 100%; /* 부모의 너비에 맞춤 */
 }
 
 .hovered-cell-info {
@@ -193,6 +205,7 @@
   background-color: #f0f2fa;
   border: none;
 }
+
 .highlight-cell-border {
   border: 2px solid #6060a6 !important; /* Adjust the color and width as needed */
 }
@@ -207,7 +220,7 @@
 
 .highlight-input, .highlight-input:focus {
   outline: none; 
-  border:none;
+  border: none;
 }
 
 .highlight-row-range th:first-child {

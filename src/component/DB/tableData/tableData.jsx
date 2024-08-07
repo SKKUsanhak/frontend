@@ -228,7 +228,7 @@ export default function TableData() {
                 <h1 className='title-name'>{tableTitle}</h1>
                 <h3 className='current-version'>{currentVersion ? `${currentVersion}` : '버전 정보 없음'}</h3>
                 <div ref={containerRef}>
-                    <div className='excel-editor'>
+                    <div className='db-excel-editor'>
                         <div className='table-section'>
                             <div className='table-data-container'>
                                 <table className='db-table'>
