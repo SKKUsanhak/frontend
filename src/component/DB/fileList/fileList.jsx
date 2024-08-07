@@ -16,7 +16,7 @@ export default function FileList() {
     const [searchQuery, setSearchQuery] = useState('');
     const fileListContainerRef = useRef(null);
     const fileDetailsRef = useRef(null);
-    const itemsPerPage = 15;
+    const itemsPerPage = 13;
     const navigate = useNavigate();
     const { buildingId } = useParams();
 

@@ -15,7 +15,7 @@ export default function BuildingList() {
     const [searchQuery, setSearchQuery] = useState('');
     const buildingListContainerRef = useRef(null);
     const buildingDetailsRef = useRef(null);
-    const itemsPerPage = 15;
+    const itemsPerPage = 13;
     const navigate = useNavigate();
 
     useEffect(() => {

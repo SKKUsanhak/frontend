@@ -17,7 +17,7 @@ export default function TableList() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTable, setSelectedTable] = useState(null);
     const [selectedVersions, setSelectedVersions] = useState({});
-    const itemsPerPage = 15;
+    const itemsPerPage = 13;
 
     const tableDetailsRef = useRef(null);
     const tableListContainerRef = useRef(null);
