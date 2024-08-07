@@ -22,8 +22,8 @@ body {
 
 
 .main-container {
-  margin-left: 10%; /* Sidebar의 너비만큼 왼쪽 여백 추가 */
-  width: 90%;
+  margin-left: 15%; /* Sidebar의 너비만큼 왼쪽 여백 추가 */
+  width: 85%;
   height: 100vh;
   position: relative; /* 부모 요소로서 자식 요소들의 위치를 기준으로 삼음 */
 }
