@@ -10,8 +10,9 @@ import TableData from './component/DB/tableData/tableData.jsx';
 import Login from './component/login/login.jsx';
 import Register from './component/register/register.jsx';
 import BuildingUpload from './component/BuildingUpload/BuildingUpload.jsx';
-import Sidebar from './component/sidebar/Sidebar.jsx'; // Import the Sidebar component
-import './App.css'; // Import App.css for additional styling
+import Sidebar from './component/sidebar/Sidebar.jsx';
+import Header from './component/header/header.jsx'; // Import the Header component
+import './App.css';
 
 function App() {
     const location = useLocation();
@@ -24,22 +25,22 @@ function App() {
 
     return (
         <div className="app-container">
-            <Sidebar onToggle={handleToggleSidebar} /> {/* Add Sidebar */}
+            <Sidebar onToggle={handleToggleSidebar} />
             <div className={`main-content-container ${isSidebarCollapsed ? 'expanded' : ''}`}>
-                {!isHome}
+                {!isHome && <Header />} {/* Render the header conditionally */}
                 <div className="main-content">
                     <Routes>
-                        <Route path="/" element={<Home />} /> {/* 홈페이지 */}
-                        <Route path="/buildings/:buildingId/files/upload" element={<FileUpload />} /> {/* 파일 업로드 페이지 */}
-                        <Route path="/excelEditor" element={<ExcelEditor />} /> {/* 파일 수정 페이지 */}
-                        <Route path="/buildings/upload" element={<BuildingUpload />} /> {/*빌딩 추가 페이지*/}
-                        <Route path="/buildings" element={<BuildingList />} /> {/* 건물 리스트  */}
-                        <Route path="/buildings/:buildingId/files" element={<FileList />} /> {/* 파일 리스트  */}
-                        <Route path="/buildings/:buildingId/files/:fileId/tables" element={<TableList />} /> {/* 테이블 리스트  */}
-                        <Route path="/buildings/:buildingId/files/:fileId/tables/:tableId/datas" element={<TableData />} /> {/* 데이터  */}
-                        <Route path="/login" element={<Login />} /> {/* 로그인 페이지 */}
-                        <Route path="/register" element={<Register />} /> {/* 회원가입 페이지 */}
-                        <Route path="*" element={<Navigate to="/" />} /> {/* 지정되지 않은 페이지 */}
+                        <Route path="/" element={<Home />} />
+                        <Route path="/buildings/:buildingId/files/upload" element={<FileUpload />} />
+                        <Route path="/excelEditor" element={<ExcelEditor />} />
+                        <Route path="/buildings/upload" element={<BuildingUpload />} />
+                        <Route path="/buildings" element={<BuildingList />} />
+                        <Route path="/buildings/:buildingId/files" element={<FileList />} />
+                        <Route path="/buildings/:buildingId/files/:fileId/tables" element={<TableList />} />
+                        <Route path="/buildings/:buildingId/files/:fileId/tables/:tableId/datas" element={<TableData />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="*" element={<Navigate to="/" />} />
                     </Routes>
                 </div>
             </div>

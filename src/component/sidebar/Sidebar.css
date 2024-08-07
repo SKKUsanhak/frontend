@@ -1,3 +1,5 @@
+/* Sidebar.css */
+
 .sidebar {
     width: 15%;
     height: 100vh;
@@ -10,15 +12,39 @@
     flex-direction: column;
     align-items: flex-start; /* 왼쪽 정렬 */
     z-index: 9999;
-    transition: width 0.5s ease; /* 너비 변화에 대한 애니메이션 효과 */
+    transition: width 0.5s ease, box-shadow 0.5s ease; /* 너비 및 box-shadow 변화에 대한 애니메이션 효과 */
 }
 
 .sidebar.collapsed {
-    width: 0; /* 축소된 사이드바의 너비 */
+    width: 60px; /* 축소된 사이드바의 너비 */
+    box-shadow: none; /* 축소된 사이드바에서 box-shadow 제거 */
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.sidebar-content {
+    width: 100%; /* 전체 너비 차지 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 상단과 하단 공간을 균등하게 배분 */
+    flex-grow: 1; /* 공간을 차지하도록 설정 */
 }
 
 .sidebar-links {
     padding: 20px; /* 사이드바 링크의 기본 패딩 설정 */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 왼쪽 정렬 */
+}
+
+.sidebar-footer {
+    padding: 20px; /* 사이드바 하단의 패딩 설정 */
     display: flex;
     flex-direction: column;
     align-items: flex-start; /* 왼쪽 정렬 */
@@ -31,20 +57,28 @@
 .sidebar-item {
     display: flex;
     align-items: center;
-    margin-bottom: 15px; /* 링크들 간의 간격 추가 */
+    padding: 5px;
+    margin-bottom: 10px; /* 링크들 간의 간격 추가 */
+    cursor: pointer; /* 클릭 가능하도록 커서 변경 */
+}
+
+.sidebar-item.disabled {
+    opacity: 0.3; /* 비활성화된 항목의 불투명도 감소 */
+    pointer-events: none;
+    cursor: not-allowed; /* 커서를 금지 표시로 설정 */
 }
 
 .sidebar-link-icon {
-    margin-right: 15px; /* 아이콘과 텍스트 간의 간격 */
+    margin-right: 10px; /* 아이콘과 텍스트 간의 간격 */
     font-size: 24px; /* 아이콘 크기 조정 */
 }
 
 .sidebar-link-icon-file {
-    margin-right: 15px; /* 파일 아이콘과 텍스트 간의 간격 */
+    margin-right: 10px; /* 파일 아이콘과 텍스트 간의 간격 */
     font-size: 28px; /* 아이콘 크기 조정 */
 }
 
-.sidebar a {
+.sidebar a, .sidebar span {
     color: rgb(0, 0, 0);
     text-decoration: none;
     font-size: 16px;
@@ -53,18 +87,16 @@
     text-align: left; /* 텍스트 왼쪽 정렬 */
 }
 
-.sidebar a.active {
+.sidebar a.active, .sidebar span.active {
     border-radius: 10px;
 }
 
-.sidebar a:hover {
+.sidebar a:hover, .sidebar span:hover {
     font-family: "LineFontBold";
     border-radius: 10px;
 }
 
 .sidebar-icon {
-    margin-top: 20px;
-    margin-left: 20px; /* 아이콘 위치 고정 */
     font-size: 24px;
     cursor: pointer;
     color: rgb(0, 0, 0);

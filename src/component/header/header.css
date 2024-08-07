@@ -1,0 +1,23 @@
+.header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding:20px;
+    width: 100%;
+    background: none;
+    border: none;
+}
+
+.header-content {
+    display: flex;
+    justify-content: flex-end;
+    width: auto;
+}
+
+.home-icon {
+    font-size: 1.5rem;
+    cursor: pointer;
+}
