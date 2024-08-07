@@ -10,6 +10,7 @@
     align-items: flex-start; /* 왼쪽 정렬 */
     z-index: 9999;
     transition: width 0.5s ease; /* 너비 변화에 대한 애니메이션 효과 */
+    font-family: "LineFont";
 }
 
 .sidebar.collapsed {
@@ -29,7 +30,7 @@
 
 .sidebar a {
     color: white;
-    padding: 10px 10px;
+    padding: 10px 0;
     text-decoration: none;
     font-size: 18px;
     transition: opacity 0.3s ease; /* 투명도 변화에 대한 애니메이션 효과 */
@@ -39,12 +40,16 @@
 
 .sidebar a.active {
     background-color: #575757;
-    border-radius: 10px;
+    border-radius: 4px;
 }
 
 .sidebar a:hover {
     background-color: #575757;
-    border-radius: 10px;
+}
+
+.sidebar a.disabled {
+    color: gray;
+    pointer-events: none; /* 클릭 불가능하게 설정 */
 }
 
 .sidebar-icon {

@@ -42,7 +42,7 @@
 
 .building-list-container.expanded {
     width: 40%;
-    transform: translateX(-20%);
+    transform: translateX(-30%);
 }
 
 .building-list-content {

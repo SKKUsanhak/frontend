@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import FileUpload from './component/Fileupload/FileUpload.jsx';
 import ExcelEditor from './component/excelEditor/ExcelEditor.jsx';
-import Header from './component/header/header.jsx';
 import Home from './component/Home/home.jsx';
 import BuildingList from './component/DB/buildingList/buildingList.jsx';
 import FileList from './component/DB/fileList/fileList.jsx';
@@ -27,7 +26,7 @@ function App() {
         <div className="app-container">
             <Sidebar onToggle={handleToggleSidebar} /> {/* Add Sidebar */}
             <div className={`main-content-container ${isSidebarCollapsed ? 'expanded' : ''}`}>
-                {!isHome && <Header />}
+                {!isHome}
                 <div className="main-content">
                     <Routes>
                         <Route path="/" element={<Home />} /> {/* 홈페이지 */}

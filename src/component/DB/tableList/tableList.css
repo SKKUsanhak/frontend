@@ -42,7 +42,7 @@
 
 .table-list-container.expanded {
     width: 40%; /* table-details와 함께 보여질 때 너비 조절 */
-    transform: translateX(-20%); /* 왼쪽으로 이동 */
+    transform: translateX(-30%); /* 왼쪽으로 이동 */
 }
 
 .table-list-content {
