@@ -8,12 +8,9 @@ body, html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100%; /* 중앙에 위치시키기 위해 높이를 80%로 설정 */
     text-align: center;
+    height: 100%;
     position: relative; /* 부모 요소로서 자식 요소들의 위치를 기준으로 삼음 */
-    transform: translateY(-50%); /* 세로 방향으로 중앙 정렬 */
-    top: 40%;
     font-family: "LineFont";
     transition: transform 0.5s ease-in-out, width 0.5s ease-in-out; /* 너비와 위치 변화 애니메이션 추가 */
     width: 100%; /* 기본 너비 */
@@ -21,13 +18,13 @@ body, html {
 }
 
 .file-upload-container.expanded {
-    transform: translateY(-50%) translateX(-10%); /* 왼쪽으로 10% 이동 */
+    transform: translateX(-15%); /* 왼쪽으로 20% 이동 */
 }
 
 .drop-area {
     border: 2px dashed #ccc;
     width: 60%; /* 크기 조정 */
-    height: 50%; /* 크기 조정 */
+    height: 60%; /* 크기 조정 */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -79,7 +76,7 @@ body, html {
 }
 
 .loader-overlay {
-    position: absolute;
+    position: fixed; /* 변경된 부분 */
     top: 0;
     left: 0;
     width: 100%;
@@ -101,19 +98,20 @@ body, html {
 .panel-container {
     position: fixed;
     top: 0;
-    right: 0; /* 오른쪽 끝에 위치하도록 조정 */
-    width: 20%; /* 화면의 20% 너비 */
+    right: -100%;
     height: 100%;
-    background: white;
-    box-shadow: -2px 0 5px rgba(0,0,0,0.5);
-    transition: transform 0.5s ease; /* 위치 변화 애니메이션 */
-    transform: translateX(100%); /* 초기에는 화면 밖으로 */
+    width: 20%;
+    background-color: white;
+    padding: 20px;
+    box-shadow: -2px 0 5px #ddd;
+    overflow-y: auto;
+    z-index: 1000;
     font-family: "LineFont";
-    vertical-align: middle;
+    transition: right 0.5s ease;
 }
 
 .panel-container.visible {
-    transform: translateX(0); /* 활성화시 완전히 화면에 표시 */
+    right: 0; /* 활성화시 완전히 화면에 표시 */
 }
 
 /* Overlays and other styling */
@@ -134,7 +132,7 @@ body, html {
 }
 
 .file-info h2 {
-    margin-top: 100px;
+    margin-top: 50px;
     align-self: center; /* h2만 중앙 정렬 */
 }
 
@@ -163,7 +161,7 @@ body, html {
 }
 
 .file-info textarea {
-    height: 300px; /* 비고의 높이 설정 */
+    height: 200px; /* 비고의 높이 설정 */
     resize: none; /* 사용자가 크기 조절 못하게 설정 */
     margin-left: 10px;
     margin-right: 10px;
