@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import FileUpload from './component/Fileupload/FileUpload.jsx';
 import ExcelEditor from './component/excelEditor/ExcelEditor.jsx';
@@ -17,11 +17,16 @@ import './App.css'; // Import App.css for additional styling
 function App() {
     const location = useLocation();
     const isHome = location.pathname === '/';
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+    const handleToggleSidebar = (isCollapsed) => {
+        setIsSidebarCollapsed(isCollapsed);
+    };
 
     return (
         <div className="app-container">
-            <Sidebar /> {/* Add Sidebar */}
-            <div className="main-content-container">
+            <Sidebar onToggle={handleToggleSidebar} /> {/* Add Sidebar */}
+            <div className={`main-content-container ${isSidebarCollapsed ? 'expanded' : ''}`}>
                 {!isHome && <Header />}
                 <div className="main-content">
                     <Routes>
