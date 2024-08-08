@@ -9,7 +9,6 @@ import { PiBuildingOfficeFill } from "react-icons/pi";
 import { MdOutlinePersonAddAlt } from "react-icons/md";
 import { TbLogin2 } from "react-icons/tb";
 
-
 const Sidebar = ({ onToggle }) => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const location = useLocation();
@@ -28,6 +27,10 @@ const Sidebar = ({ onToggle }) => {
     const canAccessFile = segments.length >= 3;
     const canAccessTable = segments.length >= 5;
     const canAccessData = segments.length >= 7;
+
+    const handleRefresh = () => {
+        window.location.reload();
+    };
 
     return (
         <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
@@ -60,7 +63,7 @@ const Sidebar = ({ onToggle }) => {
                         <div className={`sidebar-item ${canAccessData ? '' : 'disabled'}`}>
                             <CgDatabase className="sidebar-link-icon" />
                             {canAccessData ? (
-                                <NavLink to={`/buildings/${segments[1]}/files/${segments[3]}/tables/${segments[5]}/datas`} className="sidebar-link" activeClassName="active">Data</NavLink>
+                                <span onClick={handleRefresh} className="sidebar-link">Data</span>
                             ) : (
                                 <span className="sidebar-link">Data</span>
                             )}

@@ -20,7 +20,6 @@ export default function TableData() {
     const [error, setError] = useState({ visible: false, message: '', target: null });
     const containerRef = useRef(null);
     const navigate = useNavigate();
-    const [isControlSectionClicked, setIsControlSectionClicked] = useState(false);
 
     const fetchData = useCallback(() => {
         axios.get(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas`, {
@@ -180,10 +179,6 @@ export default function TableData() {
     };
 
     const handleCellBlur = (buildingId, fileId, tableId, rowIndex, columnIndex, value) => {
-        if (isControlSectionClicked) {
-            setIsControlSectionClicked(false);
-            return;
-        }
         setEditQueue([...editQueue, {
             method: 'patch',
             url: `/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas`,
@@ -318,8 +313,7 @@ export default function TableData() {
                                 </table>
                             </div>
                         </div>
-                        <div className={`control-section ${!isLastVersion ? 'disabled' : ''}`}
-                            onMouseDown={() => setIsControlSectionClicked(true)}>
+                        <div className={`control-section ${!isLastVersion ? 'disabled' : ''}`}>
                             <div className='button-group'>
                                 <button className="add-button" onClick={() => handleMakeRow(buildingId, fileId, tableId, rows, columns, table)} disabled={!isLastVersion}>행 추가</button>
                                 <button className="delete-button" onClick={() => handleDeleteRow(buildingId, fileId, tableId, selectedCell ? selectedCell.rowIndex : null)} disabled={!isLastVersion || !deleteEnabled}>행 삭제</button>
