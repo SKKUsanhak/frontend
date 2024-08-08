@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaTrash, FaEdit, FaSearch } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
+import { MdOutlineDomainAdd } from "react-icons/md";
 
 export default function BuildingList() {
     const [buildings, setBuildings] = useState([]);
@@ -158,6 +159,10 @@ export default function BuildingList() {
                                 }}
                             />
                             <FaSearch className="search-icon" />
+                        </div>
+                        <div className='add-container' onClick={() => navigate(`/buildings/upload`)}>
+                            <span>건물 추가</span>
+                            <MdOutlineDomainAdd className='add-building-icon' />
                         </div>
                     </div>
                     <div className="building-list-content">

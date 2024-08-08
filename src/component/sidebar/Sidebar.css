@@ -101,3 +101,13 @@
     cursor: pointer;
     color: rgb(0, 0, 0);
 }
+
+.sidebar-footer-icon {
+    margin-right: 10px; /* 아이콘과 텍스트 간의 간격 */
+    font-size: 24px; /* 아이콘 크기 조정 */
+}
+
+.sidebar-footer-icon-file {
+    margin-right: 10px; /* 파일 아이콘과 텍스트 간의 간격 */
+    font-size: 28px; /* 아이콘 크기 조정 */
+}

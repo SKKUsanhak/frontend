@@ -214,15 +214,17 @@
     justify-content: center; /* 중앙 정렬 */
     align-items: center;
     vertical-align: middle;
+    margin-bottom: 10px;
 }
 
 .building-list-header .search-container {
     display: flex;
     align-items: center;
     vertical-align: middle;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative; /* 부모 요소를 기준으로 위치 설정 */
+    position: absolute; /* 부모 요소를 기준으로 위치 설정 */
+    left: 50%; /* 부모 요소의 왼쪽에서 50% 이동 */
+    transform: translateX(-50%); /* 자신의 너비의 50%만큼 왼쪽으로 이동 */
+    font-family: "LineFont";
 }
 
 .building-list-header .search-container input {
@@ -288,4 +290,34 @@
     background-color: white;
     cursor: auto;
     transform: none;
+}
+
+.building-list-header .add-container {
+    display: flex; /* Flexbox 사용 */
+    align-items: center; /* 요소들을 수직 정렬 */
+    justify-content: center;
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.building-list-header .add-container span {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-family: "LineFont";
+    font-size: 16px;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.add-building-icon {
+    font-size: 28px;
+    transition: color 0.5s ease;
+}
+
+.add-building-icon:hover {
+    color: cornflowerblue;
+}
+
+.add-building-icon:active {
+    color: blue;
 }

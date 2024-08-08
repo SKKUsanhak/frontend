@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { IoMenu } from "react-icons/io5";
 import './Sidebar.css';
-import { MdDomainAdd } from "react-icons/md";
-import { BiBuildings } from "react-icons/bi";
 import { FaRegFileAlt } from "react-icons/fa";
 import { FiTable } from "react-icons/fi";
 import { CgDatabase } from "react-icons/cg";
+import { PiBuildingOfficeFill } from "react-icons/pi";
+import { MdOutlinePersonAddAlt } from "react-icons/md";
+import { TbLogin2 } from "react-icons/tb";
+
 
 const Sidebar = ({ onToggle }) => {
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -35,12 +37,8 @@ const Sidebar = ({ onToggle }) => {
             {!isCollapsed && (
                 <div className="sidebar-content">
                     <div className="sidebar-links">
-                        <NavLink to="/buildings/upload" className="sidebar-item" activeClassName="active">
-                            <MdDomainAdd className="sidebar-link-icon" />
-                            <span className="sidebar-link">Upload</span>
-                        </NavLink>
                         <NavLink to="/buildings" className="sidebar-item" activeClassName="active">
-                            <BiBuildings className="sidebar-link-icon" />
+                            <PiBuildingOfficeFill className="sidebar-link-icon" />
                             <span className="sidebar-link">Building</span>
                         </NavLink>
                         <div className={`sidebar-item ${canAccessFile ? '' : 'disabled'}`}>
@@ -70,9 +68,11 @@ const Sidebar = ({ onToggle }) => {
                     </div>
                     <div className="sidebar-footer">
                         <NavLink to="/login" className="sidebar-item">
+                            <TbLogin2 className='sidebar-footer-icon' />
                             <span className="sidebar-link">Login</span>
                         </NavLink>
                         <NavLink to="/register" className="sidebar-item">
+                            <MdOutlinePersonAddAlt className='sidebar-footer-icon' />
                             <span className="sidebar-link">Register</span>
                         </NavLink>
                     </div>
