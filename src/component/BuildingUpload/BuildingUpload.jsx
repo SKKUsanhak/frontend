@@ -41,11 +41,26 @@ const BuildingUpload = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.buildingName.trim() || !formData.address.trim()) {
-            alert('건물명과 주소지는 필수 입력 항목입니다.');
+
+        const buildingNameInput = document.querySelector('input[name="buildingName"]');
+        const addressInput = document.querySelector('input[name="address"]');
+
+        if (!formData.buildingName.trim()) {
+            buildingNameInput.setCustomValidity('이 입력란을 작성하세요');
+            buildingNameInput.reportValidity();
             return;
+        } else {
+            buildingNameInput.setCustomValidity('');
         }
-        // console.log('Submitting form data:', formData); // 요청 데이터 출력
+
+        if (!formData.address.trim()) {
+            addressInput.setCustomValidity('이 입력란을 작성하세요');
+            addressInput.reportValidity();
+            return;
+        } else {
+            addressInput.setCustomValidity('');
+        }
+
         try {
             await axios.post('/buildings', formData);
             navigate('/buildings');
@@ -64,6 +79,9 @@ const BuildingUpload = () => {
                         name="buildingName"
                         value={formData.buildingName}
                         onChange={handleChange}
+                        onInvalid={(e) => e.target.setCustomValidity('이 입력란을 작성하세요')}
+                        onInput={(e) => e.target.setCustomValidity('')}
+                        required
                     />
                 </div>
                 <div className="address-search">
@@ -74,7 +92,9 @@ const BuildingUpload = () => {
                             name="address"
                             value={formData.address}
                             onChange={handleChange}
-                            
+                            onInvalid={(e) => e.target.setCustomValidity('이 입력란을 작성하세요')}
+                            onInput={(e) => e.target.setCustomValidity('')}
+                            required
                         />
                         <button type="button" className="search-button" onClick={() => setIsModalOpen(true)}>
                             <FaSearch />

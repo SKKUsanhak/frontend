@@ -17,6 +17,7 @@ export default function TableData() {
     const [deleteEnabled, setDeleteEnabled] = useState(false);
     const [versionName, setVersionName] = useState('');
     const [note, setNote] = useState('');
+    const [error, setError] = useState({ visible: false, message: '', target: null });
     const containerRef = useRef(null);
     const navigate = useNavigate();
 
@@ -198,6 +199,15 @@ export default function TableData() {
     };
 
     const handleSaveChanges = async () => {
+        if (isLastVersion && !versionName.trim()) {
+            const versionNameInput = document.querySelector('input[name="versionName"]');
+            versionNameInput.setCustomValidity('이 입력란을 작성하세요');
+            versionNameInput.reportValidity();
+            return;
+        }
+
+        setError({ visible: false, message: '', target: null });
+
         try {
             const versioningDto = { version: versionName, note };
             const response = await axios.post(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/versions`, versioningDto, {
@@ -304,12 +314,15 @@ export default function TableData() {
                                     <span className="file-info-label">버전 이름:</span>
                                     <input
                                         type="text"
+                                        name="versionName"
                                         placeholder="새로운 버전 이름 입력"
                                         value={versionName}
                                         onChange={(e) => setVersionName(e.target.value)}
-                                        required
                                         disabled={!isLastVersion}
                                     />
+                                    {error.visible && error.target === 'versionName' && (
+                                        <div className="custom-tooltip">{error.message}</div>
+                                    )}
                                 </div>
                                 <div>
                                     <span className="file-info-label">비고</span>
