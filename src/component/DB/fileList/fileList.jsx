@@ -173,7 +173,7 @@ export default function FileList() {
                     <div className="file-list-content">
                         <div className="file-list">
                             {files && files.length === 0 ? (
-                                <p>현재 DB에 파일이 없습니다.</p>
+                                <p>현재 건물에 파일이 없습니다.</p>
                             ) : (
                                 <table className="file-table">
                                     <thead>
