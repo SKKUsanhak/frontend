@@ -227,7 +227,7 @@ export default function FileList() {
                                         )}</td>
                                     </tr>
                                     <tr>
-                                        <td className='details-td'><strong>비고</strong></td>
+                                        <td className='details-td'><strong>비고<br/>(최대 300자)</strong></td>
                                         <td>{editingFileId === selectedFile.id ? (
                                             <input
                                                 type="text"

@@ -119,7 +119,7 @@ export default function Upload() {
                     <div>
                         <textarea
                             placeholder="비고 (최대 300자)"
-                            maxLength="200"
+                            maxLength="300"
                             value={note}
                             onChange={(e) => setNote(e.target.value)}
                         />
