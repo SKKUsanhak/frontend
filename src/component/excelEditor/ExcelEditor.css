@@ -113,17 +113,17 @@
   text-align: center;
 }
 
-.table {
+.table-container .table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.table th, .table td {
+.table-container .table th, .table-container .table td {
   border: 1px solid #ddd;
-  padding: 8px;
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding: 5px;
 }
 
 .sheet-navigation {
@@ -245,13 +245,4 @@
 
 .download-button {
   width: 100%;
-}
-
-.function-explain {
-  font-size: 14px;
-  font-family: "LineFont";
-  flex: 1; /* 제목과 나란히 배치되도록 */
-  text-align: left;
-  margin-right: 20px; /* 제목과의 간격 조정 */
-  line-height: 1.6;
 }

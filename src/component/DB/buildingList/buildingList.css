@@ -54,12 +54,12 @@
     width: 100%;
 }
 
-.table {
+.building-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.table td {
+.building-table td {
     cursor: pointer;
     border: 1px solid #ddd;
     padding: 8px;
@@ -67,14 +67,14 @@
     vertical-align: middle;
 }
 
-.table th {
+.building-table th {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
     vertical-align: middle;
 }
 
-.table .selected td {
+.building-table .selected td {
     background-color: rgb(228, 228, 228);
 }
 

@@ -223,7 +223,7 @@ export default function TableList() {
                             {tableList.length === 0 ? (
                                 <p>현재 파일에 테이블이 없습니다.</p>
                             ) : (
-                                <table className="table">
+                                <table className="table-table">
                                     <thead>
                                         <tr>
                                             <th>테이블 이름</th>

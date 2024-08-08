@@ -175,7 +175,7 @@ export default function FileList() {
                             {files && files.length === 0 ? (
                                 <p>현재 DB에 파일이 없습니다.</p>
                             ) : (
-                                <table className="table">
+                                <table className="file-table">
                                     <thead>
                                         <tr>
                                             <th className='header-cell'>

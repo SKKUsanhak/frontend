@@ -165,7 +165,7 @@ export default function BuildingList() {
                             {buildings.length === 0 ? (
                                 <p>현재 DB에 건물이 없습니다.</p>
                             ) : (
-                                <table className="table">
+                                <table className="building-table">
                                     <thead>
                                         <tr>
                                             <th className='header-cell'>
