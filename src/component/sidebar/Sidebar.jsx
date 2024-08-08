@@ -35,14 +35,14 @@ const Sidebar = ({ onToggle }) => {
             {!isCollapsed && (
                 <div className="sidebar-content">
                     <div className="sidebar-links">
-                        <div className="sidebar-item">
+                        <NavLink to="/buildings/upload" className="sidebar-item" activeClassName="active">
                             <MdDomainAdd className="sidebar-link-icon" />
-                            <NavLink to="/buildings/upload" className="sidebar-link" activeClassName="active">Upload</NavLink>
-                        </div>
-                        <div className="sidebar-item">
+                            <span className="sidebar-link">Upload</span>
+                        </NavLink>
+                        <NavLink to="/buildings" className="sidebar-item" activeClassName="active">
                             <BiBuildings className="sidebar-link-icon" />
-                            <NavLink to="/buildings" className="sidebar-link" activeClassName="active">Building</NavLink>
-                        </div>
+                            <span className="sidebar-link">Building</span>
+                        </NavLink>
                         <div className={`sidebar-item ${canAccessFile ? '' : 'disabled'}`}>
                             <FaRegFileAlt className="sidebar-link-icon" />
                             {canAccessFile ? (
@@ -69,12 +69,12 @@ const Sidebar = ({ onToggle }) => {
                         </div>
                     </div>
                     <div className="sidebar-footer">
-                        <div className="sidebar-item">
-                            <NavLink to="/login" className="sidebar-link">Login</NavLink>
-                        </div>
-                        <div className="sidebar-item">
-                            <NavLink to="/register" className="sidebar-link">Register</NavLink>
-                        </div>
+                        <NavLink to="/login" className="sidebar-item">
+                            <span className="sidebar-link">Login</span>
+                        </NavLink>
+                        <NavLink to="/register" className="sidebar-item">
+                            <span className="sidebar-link">Register</span>
+                        </NavLink>
                     </div>
                 </div>
             )}

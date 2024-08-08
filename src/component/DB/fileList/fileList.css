@@ -258,13 +258,18 @@
 .file-list-header .add-container {
     display: flex; /* Flexbox 사용 */
     align-items: center; /* 요소들을 수직 정렬 */
+    justify-content: center;
     margin-left: auto;
     cursor: pointer;
 }
 
 .file-list-header .add-container span {
-    margin-left: 5px;
+    margin-left: 10px;
     margin-right: 10px;
+    font-family: "LineFont";
+    font-size: 16px;
+    align-items: center;
+    vertical-align: middle;
 }
 
 .file-list-header .search-container input {
@@ -289,6 +294,7 @@
 }
 
 .add-file-icon {
+    font-size: 28px;
     transition: color 0.5s ease;
 }
 

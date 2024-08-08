@@ -210,7 +210,13 @@ export default function TableData() {
                 alert('모든 변경 사항이 성공적으로 저장되었습니다.');
                 setEditQueue([]);
                 const newVersionId = response.data.id;
-                navigate(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas?versionId=${newVersionId}`);
+                navigate(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas?versionId=${newVersionId}`, {
+                    state: {
+                        tableTitle: tableTitle,
+                        isLastVersion: true,
+                        currentVersion: versionName
+                    }
+                });
             } else {
                 alert('버전 생성 실패');
             }

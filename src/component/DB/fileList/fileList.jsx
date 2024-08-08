@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaTrash, FaEdit, FaSearch } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import { GoTriangleLeft, GoTriangleRight } from "react-icons/go";
-import { FaFileCirclePlus } from "react-icons/fa6";
+import { FiFilePlus } from "react-icons/fi";
 
 export default function FileList() {
     const [files, setFiles] = useState([]);
@@ -167,7 +167,7 @@ export default function FileList() {
                         </div>
                         <div className='add-container' onClick={() => navigate(`/buildings/${buildingId}/files/upload`, { state: { buildingId } })}>
                             <span>파일 추가</span>
-                            <FaFileCirclePlus className='add-file-icon' size={24} />
+                            <FiFilePlus className='add-file-icon' />
                         </div>
                     </div>
                     <div className="file-list-content">
