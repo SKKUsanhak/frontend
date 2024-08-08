@@ -20,6 +20,7 @@ export default function TableData() {
     const [error, setError] = useState({ visible: false, message: '', target: null });
     const containerRef = useRef(null);
     const navigate = useNavigate();
+    const [isControlSectionClicked, setIsControlSectionClicked] = useState(false);
 
     const fetchData = useCallback(() => {
         axios.get(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas`, {
@@ -129,26 +130,24 @@ export default function TableData() {
         }
         const confirmDelete = window.confirm(`정말로 ${rowIndex} 행을 삭제하시겠습니까?`);
         if (!confirmDelete) return;
-        axios.delete(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/rows`, {
+
+        const newTable = table.filter(row => row[0].rowNumber !== actualRowIndex)
+            .map((row, index) => row.map(cell => ({
+                ...cell,
+                rowNumber: index + 2
+            })));
+        const newRows = newTable.map(row => row[0].rowNumber);
+
+        setTable(newTable);
+        setRows(newRows);
+        setSelectedCell(null);
+        setDeleteEnabled(false);
+
+        setEditQueue([...editQueue, {
+            method: 'delete',
+            url: `/buildings/${buildingId}/files/${fileId}/tables/${tableId}/rows`,
             params: { rowIndex: actualRowIndex }
-        })
-            .then(() => {
-                alert("행 삭제 성공");
-                const newTable = table.filter(row => row[0].rowNumber !== actualRowIndex)
-                    .map((row, index) => row.map(cell => ({
-                        ...cell,
-                        rowNumber: index + 2
-                    })));
-                const newRows = newTable.map(row => row[0].rowNumber);
-                setTable(newTable);
-                setRows(newRows);
-                setSelectedCell(null);
-                setDeleteEnabled(false);
-            })
-            .catch(error => {
-                console.error("Error deleting row:", error);
-                alert("Error deleting the row.");
-            });
+        }]);
     };
 
     const handleDeleteColumn = (buildingId, fileId, tableId, columnIndex) => {
@@ -159,22 +158,19 @@ export default function TableData() {
         }
         const confirmDelete = window.confirm(`정말로 ${columns[columnIndex]} 열을 삭제하시겠습니까?`);
         if (!confirmDelete) return;
-        axios.delete(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/columns`, {
+
+        const newColumns = columns.filter((_, idx) => idx !== columnIndex);
+        setColumns(newColumns);
+        const newTable = table.map(row => row.filter((_, idx) => idx !== columnIndex));
+        setTable(newTable);
+        setSelectedCell(null);
+        setDeleteEnabled(false);
+
+        setEditQueue([...editQueue, {
+            method: 'delete',
+            url: `/buildings/${buildingId}/files/${fileId}/tables/${tableId}/columns`,
             params: { columnIndex }
-        })
-            .then(() => {
-                alert("열 삭제 성공");
-                const newColumns = columns.filter((_, idx) => idx !== columnIndex);
-                setColumns(newColumns);
-                const newTable = table.map(row => row.filter((_, idx) => idx !== columnIndex));
-                setTable(newTable);
-                setSelectedCell(null);
-                setDeleteEnabled(false);
-            })
-            .catch(error => {
-                console.error("열 삭제 중 오류 발생:", error);
-                alert("열 삭제 실패");
-            });
+        }]);
     };
 
     const handleCellChange = (rowIndex, cellIndex, value) => {
@@ -184,6 +180,10 @@ export default function TableData() {
     };
 
     const handleCellBlur = (buildingId, fileId, tableId, rowIndex, columnIndex, value) => {
+        if (isControlSectionClicked) {
+            setIsControlSectionClicked(false);
+            return;
+        }
         setEditQueue([...editQueue, {
             method: 'patch',
             url: `/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas`,
@@ -205,21 +205,39 @@ export default function TableData() {
             versionNameInput.reportValidity();
             return;
         }
-
+    
         setError({ visible: false, message: '', target: null });
-
+    
         try {
+            console.log('Starting versioning process');
             const versioningDto = { version: versionName, note };
+            console.log('Sending versioning request:', versioningDto);
+    
             const response = await axios.post(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/versions`, versioningDto, {
                 headers: { 'Content-Type': 'application/json' }
             });
+    
+            console.log('Versioning response:', response);
+
+    
             if (response.status === 201) {
-                for (const request of editQueue) {
-                    await axios(request);
+                console.log('Version created successfully, starting edit queue processing');
+
+                for (const [index, request] of editQueue.entries()) {
+                    console.log(`request ${index + 1} of ${editQueue.length}:`, request);
                 }
+
+                for (const [index, request] of editQueue.entries()) {
+                    console.log(`Sending request ${index + 1} of ${editQueue.length}:`, request);
+                    await axios(request);
+                    console.log(`Request ${index + 1} completed`);
+                }
+    
                 alert('모든 변경 사항이 성공적으로 저장되었습니다.');
                 setEditQueue([]);
                 const newVersionId = response.data.id;
+                console.log('Navigating to new version:', newVersionId);
+    
                 navigate(`/buildings/${buildingId}/files/${fileId}/tables/${tableId}/datas?versionId=${newVersionId}`, {
                     state: {
                         tableTitle: tableTitle,
@@ -228,13 +246,13 @@ export default function TableData() {
                     }
                 });
             } else {
+                console.log('Version creation failed with status:', response.status);
                 alert('버전 생성 실패');
             }
         } catch (error) {
+            console.error('Error during save changes process:', error);
             alert('오류가 발생했습니다.');
-            console.error('Error:', error);
             setEditQueue([]);
-            window.location.reload(); // 오류 발생 시 새로고침
         }
     };
 
@@ -300,7 +318,8 @@ export default function TableData() {
                                 </table>
                             </div>
                         </div>
-                        <div className={`control-section ${!isLastVersion ? 'disabled' : ''}`}>
+                        <div className={`control-section ${!isLastVersion ? 'disabled' : ''}`}
+                            onMouseDown={() => setIsControlSectionClicked(true)}>
                             <div className='button-group'>
                                 <button className="add-button" onClick={() => handleMakeRow(buildingId, fileId, tableId, rows, columns, table)} disabled={!isLastVersion}>행 추가</button>
                                 <button className="delete-button" onClick={() => handleDeleteRow(buildingId, fileId, tableId, selectedCell ? selectedCell.rowIndex : null)} disabled={!isLastVersion || !deleteEnabled}>행 삭제</button>
