@@ -69,6 +69,10 @@
     border-collapse: collapse;
 }
 
+.table-table td {
+    cursor: pointer;
+}
+
 .table-table th, .table-table td {
     border: 1px solid #ddd;
     text-align: center;
