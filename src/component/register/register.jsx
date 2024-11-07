@@ -1,6 +1,7 @@
 // RegisterPage.js
 import React, { useState } from 'react';
 import './register.css';
+import { redirect } from 'react-router-dom';
 
 function RegisterPage() {
     const [username, setUsername] = useState('');
@@ -8,18 +9,42 @@ function RegisterPage() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
+        setError('');
+        setSuccess('');
+        
         if (password !== confirmPassword) {
-            setError('Passwords do not match');
+            setError('패스워드와 패스워드 재입력이 일치하지 않습니다');
             return;
         }
-        // 회원가입 로직 (여기서는 콘솔에 출력)
-        console.log('Username:', username);
-        console.log('Email:', email);
-        console.log('Password:', password);
-        alert('Registration successful!');
+
+        try {
+            const response = await fetch('/sign-up', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password,
+                }),
+            });
+
+            if (response.ok) {
+                alert('회원가입 성공.');
+                redirect('/login');
+            } else {
+                const errorData = await response.json();
+                const errorMessages = Object.values(errorData).join(', ');
+                setError(`회원가입 실패: ${errorMessages}`);
+            }
+        } catch (error) {
+            setError('에러 발생: ' + error.message);
+        }
     };
 
     return (
@@ -68,6 +93,7 @@ function RegisterPage() {
                         />
                     </div>
                     {error && <p className="error">{error}</p>}
+                    {success && <p className="success">{success}</p>}
                     <button type="submit">회원가입</button>
                 </form>
             </div>

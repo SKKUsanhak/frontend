@@ -9,14 +9,32 @@ function LoginPage() {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        // 기본적인 로그인 로직 (여기서는 username: admin, password: password가 올바른 자격 증명이라고 가정)
-        if (username === 'admin' && password === 'password') {
-            alert('Login successful!');
-            // 여기서 실제 로그인 로직을 구현할 수 있습니다. 예를 들어, JWT 토큰을 저장하거나, 다른 페이지로 리디렉션하는 등의 작업
-        } else {
-            setError('Invalid username or password');
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const token = data.jwt;  // 서버로부터 받은 JWT 토큰
+                localStorage.setItem('token', token);  // JWT 토큰을 로컬스토리지에 저장
+                alert('Login successful!');
+                navigate('/');  // 로그인 성공 시 홈으로 이동
+            } else {
+                const errorData = await response.text();
+                setError(errorData || 'Login failed');
+            }
+        } catch (error) {
+            setError('An error occurred: ' + error.message);
         }
     };
 

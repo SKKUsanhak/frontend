@@ -102,7 +102,7 @@ const BuildingUpload = () => {
                     </div>
                 </div>
                 <div>
-                    <label>총면적</label>
+                    <label>총면적(㎡)</label>
                     <input
                         type="text"
                         name="totalArea"
