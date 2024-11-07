@@ -1,7 +1,8 @@
 // RegisterPage.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './register.css';
-import { redirect } from 'react-router-dom';
+
 
 function RegisterPage() {
     const [username, setUsername] = useState('');
@@ -10,6 +11,7 @@ function RegisterPage() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const navigate = useNavigate();
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -36,7 +38,7 @@ function RegisterPage() {
 
             if (response.ok) {
                 alert('회원가입 성공.');
-                redirect('/login');
+                navigate('/login');
             } else {
                 const errorData = await response.json();
                 const errorMessages = Object.values(errorData).join(', ');

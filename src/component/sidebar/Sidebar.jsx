@@ -7,9 +7,10 @@ import { FiTable } from "react-icons/fi";
 import { CgDatabase } from "react-icons/cg";
 import { PiBuildingOfficeFill } from "react-icons/pi";
 import { MdOutlinePersonAddAlt } from "react-icons/md";
-import { TbLogin2 } from "react-icons/tb";
+import { TbLogin2, TbLogout } from "react-icons/tb";
+import { FaUser } from "react-icons/fa";
 
-const Sidebar = ({ onToggle }) => {
+const Sidebar = ({ onToggle, isAuthenticated, username, onLogout }) => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const location = useLocation();
 
@@ -70,14 +71,29 @@ const Sidebar = ({ onToggle }) => {
                         </div>
                     </div>
                     <div className="sidebar-footer">
-                        <NavLink to="/login" className="sidebar-item">
-                            <TbLogin2 className='sidebar-footer-icon' />
-                            <span className="sidebar-link">Login</span>
-                        </NavLink>
-                        <NavLink to="/register" className="sidebar-item">
-                            <MdOutlinePersonAddAlt className='sidebar-footer-icon' />
-                            <span className="sidebar-link">Register</span>
-                        </NavLink>
+                        {!isAuthenticated ? (
+                            <>
+                                <NavLink to="/login" className="sidebar-item">
+                                    <TbLogin2 className='sidebar-footer-icon' />
+                                    <span className="sidebar-link">Login</span>
+                                </NavLink>
+                                <NavLink to="/register" className="sidebar-item">
+                                    <MdOutlinePersonAddAlt className='sidebar-footer-icon' />
+                                    <span className="sidebar-link">Register</span>
+                                </NavLink>
+                            </>
+                        ) : (
+                            <div className="user-info">
+                                <div className="user-icon">
+                                    <FaUser className="sidebar-user-icon" />
+                                    <span className="sidebar-username">{username}</span>
+                                </div>
+                                <div className="logout-button" onClick={onLogout}>
+                                    <TbLogout className="sidebar-logout-icon" />
+                                    <span className="sidebar-link">Logout</span>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

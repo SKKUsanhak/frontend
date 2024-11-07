@@ -103,11 +103,72 @@
 }
 
 .sidebar-footer-icon {
-    margin-right: 10px; /* 아이콘과 텍스트 간의 간격 */
+    margin-right: 20px; /* 아이콘과 텍스트 간의 간격 */
     font-size: 24px; /* 아이콘 크기 조정 */
 }
 
 .sidebar-footer-icon-file {
     margin-right: 10px; /* 파일 아이콘과 텍스트 간의 간격 */
     font-size: 28px; /* 아이콘 크기 조정 */
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.user-icon {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* 아이콘과 로그아웃 버튼 사이 간격 */
+    cursor: default; /* 기본 커서로 설정하여 호버 효과 줄임 */
+}
+
+.user-icon:hover {
+    font-family: inherit; /* 호버 시 폰트 변화 없음 */
+    border-radius: 0; /* 호버 시 둥근 테두리 변화 없음 */
+}
+
+.sidebar-user-icon {
+    margin-right: 10px; /* 아이콘과 사용자명 사이 간격 */
+    font-size: 20px;
+}
+
+.sidebar-username {
+    font-size: 16px;
+}
+
+.sidebar-footer .sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 5px 0; /* 세로 패딩 추가 */
+    cursor: pointer;
+    margin-bottom: 10px; /* 각 버튼 간격 추가 */
+    color: rgb(0, 0, 0); /* 텍스트 색상 설정 */
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.sidebar-footer .sidebar-item:hover {
+    font-family: "LineFontBold"; /* 호버 시 폰트 두껍게 */
+    border-radius: 10px; /* 기존과 동일하게 둥근 테두리 */
+}
+
+.logout-button {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    cursor: pointer;
+    color: rgb(0, 0, 0); /* 텍스트 색상 설정 */
+}
+
+.sidebar-footer .logout-button:hover {
+    font-family: "LineFontBold"; /* 호버 시 폰트 두껍게 */
+    border-radius: 10px;
+}
+
+.sidebar-logout-icon {
+    margin-right: 10px; /* 아이콘과 텍스트 간의 간격 */
+    font-size: 24px; /* 아이콘 크기 */
 }

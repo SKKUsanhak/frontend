@@ -26,8 +26,11 @@ function LoginPage() {
             if (response.ok) {
                 const data = await response.json();
                 const token = data.jwt;  // 서버로부터 받은 JWT 토큰
+                const user = username; // 서버로부터 받은 사용자명
                 localStorage.setItem('token', token);  // JWT 토큰을 로컬스토리지에 저장
+                localStorage.setItem('username', user);
                 alert('Login successful!');
+                window.location.reload(); // 로그아웃 후 페이지 새로고침
                 navigate('/');  // 로그인 성공 시 홈으로 이동
             } else {
                 const errorData = await response.text();
