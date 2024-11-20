@@ -18,6 +18,7 @@ export default function TableList() {
     const [selectedTable, setSelectedTable] = useState(null);
     const [selectedVersions, setSelectedVersions] = useState({});
     const itemsPerPage = 13;
+    const [username, setUsername] = useState('');
 
     const tableDetailsRef = useRef(null);
     const tableListContainerRef = useRef(null);
@@ -40,6 +41,11 @@ export default function TableList() {
                 console.error('Error fetching table data:', error);
             });
     }, [fileId, buildingId]);
+
+    useEffect(() => {
+        const user = localStorage.getItem('username'); // 로컬스토리지에서 사용자 이름 가져오기
+        setUsername(user);
+    }, []);
 
     useEffect(() => {
         fetchTable();
@@ -299,6 +305,14 @@ export default function TableList() {
                                     <tr>
                                         <td className='details-td'><strong>버전</strong></td>
                                         <td>{selectedTable.dataVersionList.find(version => version.id === selectedVersions[selectedTable.id])?.version}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className='details-td'><strong>최초 업로드 유저</strong></td>
+                                        <td>{username}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className='details-td'><strong>최종 수정 유저</strong></td>
+                                        <td>{username}</td>
                                     </tr>
                                 </tbody>
                             </table>
